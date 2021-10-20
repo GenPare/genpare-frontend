@@ -1,0 +1,39 @@
+<div class="card loginCard">
+  <h5 class="card-title title">Log in</h5>
+  <div class="card-body">
+    <form class="has-validation" [formGroup]="loginForm" (ngSubmit)="login()">
+      <div class="form-group">
+        <input
+          type="email"
+          class="form-control text-input"
+          [ngClass]="{
+            'is-valid': loginForm.get('email')?.valid,
+            'is-invalid': !loginForm.get('email')?.valid
+          }"
+          placeholder="Email"
+          formControlName="email"
+        />
+        <div class="invalid-feedback">Email wird benötigt.</div>
+      </div>
+      <div class="form-group">
+        <input
+          type="password"
+          class="form-control text-input has-validation"
+          placeholder="Passwort"
+          formControlName="password"
+          [ngClass]="{
+            'is-valid': loginForm.get('password')?.valid,
+            'is-invalid': !loginForm.get('password')?.valid
+          }"
+          required
+        />
+        <div class="invalid-feedback">Passwort wird benötigt.</div>
+      </div>
+      <input type="checkbox" class="checkbox" id="remember-me-box" />
+      <label class="form-check-label box-label" for="remember-me-box"
+        >Eingeloggt bleiben</label
+      >
+      <button type="submit" class="btn btn-primary form-control">Login</button>
+    </form>
+  </div>
+</div>
