@@ -1,10 +1,12 @@
 import { Component, OnInit } from '@angular/core';
+import { FormControl, FormGroup, FormsModule } from "@angular/forms";
 
 @Component({
   selector: 'app-data-management',
   templateUrl: './data-management.component.html',
   styleUrls: ['./data-management.component.scss']
 })
+
 export class DataManagementComponent implements OnInit {
 
   federal_states: String[] = [
@@ -51,9 +53,21 @@ export class DataManagementComponent implements OnInit {
     'Höherer Dienst'
   ]
 
+  data_management = new FormGroup({
+    job: new FormControl(),
+    education_degree: new FormControl(''),
+    federal_state: new FormControl(''),
+    salary: new FormControl(''),
+    gender: new FormControl(''),
+    age: new FormControl('')
+  })
+  
   constructor() { }
 
   ngOnInit(): void {
   }
 
+  display(): void {
+    
+  }
 }
