@@ -1,10 +1,10 @@
 import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
-import { DataManagementComponent } from '@shared/data-management/data-management.component';
+import { ProfileManagementComponent } from './profile-management/profile-management.component';
 
 const routes: Routes = [
-  { path: 'data-management', component: DataManagementComponent },
-  { path: '', redirectTo: 'data-management', pathMatch: 'full' }
+  { path: 'profile', component: ProfileManagementComponent },
+  { path: '', redirectTo: 'profile', pathMatch: 'full' }
 ];
 
 @NgModule({
