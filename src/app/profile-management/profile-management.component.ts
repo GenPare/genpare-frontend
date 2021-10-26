@@ -8,6 +8,11 @@ import { DataManagementComponent } from "@shared/data-management/data-management
 })
 export class ProfileManagementComponent implements OnInit {
 
+  email: String = "email@email.email"
+  password: String = "********";
+  nickname: String = "nickname1";
+  account_created: Date = new Date();
+
   constructor() { }
 
   ngOnInit(): void {
