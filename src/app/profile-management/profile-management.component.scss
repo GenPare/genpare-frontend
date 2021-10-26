@@ -1,7 +1,9 @@
+@import 'src/app/shared/variables.scss';
+
 .card {
-    margin-left: 50px;
-    margin-right: 50px;
-    margin-top: 50px;
+    margin-left: $main-padding;
+    margin-right: $main-padding;
+    margin-top: $main-padding;
 }
 
 .card-title {
