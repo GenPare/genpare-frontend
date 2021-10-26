@@ -54,7 +54,7 @@ export class DataManagementComponent implements OnInit {
   ]
 
   data_management = new FormGroup({
-    job: new FormControl(),
+    job: new FormControl(''),
     education_degree: new FormControl(''),
     federal_state: new FormControl(''),
     salary: new FormControl(''),
@@ -65,9 +65,5 @@ export class DataManagementComponent implements OnInit {
   constructor() { }
 
   ngOnInit(): void {
-  }
-
-  display(): void {
-    
   }
 }
