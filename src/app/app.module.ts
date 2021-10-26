@@ -1,4 +1,5 @@
 import { NgModule } from '@angular/core';
+import { DatePipe } from "@angular/common";
 import { BrowserModule } from '@angular/platform-browser';
 import { FormsModule, ReactiveFormsModule } from "@angular/forms";
 
@@ -21,7 +22,7 @@ import { ProfileManagementComponent } from './profile-management/profile-managem
     FormsModule,
     ReactiveFormsModule
   ],
-  providers: [],
+  providers: [DatePipe],
   bootstrap: [AppComponent]
 })
 export class AppModule { }

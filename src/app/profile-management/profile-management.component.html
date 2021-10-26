@@ -14,7 +14,7 @@
                         <div class="col-1">Passwort:</div>
                         <div class="col-5">{{ password }}</div>
                         <div class="col-1">Account erstellt:</div>
-                        <div class="col-5">{{ account_created }}</div>
+                        <div class="col-5">{{ account_created | date : 'longDate' }}</div>
                     </div>
                     <div class="row">
                         <div class="col">
