@@ -1,7 +1,11 @@
 import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
+import { ProfileManagementComponent } from './profile-management/profile-management.component';
 
-const routes: Routes = [];
+const routes: Routes = [
+  { path: 'profile', component: ProfileManagementComponent },
+  { path: '', redirectTo: 'profile', pathMatch: 'full' }
+];
 
 @NgModule({
   imports: [RouterModule.forRoot(routes)],

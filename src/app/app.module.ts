@@ -1,22 +1,28 @@
 import { NgModule } from '@angular/core';
+import { DatePipe } from "@angular/common";
 import { BrowserModule } from '@angular/platform-browser';
+import { FormsModule, ReactiveFormsModule } from "@angular/forms";
 
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
-import { LoginComponent } from './login/login.component';
 import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
+import { DataManagementComponent } from './shared/data-management/data-management.component';
+import { ProfileManagementComponent } from './profile-management/profile-management.component';
 
 @NgModule({
   declarations: [
     AppComponent,
-    LoginComponent
+    DataManagementComponent,
+    ProfileManagementComponent
   ],
   imports: [
     BrowserModule,
     AppRoutingModule,
-    NgbModule
+    NgbModule,
+    FormsModule,
+    ReactiveFormsModule
   ],
-  providers: [],
+  providers: [DatePipe],
   bootstrap: [AppComponent]
 })
 export class AppModule { }
