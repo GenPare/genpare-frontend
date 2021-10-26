@@ -1,4 +1,5 @@
 import { Component, OnInit } from '@angular/core';
+import { DataManagementComponent } from "@shared/data-management/data-management.component";
 
 @Component({
   selector: 'app-profile-management',
