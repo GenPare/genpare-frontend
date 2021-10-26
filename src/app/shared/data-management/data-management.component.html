@@ -32,7 +32,12 @@
                         </div>
                         <label class="col-sm-1 col-form-label" for="salary">Gehalt:</label>
                         <div class="col-sm-5">
-                            <input class="form-control" type="number" id="salary" aria-describedby="salary-small" placeholder="z.B. 2000" formControlName="salary">
+                            <div class="input-group">
+                                <input class="form-control" type="number" min="0" id="salary" aria-describedby="salary-small" placeholder="z.B. 2000" formControlName="salary">
+                                <div class="input-group-postpend">
+                                    <div class="input-group-text">€</div>
+                                </div>
+                            </div>
                             <small class="form-text text-muted" id="salary-small">Bitte geben Sie Ihr Monatsgehalt in Euro an.</small>
                         </div>
                     </div>
