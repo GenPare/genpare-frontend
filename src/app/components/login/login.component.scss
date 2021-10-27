@@ -3,12 +3,25 @@
   margin: 100px;
 
   .title {
-    padding: 1rem;
+    padding: 0 1.25rem;
+    padding-top: 1rem;
+  }
+
+  .error-message {
+    color:red;
   }
   .text-input {
     margin: 0.5rem 0;
   }
   .box-label {
     padding-left: 0.5rem;
+  }
+  .link {
+    color:blue;
+    text-decoration: underline;
+    padding: 0.5rem 0;
+  }
+  .loginButton {
+    width:100%;
   }
 }

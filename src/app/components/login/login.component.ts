@@ -10,8 +10,10 @@ export class LoginComponent implements OnInit {
 
   loginForm = new FormGroup( {
     email: new FormControl('',[Validators.email, Validators.required]),
-    password: new FormControl('')
+    password: new FormControl('',Validators.required)
   })
+
+  failedLogIn = false;
 
   constructor() { }
 
@@ -19,7 +21,10 @@ export class LoginComponent implements OnInit {
   }
 
   login(): void {
-    console.log(this.loginForm.valid)
+    if (!this.loginForm.valid) {
+      this.failedLogIn = true;
+      this.loginForm.controls["password"].reset()
+    }
   }
 
 }
