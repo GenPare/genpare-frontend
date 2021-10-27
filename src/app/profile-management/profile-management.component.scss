@@ -13,3 +13,9 @@
 .upper-row {
     margin-bottom: 37px;
 }
+
+button {
+    color: $secondary-color;
+    background-color: $primary-color;
+    border-color: $primary-color;
+}
