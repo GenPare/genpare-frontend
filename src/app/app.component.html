@@ -10,7 +10,8 @@
   </div>
   <div class="navbar-nav ml-auto">
     <div class="navbar-nav mr-auto">
-      <a class="nav-item nav-link" style="align-self: flex-end;" href="profile">{{ username }}</a>
+      <button type="button" class="btn btn-danger" (click)="logout()">Logout</button>
+      <a class="nav-item nav-link" href="profile">{{ username }}</a>
     </div>
   </div>
 </nav>

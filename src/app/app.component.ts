@@ -8,4 +8,8 @@ import { Component } from '@angular/core';
 export class AppComponent {
   title: String = 'genpare';
   username: String = "genparer"
+
+  logout(): void {
+    
+  }
 }

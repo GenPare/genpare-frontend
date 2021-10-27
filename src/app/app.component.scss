@@ -11,3 +11,9 @@
 .nav-item {
     color: $primary-color;
 }
+
+button {
+    color: $secondary-color;
+    background-color: $primary-color;
+    border-color: $primary-color;
+}
