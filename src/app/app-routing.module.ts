@@ -1,10 +1,10 @@
 import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
-import { ProfileManagementComponent } from './profile-management/profile-management.component';
+import { CompareComponent } from './compare/compare.component';
 
 const routes: Routes = [
-  { path: 'profile', component: ProfileManagementComponent },
-  { path: '', redirectTo: 'profile', pathMatch: 'full' }
+  { path: 'compare', component: CompareComponent },
+  { path: '', redirectTo: 'compare', pathMatch: 'full' }
 ];
 
 @NgModule({
