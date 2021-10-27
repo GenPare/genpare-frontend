@@ -1,6 +1,10 @@
 .loginCard {
   width: 50%;
-  margin: 100px;
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  margin-right: -50%;
+  transform: translate(-50%, -50%);
 
   .title {
     padding: 0 1.25rem;
@@ -8,7 +12,7 @@
   }
 
   .error-message {
-    color:red;
+    color: red;
   }
   .text-input {
     margin: 0.5rem 0;
@@ -17,11 +21,11 @@
     padding-left: 0.5rem;
   }
   .link {
-    color:blue;
+    color: blue;
     text-decoration: underline;
     padding: 0.5rem 0;
   }
   .loginButton {
-    width:100%;
+    width: 100%;
   }
 }
