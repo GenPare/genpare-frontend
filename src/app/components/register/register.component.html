@@ -1,0 +1,39 @@
+<div class="card registerCard">
+    <h5 class="card-title title">Registrierung</h5>
+    <div class="card-body">
+      <form [formGroup]="registerForm" (ngSubmit)="register()" [ngClass]="{'was-validated': failedAttempt}">
+          <div class="error-message" *ngIf="failedAttempt">Bitte E-mail überprüfen und Passwort nochmal eingeben</div>
+          <input
+            type="email"
+            class="form-control text-input"
+            placeholder="E-mail"
+            formControlName="email1"
+            required
+          />
+          <input
+            type="email"
+            class="form-control text-input"
+            placeholder="E-mail wiederholen"
+            formControlName="email2"
+            required
+          />
+          <input
+            type="password"
+            class="form-control text-input"
+            placeholder="Passwort"
+            formControlName="password1"
+            required
+          />
+          <input
+            type="password"
+            class="form-control text-input"
+            placeholder="Passwort wiederholen"
+            formControlName="password2"
+            required
+          />
+          <button type="submit" class="btn btn-primary">Registrieren</button>
+        </form>
+          <a class="link" [routerLink]="'../login'">Log In</a>
+    </div>
+  </div>
+  

@@ -2,23 +2,27 @@
   <h5 class="card-title title">Log in</h5>
   <div class="card-body">
     <form [formGroup]="loginForm" (ngSubmit)="login()">
-        <div class="error-message" *ngIf="failedLogIn">E-mail oder Passwort ist falsch</div>
-        <input
-          type="email"
-          [ngClass]="{'is-invalid': failedLogIn}"
-          class="form-control text-input"
-          placeholder="Email"
-          formControlName="email"
-        />
-        <input
-          type="password"
-          [ngClass]="{'is-invalid': failedLogIn}"
-          class="form-control text-input"
-          placeholder="Passwort"
-          formControlName="password"
-        />
-      <div class="link">Registrieren</div>
+      <div class="error-message" *ngIf="failedLogIn">
+        E-mail oder Passwort ist falsch
+      </div>
+      <input
+        type="email"
+        [ngClass]="{ 'is-invalid': failedLogIn }"
+        class="form-control text-input"
+        placeholder="Email"
+        formControlName="email"
+      />
+      <input
+        type="password"
+        [ngClass]="{ 'is-invalid': failedLogIn }"
+        class="form-control text-input"
+        placeholder="Passwort"
+        formControlName="password"
+        required
+      />
+
       <button type="submit" class="btn btn-primary">Login</button>
     </form>
+    <a class="link" [routerLink]="'../register'">Registrieren</a>
   </div>
 </div>

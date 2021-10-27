@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
-import { EmailValidator, FormControl, FormGroup, Validators } from '@angular/forms';
+import { FormControl, FormGroup, Validators } from '@angular/forms';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-login',
@@ -15,7 +16,7 @@ export class LoginComponent implements OnInit {
 
   failedLogIn = false;
 
-  constructor() { }
+  constructor(private router: Router) { }
 
   ngOnInit(): void {
   }
@@ -23,7 +24,9 @@ export class LoginComponent implements OnInit {
   login(): void {
     if (!this.loginForm.valid) {
       this.failedLogIn = true;
-      this.loginForm.controls["password"].reset()
+      this.loginForm.controls["password"].reset();
+    } else {
+      this.router.navigate(['profile']);
     }
   }
 
