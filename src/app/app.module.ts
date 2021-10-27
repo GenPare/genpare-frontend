@@ -8,12 +8,14 @@ import { AppComponent } from './app.component';
 import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
 import { DataManagementComponent } from './shared/data-management/data-management.component';
 import { ProfileManagementComponent } from './profile-management/profile-management.component';
+import { CompareComponent } from './compare/compare.component';
 
 @NgModule({
   declarations: [
     AppComponent,
     DataManagementComponent,
-    ProfileManagementComponent
+    ProfileManagementComponent,
+    CompareComponent
   ],
   imports: [
     BrowserModule,
