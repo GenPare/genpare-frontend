@@ -33,8 +33,6 @@ export class RegisterComponent {
   register() {
     if (!this.registerForm.valid) {
       this.failedAttempt = true;
-      this.registerForm.controls["password1"].reset();
-      this.registerForm.controls["password2"].reset();
     } else {
       this.router.navigate(['profile']);
     }

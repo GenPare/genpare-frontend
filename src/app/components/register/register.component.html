@@ -1,39 +1,58 @@
 <div class="card registerCard">
-    <h5 class="card-title title">Registrierung</h5>
-    <div class="card-body">
-      <form [formGroup]="registerForm" (ngSubmit)="register()" [ngClass]="{'was-validated': failedAttempt}">
-          <div class="error-message" *ngIf="failedAttempt">Bitte E-mail überprüfen und Passwort nochmal eingeben</div>
-          <input
-            type="email"
-            class="form-control text-input"
-            placeholder="E-mail"
-            formControlName="email1"
-            required
-          />
-          <input
-            type="email"
-            class="form-control text-input"
-            placeholder="E-mail wiederholen"
-            formControlName="email2"
-            required
-          />
-          <input
-            type="password"
-            class="form-control text-input"
-            placeholder="Passwort"
-            formControlName="password1"
-            required
-          />
-          <input
-            type="password"
-            class="form-control text-input"
-            placeholder="Passwort wiederholen"
-            formControlName="password2"
-            required
-          />
-          <button type="submit" class="btn btn-primary">Registrieren</button>
-        </form>
-          <a class="link" [routerLink]="'../login'">Log In</a>
-    </div>
+  <h5 class="card-title title">Registrierung</h5>
+  <div class="card-body">
+    <form [formGroup]="registerForm" (ngSubmit)="register()">
+      <div class="error-message" *ngIf="failedAttempt">
+        Bitte E-mail überprüfen und Passwort nochmal eingeben
+      </div>
+      <input
+        type="email"
+        class="form-control text-input"
+        [ngClass]="{
+          'is-invalid': !registerForm.get('email1')?.valid && this.registerForm.get('email1')?.dirty,
+          'is-valid': registerForm.get('email1')?.valid && this.registerForm.get('email1')?.dirty
+        }"
+        placeholder="E-mail"
+        formControlName="email1"
+        required
+      />
+      <input
+        type="email"
+        class="form-control text-input"
+        [ngClass]="{
+          'is-invalid':
+            registerForm.value.email1 !== registerForm.value.email2 &&
+            this.registerForm.get('email2')?.dirty,
+          'is-valid': registerForm.get('email2')?.valid && this.registerForm.get('email2')?.dirty
+        }"
+        placeholder="E-mail wiederholen"
+        formControlName="email2"
+      />
+      <input
+        type="password"
+        class="form-control text-input"
+        [ngClass]="{
+          'is-invalid': !registerForm.get('password1')?.valid && this.registerForm.get('password1')?.dirty,
+          'is-valid': registerForm.get('password1')?.valid && this.registerForm.get('password1')?.dirty
+        }"
+        placeholder="Passwort"
+        formControlName="password1"
+        required
+      />
+      <input
+        type="password"
+        class="form-control text-input"
+        [ngClass]="{
+          'is-invalid':
+            (!registerForm.get('password2')?.valid ||
+            registerForm.value.password1 !== registerForm.value.password2) && this.registerForm.get('password2')?.dirty,
+          'is-valid': registerForm.get('password2')?.valid && this.registerForm.get('password2')?.dirty
+        }"
+        placeholder="Passwort wiederholen"
+        formControlName="password2"
+      />
+      <button type="submit" class="btn btn-primary">Registrieren</button>
+    </form>
+    <a class="link" [routerLink]="'../login'">Log In</a>
   </div>
-  
+</div>
