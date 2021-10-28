@@ -19,6 +19,7 @@
                     <div class="row">
                         <div class="col">
                             <button type="button" class="btn btn-danger">Account löschen</button>
+                            <button (click)="auth.logout({ returnTo: 'http://localhost:4200/start' })" class="btn btn-danger log-button">Log out</button>
                         </div>
                     </div>
                 </div>
