@@ -3,13 +3,13 @@
   <div class="card-body">
     <form [formGroup]="loginForm" (ngSubmit)="login()">
       <div class="error-message" *ngIf="failedLogIn">
-        E-mail oder Passwort ist falsch
+        E-Mail oder Passwort ist falsch
       </div>
       <input
         type="email"
         [ngClass]="{ 'is-invalid': failedLogIn }"
         class="form-control text-input"
-        placeholder="Email"
+        placeholder="E-Mail"
         formControlName="email"
       />
       <input
@@ -22,7 +22,7 @@
       />
 
       <button type="submit" class="btn btn-primary">Login</button>
+      <button class="link-button btn btn-outline-primary" [routerLink]="'../register'">Registrieren</button>
     </form>
-    <a class="link" [routerLink]="'../register'">Registrieren</a>
   </div>
 </div>

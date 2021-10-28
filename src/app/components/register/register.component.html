@@ -3,7 +3,7 @@
   <div class="card-body">
     <form [formGroup]="registerForm" (ngSubmit)="register()">
       <div class="error-message" *ngIf="failedAttempt">
-        Bitte E-mail überprüfen und Passwort nochmal eingeben
+        Bitte E-Mail überprüfen und Passwort nochmal eingeben
       </div>
       <input
         type="email"
@@ -12,7 +12,7 @@
           'is-invalid': !registerForm.get('email1')?.valid && this.registerForm.get('email1')?.dirty,
           'is-valid': registerForm.get('email1')?.valid && this.registerForm.get('email1')?.dirty
         }"
-        placeholder="E-mail"
+        placeholder="E-Mail"
         formControlName="email1"
         required
       />
@@ -25,7 +25,7 @@
             this.registerForm.get('email2')?.dirty,
           'is-valid': registerForm.get('email2')?.valid && this.registerForm.get('email2')?.dirty
         }"
-        placeholder="E-mail wiederholen"
+        placeholder="E-Mail wiederholen"
         formControlName="email2"
       />
       <input
@@ -52,7 +52,7 @@
         formControlName="password2"
       />
       <button type="submit" class="btn btn-primary">Registrieren</button>
+      <button class="btn btn-outline-primary link-button" [routerLink]="'../login'">Log In</button>
     </form>
-    <a class="link" [routerLink]="'../login'">Log In</a>
   </div>
 </div>
