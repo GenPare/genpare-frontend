@@ -1,10 +1,11 @@
+<h3>Profilverwaltung</h3>
 <div class="card">
     <div class="card-body">
       <h5 class="card-title">Accountverwaltung</h5>
       <div class="card-text">
             <div class="card-content">
                 <div class="container-fluid">
-                    <div class="row">
+                    <div class="row upper-row">
                         <div class="col-1">Email:</div>
                         <div class="col-5">{{ email }}</div>
                         <div class="col-1">Nickname:</div>
@@ -15,12 +16,6 @@
                         <div class="col-5">{{ password }}</div>
                         <div class="col-1">Account erstellt:</div>
                         <div class="col-5">{{ account_created | date : 'longDate' }}</div>
-                    </div>
-                    <div class="row">
-                        <div class="col">
-                            <button type="button" class="btn btn-danger">Account löschen</button>
-                            <button (click)="auth.logout({ returnTo: 'http://localhost:4200/start' })" class="btn btn-danger log-button">Log out</button>
-                        </div>
                     </div>
                 </div>
             </div>
