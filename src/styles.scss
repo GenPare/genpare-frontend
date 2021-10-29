@@ -4,9 +4,13 @@
 @import '~bootstrap/scss/bootstrap';
 @import 'app/shared/variables.scss';
 
-::selection {
-    color: $secondary-color;
+body {
     background-color: $primary-color;
+}
+
+::selection {
+    color: $primary-color;
+    background-color: $secondary-color;
 }
 
 h3 {
@@ -14,6 +18,7 @@ h3 {
     margin-right: $padding-big;
     margin-top: $padding-small;
     margin-bottom: $padding-small;
+    color: $secondary-color;
 }
 
 .card {
