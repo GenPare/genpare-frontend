@@ -11,16 +11,11 @@
                         <div class="col-1">Nickname:</div>
                         <div class="col-5">{{ nickname }}</div>
                     </div>
-                    <div class="row upper-row">
+                    <div class="row">
                         <div class="col-1">Passwort:</div>
                         <div class="col-5">{{ password }}</div>
                         <div class="col-1">Account erstellt:</div>
                         <div class="col-5">{{ account_created | date : 'longDate' }}</div>
-                    </div>
-                    <div class="row">
-                        <div class="col">
-                            <button type="button" class="btn btn-danger" (click)="delete_account()">Account löschen</button>
-                        </div>
                     </div>
                 </div>
             </div>

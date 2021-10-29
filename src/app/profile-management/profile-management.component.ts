@@ -16,8 +16,4 @@ export class ProfileManagementComponent implements OnInit {
 
   ngOnInit(): void {
   }
-
-  delete_account(): void {
-    
-  }
 }
