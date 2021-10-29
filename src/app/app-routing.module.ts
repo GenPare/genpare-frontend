@@ -4,6 +4,7 @@ import { ProfileManagementComponent } from './profile-management/profile-managem
 
 const routes: Routes = [
   { path: 'profile', component: ProfileManagementComponent },
+  { path: 'compare', redirectTo: 'profile', pathMatch: 'full'},
   { path: '', redirectTo: 'profile', pathMatch: 'full' }
 ];
 
