@@ -1,21 +1,18 @@
-import { Component, OnInit } from '@angular/core';
-import { DataManagementComponent } from "@shared/data-management/data-management.component";
+import { Component } from '@angular/core';
+import { AuthService } from '@auth0/auth0-angular';
 
 @Component({
   selector: 'app-profile-management',
   templateUrl: './profile-management.component.html',
-  styleUrls: ['./profile-management.component.scss']
+  styleUrls: ['./profile-management.component.scss'],
 })
-export class ProfileManagementComponent implements OnInit {
-
-  email: String = "email@email.email"
-  password: String = "********";
-  nickname: String = "nickname1";
+export class ProfileManagementComponent {
+  email?: string = 'email@email.email';
+  password: string = '********';
+  nickname: string = 'nickname1';
   account_created: Date = new Date();
 
-  constructor() { }
-
-  ngOnInit(): void {
+  constructor(public auth: AuthService) {
+    auth.user$.subscribe((user) => (this.email = user?.email));
   }
-
 }
