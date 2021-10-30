@@ -66,4 +66,8 @@ export class DataManagementComponent implements OnInit {
 
   ngOnInit(): void {
   }
+
+  save(): void {
+    
+  }
 }
