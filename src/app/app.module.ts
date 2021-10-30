@@ -5,11 +5,11 @@ import { FormsModule, ReactiveFormsModule } from "@angular/forms";
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
 import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
-import { DataManagementComponent } from './shared/data-management/data-management.component';
-import { ProfileManagementComponent } from './profile-management/profile-management.component';
 import { AuthModule } from '@auth0/auth0-angular';
-import { CompareComponent } from './compare/compare.component';
-import { StartPageComponent } from './components/start-page/start-page.component';
+import { StartPageComponent } from '@comp/start-page/start-page.component';
+import { CompareComponent } from '@comp/compare/compare.component';
+import { ProfileManagementComponent } from '@comp/profile-management/profile-management.component';
+import { DataManagementComponent } from '@shared/data-management/data-management.component';
 
 @NgModule({
   declarations: [
