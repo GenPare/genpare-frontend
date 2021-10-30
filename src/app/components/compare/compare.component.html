@@ -2,12 +2,38 @@
 
 <div class="card">
     <div class="card-body">
-      <h5 class="card-title">Filter</h5>
-      <div class="card-text">
-            <div class="card-content">
-                
-            </div>
+        <h5 class="card-title">Filter</h5>
+        <div class="card-text">
+            <form>
+                <div class="form-group row">
+                    <label class="col-sm-1 col-form-label">Gehalt:</label>
+                    <div class="col-sm">
+                        <div class="input-group">
+                            <input class="form-control" type="number" min="0" placeholder="Von">
+                            <div class="input-group-postpend">
+                                <div class="input-group-text">€</div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-sm">
+                        <div class="input-group">
+                            <input class="form-control" type="number" placeholder="Bis">
+                            <div class="input-group-postpend">
+                                <div class="input-group-text">€</div>
+                            </div>
+                        </div>
+                    </div>
+                    <label class="col-sm-1 col-form-label">Alter:</label>
+                    <div class="col-sm">
+                        <input class="form-control" type="number" min="0" placeholder="Von">
+                    </div>
+                    <div class="col-sm">
+                        <input class="form-control" type="number" placeholder="Bis">
+                    </div>
+                </div>
+            </form>
         </div>
     </div>
 </div>
 
+<button type="button" class="btn btn-success">Suchen</button>
