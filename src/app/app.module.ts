@@ -9,13 +9,16 @@ import { DataManagementComponent } from './shared/data-management/data-managemen
 import { ProfileManagementComponent } from './profile-management/profile-management.component';
 import { AuthModule } from '@auth0/auth0-angular';
 import { StartPageComponent } from './components/start-page/start-page.component';
+import { ToastsContainerComponent } from './shared/toasts-container/toasts-container.component';
+import { HasEnteredDataGuard } from './guards/has-entered-data';
 
 @NgModule({
   declarations: [
     AppComponent,
     DataManagementComponent,
     ProfileManagementComponent,
-    StartPageComponent
+    StartPageComponent,
+    ToastsContainerComponent
   ],
   imports: [
     BrowserModule,
@@ -28,7 +31,7 @@ import { StartPageComponent } from './components/start-page/start-page.component
       clientId: 'OLtqeuEcVpFPKkLIRaKJ3ENrv3hUUlWY'
     })
   ],
-  providers: [DatePipe],
+  providers: [DatePipe, HasEnteredDataGuard],
   bootstrap: [AppComponent]
 })
 export class AppModule { }

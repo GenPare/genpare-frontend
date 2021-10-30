@@ -2,13 +2,9 @@
   <h3 class="title">GenPare</h3>
   <a>Text der GenPare erklärt</a>
   <img src="https://egirl.rip/2JGbP1xqqM.png?key=UUwP0gP7wWjHag" />
-  <div class="button-container">
+  <div class="button-container" *ngIf="!(auth.isAuthenticated$ | async)">
     <button
-      (click)="
-        auth.loginWithRedirect({
-          uri_redirect: 'http://localhost:4200/profile'
-        })
-      "
+      (click)="auth.loginWithRedirect({ appState: { target: '/profile' } })"
       class="btn btn-primary log-button"
     >
       Log in
