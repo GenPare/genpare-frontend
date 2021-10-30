@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { FormControl, FormGroup } from "@angular/forms";
-import { education_degrees, federal_states, genders } from "@shared/select_data";
+import { Observable } from 'rxjs';
+import { SelectDataService } from "../../select-data.service";
 
 @Component({
   selector: 'app-data-management',
@@ -10,11 +11,11 @@ import { education_degrees, federal_states, genders } from "@shared/select_data"
 
 export class DataManagementComponent implements OnInit {
 
-  federal_states: String[] = federal_states;
+  federal_states$: Observable<String[]>; 
 
-  genders: String[] = genders;
+  genders$: Observable<String[]>;
 
-  education_degrees: String[] = education_degrees;
+  education_degrees$: Observable<String[]>;
 
   data_management = new FormGroup({
     job: new FormControl(''),
@@ -25,7 +26,11 @@ export class DataManagementComponent implements OnInit {
     age: new FormControl('')
   })
   
-  constructor() { }
+  constructor(public selectDataService: SelectDataService) {
+    this.federal_states$ = selectDataService.getFederalStates();
+    this.genders$ = selectDataService.getGenders();
+    this.education_degrees$ = selectDataService.getEducationDegrees();
+  }
 
   ngOnInit(): void {
   }
