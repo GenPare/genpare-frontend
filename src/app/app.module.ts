@@ -6,6 +6,7 @@ import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
 import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
 import { AuthModule } from '@auth0/auth0-angular';
+import { MDBBootstrapModule } from "angular-bootstrap-md";
 import { StartPageComponent } from '@comp/start-page/start-page.component';
 import { CompareComponent } from '@comp/compare/compare.component';
 import { ProfileManagementComponent } from '@comp/profile-management/profile-management.component';
@@ -28,7 +29,8 @@ import { DataManagementComponent } from '@shared/data-management/data-management
     AuthModule.forRoot({
       domain: 'dev-t9d7tc1e.eu.auth0.com',
       clientId: 'OLtqeuEcVpFPKkLIRaKJ3ENrv3hUUlWY'
-    })
+    }),
+    MDBBootstrapModule.forRoot()
   ],
   providers: [DatePipe],
   bootstrap: [AppComponent]
