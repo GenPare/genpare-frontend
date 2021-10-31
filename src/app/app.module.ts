@@ -11,7 +11,6 @@ import { StartPageComponent } from '@comp/start-page/start-page.component';
 import { CompareComponent } from '@comp/compare/compare.component';
 import { ProfileManagementComponent } from '@comp/profile-management/profile-management.component';
 import { DataManagementComponent } from '@shared/data-management/data-management.component';
-import { StartPageComponent } from './components/start-page/start-page.component';
 import { SupportPageComponent } from './components/support-page/support-page.component';
 import { HttpClientModule } from '@angular/common/http';
 import { ToastsContainerComponent } from './shared/toasts-container/toasts-container.component';
