@@ -9,6 +9,8 @@ import { DataManagementComponent } from './shared/data-management/data-managemen
 import { ProfileManagementComponent } from './profile-management/profile-management.component';
 import { AuthModule } from '@auth0/auth0-angular';
 import { StartPageComponent } from './components/start-page/start-page.component';
+import { ToastsContainerComponent } from './shared/toasts-container/toasts-container.component';
+import { HasEnteredDataGuard } from './guards/has-entered-data';
 import { SupportPageComponent } from './components/support-page/support-page.component';
 
 @NgModule({
@@ -17,6 +19,7 @@ import { SupportPageComponent } from './components/support-page/support-page.com
     DataManagementComponent,
     ProfileManagementComponent,
     StartPageComponent,
+    ToastsContainerComponent,
     SupportPageComponent
   ],
   imports: [
@@ -30,7 +33,7 @@ import { SupportPageComponent } from './components/support-page/support-page.com
       clientId: 'OLtqeuEcVpFPKkLIRaKJ3ENrv3hUUlWY'
     })
   ],
-  providers: [DatePipe],
+  providers: [DatePipe, HasEnteredDataGuard],
   bootstrap: [AppComponent]
 })
 export class AppModule { }
