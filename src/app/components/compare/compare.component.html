@@ -69,9 +69,21 @@
 
 <div class="card">
     <div class="card-body">
-        <h5 class="card-title">Filter</h5>
+        <h5 class="card-title">Ergebnisse</h5>
         <div class="card-text">
-            <table class="table table-striped"></table>                  
+            <table class="table table-striped">
+                <tr>
+                    <th *ngFor="let header of table_headers">{{ header }}</th>
+                </tr>
+                <tr *ngFor="let data of data$ | async">
+                    <td>{{ data.job_title }}</td>
+                    <td>{{ data.education_degree }}</td>
+                    <td>{{ data.age.min }} - {{ data.age.max }}</td>
+                    <td>{{ data.federal_state }}</td>
+                    <td>{{ data.gender }}</td>
+                    <td>{{ data.salary.min }}€ - {{ data.salary.max }}€</td>
+                </tr>
+            </table>
         </div>
     </div>
 </div>

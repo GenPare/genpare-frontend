@@ -11,6 +11,7 @@ import { StartPageComponent } from '@comp/start-page/start-page.component';
 import { CompareComponent } from '@comp/compare/compare.component';
 import { ProfileManagementComponent } from '@comp/profile-management/profile-management.component';
 import { DataManagementComponent } from '@shared/data-management/data-management.component';
+import { HttpClientModule } from '@angular/common/http';
 
 @NgModule({
   declarations: [
@@ -30,7 +31,8 @@ import { DataManagementComponent } from '@shared/data-management/data-management
       domain: 'dev-t9d7tc1e.eu.auth0.com',
       clientId: 'OLtqeuEcVpFPKkLIRaKJ3ENrv3hUUlWY'
     }),
-    MDBBootstrapModule.forRoot()
+    MDBBootstrapModule.forRoot(),
+    HttpClientModule
   ],
   providers: [DatePipe],
   bootstrap: [AppComponent]
