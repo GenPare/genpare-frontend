@@ -4,7 +4,8 @@ import { CompareComponent } from '@comp/compare/compare.component';
 import { AuthGuard } from '@auth0/auth0-angular';
 import { StartPageComponent } from './components/start-page/start-page.component';
 import { SupportPageComponent } from './components/support-page/support-page.component';
-import { ProfileManagementComponent } from './profile-management/profile-management.component';
+import { ProfileManagementComponent } from '@comp/profile-management/profile-management.component';
+
 
 
 const routes: Routes = [

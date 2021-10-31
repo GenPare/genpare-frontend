@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { CanDeactivate } from '@angular/router';
-import { ProfileManagementComponent } from 'app/profile-management/profile-management.component';
+import { ProfileManagementComponent } from '@comp/profile-management/profile-management.component';
 import { ToastService } from 'app/services/toast.service';
 
 @Injectable()
