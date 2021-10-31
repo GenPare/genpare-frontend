@@ -31,9 +31,38 @@
                         <input class="form-control" type="number" placeholder="Bis">
                     </div>
                 </div>
+                <div class="form-group row">
+                    <label class="col-sm-1 col-form-label">Beruf:</label>
+                    <div class="col-sm-3">
+                        <select class="form-control" type="select">
+                            <ng-container>
+                                <option>1</option>
+                            </ng-container>
+                        </select>
+                    </div>
+                    <label class="col-sm-1 col-form-label">Bundesland:</label>
+                    <div class="col-sm-3">
+                        <select class="form-control" type="select">
+                            <ng-container *ngFor="let federal_state of federal_states$ | async">
+                                <option>{{ federal_state }}</option>
+                            </ng-container>
+                        </select>
+                    </div>
+                    <label class="col-sm-1 col-form-label">Bildungsgrad:</label>
+                    <div class="col-sm-3">
+                        <select class="form-control" type="select">
+                            <ng-container *ngFor="let education_degree of education_degrees$ | async">
+                                <option>{{ education_degree }}</option>
+                            </ng-container>
+                        </select>
+                    </div>
+                </div>
+                <div class="form-group row">
+                    <div class="col-sm-1">
+                        <button type="button" class="btn btn-success" (click)="search()">Suchen</button>
+                    </div>
+                </div>
             </form>
         </div>
     </div>
 </div>
-
-<button type="button" class="btn btn-success">Suchen</button>

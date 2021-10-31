@@ -21,4 +21,8 @@ export class CompareComponent implements OnInit {
   ngOnInit(): void {
   }
 
+  search(): void {
+    
+  }
+
 }
