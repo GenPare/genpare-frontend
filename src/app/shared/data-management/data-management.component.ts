@@ -1,5 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { FormControl, FormGroup } from "@angular/forms";
+import { Observable } from 'rxjs';
+import { SelectDataService } from "../../select-data.service";
 
 @Component({
   selector: 'app-data-management',
@@ -9,49 +11,11 @@ import { FormControl, FormGroup } from "@angular/forms";
 
 export class DataManagementComponent implements OnInit {
 
-  federal_states: String[] = [
-    'Baden-Württemberg',
-    'Bayern',
-    'Berlin',
-    'Brandenburg',
-    'Bremen',
-    'Hamburg',
-    'Hessen',
-    'Mecklenburg-Vorpommern',
-    'Niedersachsen',
-    'Nordrhein-Westfalen',
-    'Rheinland-Pfalz',
-    'Saarland',
-    'Sachsen',
-    'Sachsen-Anhalt',
-    'Schleswig-Holstein',
-    'Thüringen'
-  ]
+  federal_states$: Observable<String[]>; 
 
-  genders: String[] = [
-    'männlich',
-    'weiblich',
-    'divers'
-  ]
+  genders$: Observable<String[]>;
 
-  education_degrees: String[] = [
-    'kein Abschluss',
-    'Hauptschulabschluss',
-    'Realschulschluss',
-    'Abitur / Allgemeine Hochschulreife',
-    'Fachhochschulreife',
-    'Diplom (Hochschule)',
-    'Magister (Hochschule)',
-    'Bachelor (Hochschule)',
-    'Master (Hochschule)',
-    'Doktor / Promotion (Hochschule)',
-    'Geselle',
-    'Meister',
-    'Einfacher Dienst',
-    'Mittlerer Dienst',
-    'Gehobener Dienst',
-    'Höherer Dienst'
-  ]
+  education_degrees$: Observable<String[]>;
 
   data_management = new FormGroup({
     job: new FormControl(''),
@@ -62,8 +26,16 @@ export class DataManagementComponent implements OnInit {
     age: new FormControl('')
   })
   
-  constructor() { }
+  constructor(public selectDataService: SelectDataService) {
+    this.federal_states$ = selectDataService.getFederalStates();
+    this.genders$ = selectDataService.getGenders();
+    this.education_degrees$ = selectDataService.getEducationDegrees();
+  }
 
   ngOnInit(): void {
+  }
+
+  save(): void {
+    
   }
 }
