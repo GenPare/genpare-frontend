@@ -9,13 +9,15 @@ import { DataManagementComponent } from './shared/data-management/data-managemen
 import { ProfileManagementComponent } from './profile-management/profile-management.component';
 import { AuthModule } from '@auth0/auth0-angular';
 import { StartPageComponent } from './components/start-page/start-page.component';
+import { SupportPageComponent } from './components/support-page/support-page.component';
 
 @NgModule({
   declarations: [
     AppComponent,
     DataManagementComponent,
     ProfileManagementComponent,
-    StartPageComponent
+    StartPageComponent,
+    SupportPageComponent
   ],
   imports: [
     BrowserModule,
