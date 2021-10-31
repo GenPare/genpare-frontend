@@ -11,6 +11,7 @@ import { AuthModule } from '@auth0/auth0-angular';
 import { StartPageComponent } from './components/start-page/start-page.component';
 import { ToastsContainerComponent } from './shared/toasts-container/toasts-container.component';
 import { HasEnteredDataGuard } from './guards/has-entered-data';
+import { SupportPageComponent } from './components/support-page/support-page.component';
 
 @NgModule({
   declarations: [
@@ -18,7 +19,8 @@ import { HasEnteredDataGuard } from './guards/has-entered-data';
     DataManagementComponent,
     ProfileManagementComponent,
     StartPageComponent,
-    ToastsContainerComponent
+    ToastsContainerComponent,
+    SupportPageComponent
   ],
   imports: [
     BrowserModule,
