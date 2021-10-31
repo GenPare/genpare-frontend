@@ -1,27 +1,17 @@
-# Genpare
+# GenPare: Frontend 
 
-This project was generated with [Angular CLI](https://github.com/angular/angular-cli) version 12.2.7.
+Welcome to the Frontend-Repository of GenPare! The following steps will help you to set up the Angular-Application locally. 
 
-## Development server
+## Installing
 
-Run `ng serve` for a dev server. Navigate to `http://localhost:4200/`. The app will automatically reload if you change any of the source files.
+### Install Angular 
 
-## Code scaffolding
+As this is an Angular-Application, Angular and [Node.js](https://nodejs.org/en/download/) (v14.18.1) are required. If not already installed, install Node.js first. Then, install the Angular CLI via npm by running the following command: `npm install -g @angular/cli`.
 
-Run `ng generate component component-name` to generate a new component. You can also use `ng generate directive|pipe|service|class|guard|interface|enum|module`.
+### Install Dependencies
 
-## Build
+When Angular is installed, clone the repository and head into the root directory (main-folder). To install all required dependencies, run the command `npm i`. 
 
-Run `ng build` to build the project. The build artifacts will be stored in the `dist/` directory.
+## Starting
 
-## Running unit tests
-
-Run `ng test` to execute the unit tests via [Karma](https://karma-runner.github.io).
-
-## Running end-to-end tests
-
-Run `ng e2e` to execute the end-to-end tests via a platform of your choice. To use this command, you need to first add a package that implements end-to-end testing capabilities.
-
-## Further help
-
-To get more help on the Angular CLI use `ng help` or go check out the [Angular CLI Overview and Command Reference](https://angular.io/cli) page.
+To start the frontend, stay in the root-directory of the repository and type `ng serve --open`. The Angular CLI will compile and build the Application and open a new tab in your browser.
