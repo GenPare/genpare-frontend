@@ -1,3 +1,5 @@
+@import "../../shared/variables.scss";
+
 .centered {
   width: 50%;
   position: absolute;
@@ -13,11 +15,32 @@
     padding: 1rem;
     width: 100%;
     display: flex;
-    justify-content: space-evenly;
+    justify-content: center;
+  }
+
+  .log-button {
+    color: $primary-color;
+    background-color: $secondary-color;
+    border-color: $secondary-color;
+    margin: 0 3rem;
+  }
+  .sign-button {
+    color: $secondary-color;
+    background-color: $primary-color;
+    border-color: $secondary-color;
+    margin: 0 3rem;
+  }
+
+  .title {
+    color: $secondary-color;
+  }
+  .description {
+    color: $secondary-color;
   }
 }
 
-img {
-  width: 50%;
+svg {
+  width: 30rem;
   height: auto;
+  border: 0px;
 }
