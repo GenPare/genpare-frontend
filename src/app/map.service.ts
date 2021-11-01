@@ -28,4 +28,16 @@ export class MapService {
       this.gendersMap.set(genders_s[i], genders_b[i]);
     }
   }
+
+  mapGender(key: string): string {
+    return this.gendersMap.get(key);
+  }
+
+  mapEducationDegree(key: string): string {
+    return this.educationDegreesMap.get(key);
+  }
+
+  mapFederalState(key: string): string {
+    return this.federalStatesMap.get(key);
+  }
 }
