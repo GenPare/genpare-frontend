@@ -1,4 +1,4 @@
-export const federal_states: String[] = [
+export const federal_states: string[] = [
     'Baden-Württemberg',
     'Bayern',
     'Berlin',
@@ -17,13 +17,13 @@ export const federal_states: String[] = [
     'Thüringen'
   ];
 
-  export const genders: String[] = [
+  export const genders: string[] = [
     'männlich',
     'weiblich',
     'divers'
   ];
 
-  export const education_degrees: String[] = [
+  export const education_degrees: string[] = [
     'kein Abschluss',
     'Hauptschulabschluss',
     'Realschulschluss',
