@@ -14,8 +14,6 @@
                     <div class="col-sm-5">
                         <select class="form-control" id="education-degree" aria-describedby="education-degree-small" formControlName="education_degree">
                             <ng-container *ngFor="let education_degree of education_degrees">
-                                <option value="education_degree">{{ education_degree }}</option>
-                            </ng-container>    
                                 <option [value]="education_degree">{{ education_degree }}</option>
                             </ng-container>
                         </select>
