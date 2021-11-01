@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { Observable, of } from 'rxjs';
-import { switchMap } from 'rxjs/operators';
+import { map, switchMap } from 'rxjs/operators';
 import { HttpClient } from '@angular/common/http';
 import { backendURL } from 'app/app.module';
 import { MapService } from './map.service';
@@ -10,6 +10,13 @@ export interface ProfileData {
   salary: number;
   education_degree: string;
   federal_state: string;
+}
+
+interface ResponseData {
+  salary: number;
+  jobTitle: string;
+  state: string;
+  levelOfEducation: string;
 }
 
 export interface CompareData {
@@ -46,11 +53,11 @@ export class DataManagementService {
         },
         age: {
           min: 45,
-          max: 49
+          max: 49,
         },
         education_degree: 'Ausbildung',
         federal_state: 'Brandenburg',
-        gender: 'weiblich'
+        gender: 'weiblich',
       },
       {
         job_title: 'Krankenpfleger',
@@ -60,7 +67,7 @@ export class DataManagementService {
         },
         age: {
           min: 45,
-          max: 49
+          max: 49,
         },
         education_degree: 'Abitur',
         federal_state: 'Berlin',
@@ -74,7 +81,7 @@ export class DataManagementService {
         },
         age: {
           min: 45,
-          max: 49
+          max: 49,
         },
         education_degree: 'Master',
         federal_state: 'Hessen',
@@ -85,27 +92,63 @@ export class DataManagementService {
 
   newProfileData(data: ProfileData) {
     if (this.sessionId) {
-      return this.http.put(backendURL + '/salary/own', {
-        sessionId: this.sessionId,
-        salary: data.salary,
-        jobTitle: data.job_title,
-        state: this.mapService.mapFederalState(data.federal_state),
-        levelOfEducation: this.mapService.mapEducationDegree(data.education_degree),
-      }).subscribe();
+      return this.http
+        .put(backendURL + '/salary/own', {
+          sessionId: this.sessionId,
+          salary: data.salary,
+          jobTitle: data.job_title,
+          state: this.mapService.mapFederalState(data.federal_state),
+          levelOfEducation: this.mapService.mapEducationDegree(
+            data.education_degree
+          ),
+        })
+        .subscribe();
     } else {
-      console.log("string");
+      return this.getSessionId()
+        .pipe(
+          switchMap((sessionId) => {
+            return this.http.put(backendURL + '/salary/own', {
+              sessionId: sessionId,
+              salary: data.salary,
+              jobTitle: data.job_title,
+              state: this.mapService.mapFederalState(data.federal_state),
+              levelOfEducation: this.mapService.mapEducationDegree(
+                data.education_degree
+              ),
+            });
+          })
+        )
+        .subscribe();
+    }
+  }
+
+  getProfileData(): Observable<ProfileData> {
+    if (this.sessionId) {
+      return this.http
+        .get<ResponseData>(backendURL + '/salary/?sessionId=' + this.sessionId)
+        .pipe(
+          map((data) => ({
+            job_title: data.jobTitle,
+            salary: data.salary,
+            education_degree: data.levelOfEducation,
+            federal_state: data.state,
+          }))
+        );
+    } else {
       return this.getSessionId().pipe(
         switchMap((sessionId) => {
-          console.log(data.education_degree, data.federal_state);
-          return this.http.put(backendURL + '/salary/own', {
-            sessionId: sessionId,
-            salary: data.salary,
-            jobTitle: data.job_title,
-            state: this.mapService.mapFederalState(data.federal_state),
-            levelOfEducation: this.mapService.mapEducationDegree(data.education_degree),
-          });
+          return this.http
+            .get<ResponseData>(backendURL + '/salary/?sessionId=' + sessionId)
+            .pipe(
+              map((data) => ({
+                job_title: data.jobTitle,
+                salary: data.salary,
+                education_degree: data.levelOfEducation,
+                federal_state: data.state,
+              }))
+            );
         })
-      ).subscribe();
+      );
     }
   }
 
