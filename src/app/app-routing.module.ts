@@ -8,7 +8,7 @@ import { ProfileManagementComponent } from './profile-management/profile-managem
 
 const routes: Routes = [
   { path: 'profile', component: ProfileManagementComponent ,canActivate: [AuthGuard]},
-  { path: '', redirectTo: 'profile', pathMatch: 'full' },
+  { path: '', redirectTo: 'start', pathMatch: 'full' },
   { path: 'start', component: StartPageComponent },
   { path: 'support', component: SupportPageComponent}
 ];
