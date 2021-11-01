@@ -6,7 +6,7 @@ import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
 import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
 import { DataManagementComponent } from './components/data-management/data-management.component';
-import { ProfileManagementComponent } from './profile-management/profile-management.component';
+import { ProfileManagementComponent } from './components/profile-management/profile-management.component';
 import { AuthModule } from '@auth0/auth0-angular';
 import { StartPageComponent } from './components/start-page/start-page.component';
 import { ToastsContainerComponent } from './shared/toasts-container/toasts-container.component';

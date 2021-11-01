@@ -1,0 +1,32 @@
+<h3>Profilverwaltung</h3>
+<div class="card">
+  <div class="card-body">
+    <h5 class="card-title">Accountverwaltung</h5>
+    <div class="card-text">
+      <div class="card-content">
+        <div class="container-fluid">
+          <div class="row upper-row">
+            <div class="col-1">Email:</div>
+            <div class="col-5">{{ email$ | async }}</div>
+            <div class="col-1">Nickname:</div>
+            <input
+              type="text"
+              class="col-5"
+              [(ngModel)]="nickname"
+              [disabled]="isRegistered"
+              required
+            />
+          </div>
+          <div class="row">
+            <div class="col-1">Passwort:</div>
+            <div class="col-5">{{ password }}</div>
+            <div class="col-1">Account erstellt:</div>
+            <div class="col-5">{{ creationDate | date: "longDate" }}</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<app-data-management [nickname]="nickname" (registeredEmitter)="onRegisteredEmitter($event)"></app-data-management>

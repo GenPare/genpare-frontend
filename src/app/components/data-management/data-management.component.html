@@ -46,7 +46,7 @@
                     <div class="col-sm-5">
                         <select class="form-control" id="gender" style="width: 100%" aria-describedby="gender-small" formControlName="gender">
                             <ng-container *ngFor="let gender of genders">
-                                <option value="gender">{{ gender }}</option>
+                                <option [value]="gender">{{ gender }}</option>
                             </ng-container>    
                         </select>
                         <small class="form-text text-muted" id="gender-small">Bitte geben Sie Ihr Geschlecht an.</small>
@@ -66,5 +66,4 @@
             </form>
         </div>
     </div>
-    <button (click)="test()">test</button>
 </div>

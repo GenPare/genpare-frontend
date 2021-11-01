@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { MemberService } from 'app/services/member.service';
 import { education_degrees, federal_states, genders } from './select-options';
@@ -9,6 +9,12 @@ import { education_degrees, federal_states, genders } from './select-options';
   styleUrls: ['./data-management.component.scss'],
 })
 export class DataManagementComponent implements OnInit {
+  @Input()
+  nickname?: string;
+
+  @Output()
+  registeredEmitter = new EventEmitter<boolean>();
+
   education_degrees = education_degrees;
   federal_states = federal_states;
   genders = genders;
@@ -22,14 +28,27 @@ export class DataManagementComponent implements OnInit {
     age: new FormControl('', Validators.required),
   });
 
-  constructor(public memberService: MemberService) {}
+  constructor(private memberService: MemberService) {
+    this.memberService.getSessionId().subscribe(id => {
+      if (id) {
+        this.registeredEmitter.emit(true);
+      } else {
+        this.registeredEmitter.emit(false);
+      }
+    })
+  }
 
   ngOnInit(): void {}
 
-  test() {
-    let a = this.memberService.getSessionID();
-    a.subscribe(value => console.log(value))
+  save(): void {
+    if (!this.memberService.sessionID && this.nickname) {
+      
+      this.memberService.registerMember(
+        this.nickname,
+        this.data_management.value.age,
+        this.data_management.value.gender
+      );
+      this.registeredEmitter.emit(true);
+    }
   }
-
-  save(): void {}
 }

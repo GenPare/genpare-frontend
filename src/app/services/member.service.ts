@@ -1,129 +1,100 @@
 import { HttpClient } from '@angular/common/http';
-import { Injectable } from '@angular/core';
+import { Injectable, OnDestroy } from '@angular/core';
 import { AuthService } from '@auth0/auth0-angular';
 import { backendURL } from 'app/app.module';
 import { map, switchMap, tap } from 'rxjs/operators';
-import { Observable, EMPTY } from 'rxjs';
+import { Observable, EMPTY, of, Subscription } from 'rxjs';
 import { DatePipe } from '@angular/common';
 
 interface sessionIdResponse {
   sessionId: number;
 }
 
+interface memberDataResponse {
+  email: string;
+  name: string;
+  birthdate: Date;
+  gender: string;
+}
+
 @Injectable({
   providedIn: 'root',
 })
-export class MemberService {
+export class MemberService implements OnDestroy {
   userEmail?: string;
   sessionID?: number;
-  pipe = new DatePipe('')
+  pipe = new DatePipe('en-US');
+  subscriptions = new Subscription();
 
-  constructor(private http: HttpClient, private auth: AuthService) {}
-
-  registerMember(name: string, birthdate: Date) {
-    birthdate
-    //maybe Date Formatting
-    if (this.userEmail) {
-      return this.http.post(backendURL + '/members', {
-        id: null,
-        email: this.userEmail,
-        name: name,
-        birthdate: birthdate,
-      });
-    } else {
-      return this.getEmail().pipe(
-        switchMap((email) =>
-          this.http.post(backendURL + '/members', {
-            id: null,
-            email: email,
-            name: name,
-            birthdate: birthdate,
-          })
-        )
-      );
-    }
+  constructor(private http: HttpClient, private auth: AuthService) {
+    this.getSessionId();
   }
-
-  deleteMember() {
-    if (this.userEmail && this.sessionID) {
-      return this.http.post(backendURL + '/members', {
-        params: { email: this.userEmail, sessionId: this.sessionID },
-      });
-    } else {
-      return this.getSessionID().pipe(
-        switchMap((id) =>
-          this.userEmail
-            ? this.http.post(backendURL + '/members', {
-                params: { email: this.userEmail, sessionId: id },
-              })
-            : EMPTY
-        )
-      );
-    }
+  ngOnDestroy(): void {
+    this.subscriptions.unsubscribe();
   }
-
-  changeName(newName: string) {
-    return this.sessionID
-      ? this.http.patch(backendURL + '/members', {
-          name: newName,
-          sessionId: this.sessionID,
-        })
-      : this.getSessionID().pipe(
-          switchMap((id) =>
-            this.http.patch(backendURL + '/members', {
-              name: newName,
-              sessionId: id,
-            })
-          )
-        );
-  }
-
-  getSessionID(): Observable<number> {
-    if (this.userEmail) {
-      return this.http
-        .post<sessionIdResponse>(backendURL + '/members/session', {
-          params: { email: this.userEmail },
-        })
-        .pipe(map((json) => json.sessionId))
-        .pipe(tap((id) => (this.sessionID = id)));
-    } else {
-      return this.getEmail()
-        .pipe(
-          switchMap((email) =>
-            email
-              ? this.http.post<sessionIdResponse>(
-                  backendURL + '/members/session',
-                  {
-                    params: { email: email },
-                  }
-                )
-              : EMPTY
-          )
-        )
-        .pipe(map((json) => json.sessionId))
-        .pipe(tap((id) => (this.sessionID = id)));
-    }
-  }
-
-  getEmail(): Observable<string | undefined> {
+  getEmail(): Observable<string> {
     return this.auth.user$
-      .pipe(map((user) => user?.email))
+      .pipe(map((user) => (user?.email ? user?.email : '')))
       .pipe(tap((email) => (this.userEmail = email)));
   }
 
-  sessionIDInvalidation() {
+  getNickname(): Observable<string> {
+    console.log('getted name');
+    return this.sessionID
+      ? this.http
+          .get<memberDataResponse>(backendURL + '/members', {
+            params: { sessionId: this.sessionID },
+          })
+          .pipe(map((jsonResponse) => jsonResponse.name))
+      : EMPTY;
+  }
+
+  registerMember(name: string, birthdate: Date, gender: string) {
+    const formatDate = this.pipe.transform(birthdate, 'yyyy-MM-dd');
     return this.userEmail
-      ? this.http.delete(backendURL + '/members/session', {
+      ? this.http
+          .post(backendURL + '/members', {
+            id: null,
+            email: this.userEmail,
+            name: name,
+            birthdate: formatDate,
+            gender: gender,
+          })
+          .subscribe(() => this.getSessionId())
+      : EMPTY;
+  }
+
+  getSessionId(): Observable<number> {
+    if (this.userEmail) {
+      return this.http
+        .get<sessionIdResponse>(backendURL + '/members/session', {
           params: { email: this.userEmail },
         })
-      : this.getEmail().pipe(
-          switchMap((mail) =>
-            mail
-              ? this.http.delete(backendURL + '/members/session', {
-                  params: { email: mail },
-                })
-              : EMPTY
-          )
-        );
+        .pipe(map((jsonResponse) => jsonResponse.sessionId))
+        .pipe(tap((id) => (this.sessionID = id)));
+    } else {
+      return this.getEmail().pipe(
+        switchMap((email) =>
+          this.http
+            .get<sessionIdResponse>(backendURL + '/members/session', {
+              params: { email: email },
+            })
+            .pipe(map((jsonResponse) => jsonResponse.sessionId))
+            .pipe(tap((id) => (this.sessionID = id)))
+        )
+      );
+    }
+  }
+
+  invalidateSessionId() {
+    if (this.userEmail) {
+      return this.http.delete(backendURL + '/members/session', {
+        params: {
+          email: this.userEmail,
+        },
+      });
+    } else {
+      return EMPTY;
+    }
   }
 }
