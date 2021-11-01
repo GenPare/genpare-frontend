@@ -1,7 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { FormControl, FormGroup } from "@angular/forms";
 import { DataManagementService } from 'app/data-management.service';
-import { Observable } from 'rxjs';
 import { federal_states_s, education_degrees_s, genders_s } from "@shared/model/select_data";
 import { ProfileData } from "../../data-management.service";
 

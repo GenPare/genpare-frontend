@@ -3,6 +3,7 @@ import { Observable, of } from 'rxjs';
 import { switchMap } from 'rxjs/operators';
 import { HttpClient } from '@angular/common/http';
 import { backendURL } from 'app/app.module';
+import { MapService } from './map.service';
 
 export interface ProfileData {
   job_title: string;
@@ -33,7 +34,7 @@ export class DataManagementService {
 
   sessionId?: number;
 
-  constructor(private http: HttpClient) {}
+  constructor(private http: HttpClient, private mapService: MapService) {}
 
   getCompareData(): Observable<CompareData[]> {
     return of([
@@ -76,9 +77,9 @@ export class DataManagementService {
         sessionId: this.sessionId,
         salary: data.salary,
         jobTitle: data.job_title,
-        state: data.federal_state,
-        levelOfEducation: data.education_degree,
-      });
+        state: this.mapService.mapFederalState(data.federal_state),
+        levelOfEducation: this.mapService.mapEducationDegree(data.education_degree),
+      }).subscribe();
     } else {
       console.log("string");
       return this.getSessionId().pipe(
@@ -88,8 +89,8 @@ export class DataManagementService {
             sessionId: sessionId,
             salary: data.salary,
             jobTitle: data.job_title,
-            state: data.federal_state,
-            levelOfEducation: data.education_degree,
+            state: this.mapService.mapFederalState(data.federal_state),
+            levelOfEducation: this.mapService.mapEducationDegree(data.education_degree),
           });
         })
       ).subscribe();
