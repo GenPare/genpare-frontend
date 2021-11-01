@@ -41,8 +41,7 @@ export class DataManagementComponent implements OnInit {
       job_title: this.data_management.value.job,
       salary: this.data_management.value.salary,
       education_degree: this.data_management.value.education_degree,
-      federal_state: this.data_management.value.federal_state,
-      gender: this.data_management.value.gender
+      federal_state: this.data_management.value.federal_state
     }
     this.dataManagementService.newProfileData(this.data);
   }

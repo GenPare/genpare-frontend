@@ -10,12 +10,12 @@ export interface ProfileData {
   salary: number;
   education_degree: string;
   federal_state: string;
-  gender: string;
 }
 
 export interface CompareData {
   job_title: string;
   salary: Range;
+  age: Range;
   education_degree: string;
   federal_state: string;
   gender: string;
@@ -44,15 +44,23 @@ export class DataManagementService {
           min: 4000,
           max: 4500,
         },
+        age: {
+          min: 45,
+          max: 49
+        },
         education_degree: 'Ausbildung',
         federal_state: 'Brandenburg',
-        gender: 'weiblich',
+        gender: 'weiblich'
       },
       {
         job_title: 'Krankenpfleger',
         salary: {
           min: 2500,
           max: 3000,
+        },
+        age: {
+          min: 45,
+          max: 49
         },
         education_degree: 'Abitur',
         federal_state: 'Berlin',
@@ -63,6 +71,10 @@ export class DataManagementService {
         salary: {
           min: 5500,
           max: 6000,
+        },
+        age: {
+          min: 45,
+          max: 49
         },
         education_degree: 'Master',
         federal_state: 'Hessen',
