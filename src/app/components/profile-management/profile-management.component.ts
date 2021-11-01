@@ -1,6 +1,7 @@
 import { Component } from '@angular/core';
+import { AuthService } from '@auth0/auth0-angular';
 import { MemberService } from 'app/services/member.service';
-import { Observable, Subscription } from 'rxjs';
+import { Subscription } from 'rxjs';
 
 @Component({
   selector: 'app-profile-management',
@@ -8,19 +9,21 @@ import { Observable, Subscription } from 'rxjs';
   styleUrls: ['./profile-management.component.scss'],
 })
 export class ProfileManagementComponent {
+  email?: string = 'email@email.email';
   password: string = '********';
-  nickname?: string;
-  creationDate: Date = new Date();
-  isRegistered: boolean = false;
-  email$: Observable<string>;
+  nickname: string = 'nickname1';
+  account_created: Date = new Date();
+  isRegistered = false;
+  subscriptions = new Subscription();
 
-  constructor(public memberService: MemberService) {
-    this.email$ = memberService.getEmail();
+  constructor(public auth: AuthService, private memberService: MemberService) {
+    this.subscriptions.add(
+      auth.user$.subscribe((user) => (this.email = user?.email))
+    );
+    this.subscriptions.add(
+      this.memberService
+        .getSessionId()
+        .subscribe((id) => (this.isRegistered = id ? true : false))
+    );
   }
-
-  onRegisteredEmitter (bool: boolean) {
-    this.isRegistered = bool;
-  }
-
-  
 }

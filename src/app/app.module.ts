@@ -5,10 +5,12 @@ import { FormsModule, ReactiveFormsModule } from "@angular/forms";
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
 import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
-import { DataManagementComponent } from './components/data-management/data-management.component';
-import { ProfileManagementComponent } from './components/profile-management/profile-management.component';
 import { AuthModule } from '@auth0/auth0-angular';
-import { StartPageComponent } from './components/start-page/start-page.component';
+import { MDBBootstrapModule } from "angular-bootstrap-md";
+import { StartPageComponent } from '@comp/start-page/start-page.component';
+import { CompareComponent } from '@comp/compare/compare.component';
+import { ProfileManagementComponent } from '@comp/profile-management/profile-management.component';
+import { DataManagementComponent } from '@shared/data-management/data-management.component';
 import { ToastsContainerComponent } from './shared/toasts-container/toasts-container.component';
 import { HasEnteredDataGuard } from './guards/has-entered-data';
 import { SupportPageComponent } from './components/support-page/support-page.component';
@@ -26,6 +28,7 @@ export class App {
     AppComponent,
     DataManagementComponent,
     ProfileManagementComponent,
+    CompareComponent,
     StartPageComponent,
     ToastsContainerComponent,
     SupportPageComponent
@@ -40,6 +43,7 @@ export class App {
       domain: 'dev-t9d7tc1e.eu.auth0.com',
       clientId: 'OLtqeuEcVpFPKkLIRaKJ3ENrv3hUUlWY'
     }),
+    MDBBootstrapModule.forRoot(),
     HttpClientModule
   ],
   providers: [DatePipe, HasEnteredDataGuard],
