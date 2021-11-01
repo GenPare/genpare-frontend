@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { FormControl, FormGroup } from "@angular/forms";
 import { DataManagementService } from 'app/data-management.service';
-import { federal_states_s, education_degrees_s, genders_s } from "@shared/model/select_data";
+import { federal_states_f, education_degrees_f, genders_f } from "@shared/model/frontend_data";
 import { ProfileData } from "../../data-management.service";
 
 @Component({
@@ -28,9 +28,9 @@ export class DataManagementComponent implements OnInit {
   })
   
   constructor(private dataManagementService: DataManagementService) {
-    this.federal_states = federal_states_s;
-    this.genders = genders_s;
-    this.education_degrees = education_degrees_s;
+    this.federal_states = federal_states_f;
+    this.genders = genders_f;
+    this.education_degrees = education_degrees_f;
   }
 
   ngOnInit(): void {
