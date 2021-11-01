@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { education_degrees_s, federal_states_s, genders_s } from "@shared/model/select_data";
+import { education_degrees_f, federal_states_f, genders_f } from "@shared/model/frontend_data";
 import { education_degrees_b, federal_states_b, genders_b } from "@shared/model/backend_data";
 
 @Injectable({
@@ -7,37 +7,65 @@ import { education_degrees_b, federal_states_b, genders_b } from "@shared/model/
 })
 export class MapService {
 
-  gendersMap = new Map();
-  federalStatesMap = new Map();
-  educationDegreesMap = new Map();
+  gendersMapFtoB = new Map();
+  federalStatesMapFtoB = new Map();
+  educationDegreesMapFtoB = new Map();
+
+  gendersMapBtoF = new Map();
+  federalStatesMapBtoF = new Map();
+  educationDegreesMapBtoF = new Map();
 
   constructor() {
     this.initialize();
   }
 
   initialize(): void {
-    for(let i=0; i<federal_states_s.length; i++){
-      this.educationDegreesMap.set(education_degrees_s[i], education_degrees_b[i]);
+    for(let i=0; i<federal_states_f.length; i++){
+      this.educationDegreesMapFtoB.set(education_degrees_f[i], education_degrees_b[i]);
     }
 
-    for(let i=0; i<federal_states_s.length; i++){
-      this.federalStatesMap.set(federal_states_s[i], federal_states_b[i]);
+    for(let i=0; i<federal_states_f.length; i++){
+      this.federalStatesMapFtoB.set(federal_states_f[i], federal_states_b[i]);
     }
 
-    for(let i=0; i<genders_s.length; i++){
-      this.gendersMap.set(genders_s[i], genders_b[i]);
+    for(let i=0; i<genders_f.length; i++){
+      this.gendersMapFtoB.set(genders_f[i], genders_b[i]);
+    }
+
+    for(let i=0; i<federal_states_f.length; i++){
+      this.educationDegreesMapBtoF.set(education_degrees_b[i], education_degrees_f[i]);
+    }
+
+    for(let i=0; i<federal_states_f.length; i++){
+      this.federalStatesMapBtoF.set(federal_states_b[i], federal_states_f[i]);
+    }
+
+    for(let i=0; i<genders_f.length; i++){
+      this.gendersMapBtoF.set(genders_b[i], genders_f[i]);
     }
   }
 
-  mapGender(key: string): string {
-    return this.gendersMap.get(key);
+  mapGenderFtoB(key: string): string {
+    return this.gendersMapFtoB.get(key);
   }
 
-  mapEducationDegree(key: string): string {
-    return this.educationDegreesMap.get(key);
+  mapEducationDegreeFtoB(key: string): string {
+    return this.educationDegreesMapFtoB.get(key);
   }
 
-  mapFederalState(key: string): string {
-    return this.federalStatesMap.get(key);
+  mapFederalStateFtoB(key: string): string {
+    return this.federalStatesMapFtoB.get(key);
+  }
+
+  mapGenderBtoF(key: string): string {
+    return this.gendersMapBtoF.get(key);
+  }
+
+  mapEducationDegreeBtoF(key: string): string {
+    return this.educationDegreesMapBtoF.get(key);
+  }
+
+  mapFederalStateBtoF(key: string): string {
+    return this.federalStatesMapBtoF.get(key);
   }
 }
