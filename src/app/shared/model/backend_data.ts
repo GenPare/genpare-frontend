@@ -1,4 +1,4 @@
-export const federal_states: string[] = [
+export const federal_states_b: string[] = [
   'BADEN_WURTTEMBERG',
   'BAVARIA',
   'BERLIN',
@@ -17,9 +17,9 @@ export const federal_states: string[] = [
   'THURINGIA',
 ];
 
-export const genders: string[] = ['FEMALE', 'MALE', 'DIVERSE'];
+export const genders_b: string[] = ['FEMALE', 'MALE', 'DIVERSE'];
 
-export const education_degrees: string[] = [
+export const education_degrees_b: string[] = [
   'NONE',
   'HAUPTSCHULE',
   'MITTLERE_REIFE',
