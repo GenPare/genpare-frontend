@@ -16,6 +16,8 @@ import { HttpClientModule } from '@angular/common/http';
 import { ToastsContainerComponent } from './shared/toasts-container/toasts-container.component';
 import { HasEnteredDataGuard } from './guards/has-entered-data';
 
+export const backendURL = 'http://localhost:8080';
+
 @NgModule({
   declarations: [
     AppComponent,
