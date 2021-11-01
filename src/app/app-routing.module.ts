@@ -7,6 +7,7 @@ import { SupportPageComponent } from './components/support-page/support-page.com
 import { ProfileManagementComponent } from '@comp/profile-management/profile-management.component';
 
 
+
 const routes: Routes = [
   { path: 'compare', component: CompareComponent, canActivate: [AuthGuard] },
   { path: 'profile', component: ProfileManagementComponent ,canActivate: [AuthGuard]},

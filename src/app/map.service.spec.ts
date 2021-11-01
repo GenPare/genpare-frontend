@@ -1,13 +1,13 @@
 import { TestBed } from '@angular/core/testing';
 
-import { SelectDataService } from './select-data.service';
+import { MapService } from './map.service';
 
-describe('SelectDataService', () => {
-  let service: SelectDataService;
+describe('MapService', () => {
+  let service: MapService;
 
   beforeEach(() => {
     TestBed.configureTestingModule({});
-    service = TestBed.inject(SelectDataService);
+    service = TestBed.inject(MapService);
   });
 
   it('should be created', () => {
