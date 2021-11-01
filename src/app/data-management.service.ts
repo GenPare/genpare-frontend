@@ -97,8 +97,8 @@ export class DataManagementService {
           sessionId: this.sessionId,
           salary: data.salary,
           jobTitle: data.job_title,
-          state: this.mapService.mapFederalState(data.federal_state),
-          levelOfEducation: this.mapService.mapEducationDegree(
+          state: this.mapService.mapFederalStateFtoB(data.federal_state),
+          levelOfEducation: this.mapService.mapEducationDegreeFtoB(
             data.education_degree
           ),
         })
@@ -111,8 +111,8 @@ export class DataManagementService {
               sessionId: sessionId,
               salary: data.salary,
               jobTitle: data.job_title,
-              state: this.mapService.mapFederalState(data.federal_state),
-              levelOfEducation: this.mapService.mapEducationDegree(
+              state: this.mapService.mapFederalStateFtoB(data.federal_state),
+              levelOfEducation: this.mapService.mapEducationDegreeFtoB(
                 data.education_degree
               ),
             });
