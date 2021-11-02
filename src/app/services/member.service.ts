@@ -86,7 +86,7 @@ export class MemberService implements OnInit {
 
   registerMember(name: string, birthdate: Date, gender: string) {
     const formatDate = this.pipe.transform(birthdate, 'yyyy-MM-dd');
-    gender = this.mapService.mapGender(gender);
+    gender = this.mapService.mapGenderFtoB(gender);
     console.log('im register', name, gender, birthdate);
     this.userEmail$.subscribe((mail) =>
       this.http
