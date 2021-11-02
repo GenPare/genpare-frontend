@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { Observable } from 'rxjs';
-import { DataManagementService, Data } from "../../data-management.service";
+import { DataManagementService, CompareData } from "../../data-management.service";
 import { education_degrees_f, federal_states_f } from "@shared/model/frontend_data";
 
 @Component({
@@ -12,21 +12,21 @@ export class CompareComponent implements OnInit {
 
   federal_states: string[]; 
   education_degrees: string[];
-  data$: Observable<Data[]>;
+  data$: Observable<CompareData[]>;
 
   table_headers: string[] = [
     "Beruf",
     "Ausbildungsgrad",
     "Alter",
     "Bundesland",
-    "Geschlecht",
-    "Gehalt"
+    "Gehalt",
+    "Geschlecht"
   ]
 
   constructor(private dataManagementService: DataManagementService ) {
     this.federal_states = federal_states_f;
     this.education_degrees = education_degrees_f;
-    this.data$ = dataManagementService.getData();
+    this.data$ = dataManagementService.getCompareData();
   }
 
   ngOnInit(): void {

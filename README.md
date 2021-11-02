@@ -10,7 +10,7 @@ As this is an Angular-Application, Angular and [Node.js](https://nodejs.org/en/d
 
 ### Install Dependencies
 
-When Angular is installed, clone the repository and head into the root directory (main-folder). To install all required dependencies, run the command `npm install`. 
+When Angular is installed, clone the repository, open up a command line and head into the root directory (main-folder). To install all required dependencies, run the command `npm install`. 
 
 ## Starting
 

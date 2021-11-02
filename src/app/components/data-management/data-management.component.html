@@ -7,15 +7,15 @@
                 <div class="form-group row">
                     <label class="col-sm-1 col-form-label" for="job">Beruf:</label>
                     <div class="col-sm-5">
-                        <input class="form-control" type="text" id="job" aria-describedby="job-small" formControlName="job">
+                        <input class="form-control" type="text" id="job" aria-describedby="job-small" formControlName="job_title" [(ngModel)]="job_title">
                         <small class="form-text text-muted" id="job-small">Bitte geben Sie Ihren Beruf an.</small>
                     </div>
                     <label class="col-sm-1 col-form-label" for="education-degree">Bildungsgrad:</label>
                     <div class="col-sm-5">
-                        <select class="form-control" id="education-degree" aria-describedby="education-degree-small" formControlName="education_degree">
+                        <select class="form-control" id="education-degree" aria-describedby="education-degree-small" formControlName="education_degree" [(ngModel)]="education_degree">
                             <ng-container *ngFor="let education_degree of education_degrees">
-                                <option value="education_degree">{{ education_degree }}</option>
-                            </ng-container>    
+                                <option [ngValue]="education_degree">{{ education_degree }}</option>
+                            </ng-container>
                         </select>
                         <small class="form-text text-muted" id="education_degree-small">Bitte geben Sie Ihren höchsten Bildungsabschluss an.</small>
                     </div>
@@ -23,9 +23,9 @@
                 <div class="form-group row">
                     <label class="col-sm-1 col-form-label" for="federal-state">Bundesland:</label>
                     <div class="col-sm-5">
-                        <select class="form-control" id="federal-state" style="width: 100%" aria-describedby="federal-state-small" formControlName="federal_state">
+                        <select class="form-control" id="federal-state" style="width: 100%" aria-describedby="federal-state-small" formControlName="federal_state" [(ngModel)]="federal_state">
                             <ng-container *ngFor="let federal_state of federal_states">
-                                <option value="federal_state">{{ federal_state }}</option>
+                                <option [ngValue]="federal_state">{{ federal_state }}</option>
                             </ng-container>    
                         </select>
                         <small class="form-text text-muted" id="federal-state-small">Bitte geben Sie Ihr Bundesland an.</small>
@@ -33,7 +33,7 @@
                     <label class="col-sm-1 col-form-label" for="salary">Gehalt:</label>
                     <div class="col-sm-5">
                         <div class="input-group">
-                            <input class="form-control" type="number" min="0" id="salary" aria-describedby="salary-small" placeholder="z.B. 2000" formControlName="salary">
+                            <input class="form-control" type="number" min="0" id="salary" aria-describedby="salary-small" placeholder="z.B. 2000" formControlName="salary" [(ngModel)]="salary">
                             <div class="input-group-postpend">
                                 <div class="input-group-text">€</div>
                             </div>
