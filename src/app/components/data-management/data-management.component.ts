@@ -1,7 +1,6 @@
 import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { MemberService } from 'app/services/member.service';
-import { tap } from 'rxjs/operators';
 import { education_degrees, federal_states, genders } from './select-options';
 
 @Component({
@@ -21,7 +20,7 @@ export class DataManagementComponent {
   genders = genders;
 
   data_management = new FormGroup({
-    job: new FormControl('', Validators.required),
+    job_title: new FormControl('', Validators.required),
     education_degree: new FormControl('', Validators.required),
     federal_state: new FormControl('', Validators.required),
     salary: new FormControl('', Validators.required),
@@ -33,9 +32,7 @@ export class DataManagementComponent {
 
   save(): void {
     if (!this.memberService.sessionID$) {
-      console.log(this.nickname, 'penis');
       if (this.nickname) {
-        console.log('im nickname')
         this.memberService.registerMember(
           this.nickname,
           this.data_management.value.age,

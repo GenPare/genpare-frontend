@@ -23,8 +23,6 @@ export class App {
   constructor() {}
 }
 
-export const backendURL = 'http://localhost:8080';
-
 @NgModule({
   declarations: [
     AppComponent,

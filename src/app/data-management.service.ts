@@ -3,7 +3,7 @@ import { Observable, of } from 'rxjs';
 import { map, switchMap, tap } from 'rxjs/operators';
 import { HttpClient } from '@angular/common/http';
 import { backendURL } from 'app/app.module';
-import { MapService } from './map.service';
+import { MapService } from './services/map.service';
 
 export interface ProfileData {
   job_title: string;
