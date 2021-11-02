@@ -20,6 +20,11 @@ export class DataManagementComponent implements OnInit {
   genders: string[];
   education_degrees: string[];
 
+  federal_state?: string;
+  salary?: number;
+  education_degree?: string;
+  job_title?: string;
+
   existingData$: Observable<ProfileData>;
   newData?: ProfileData;
 
@@ -37,10 +42,19 @@ export class DataManagementComponent implements OnInit {
     this.genders = genders_f;
     this.education_degrees = education_degrees_f;
     this.existingData$ = this.dataManagementService.getProfileData();
-    this.existingData$.pipe(tap(data => this.data_management.patchValue({data}))).subscribe();
-    }
+    this.existingData$
+      .pipe(
+        tap((data) => {
+            (this.federal_state = data.federal_state),
+            (this.salary = data.salary),
+            (this.education_degree = data.education_degree),
+            (this.job_title = data.job_title);
+        })
+      )
+      .subscribe();
+  }
 
-  ngOnInit(): void { }
+  ngOnInit(): void {}
 
   save(): void {
     this.newData = {

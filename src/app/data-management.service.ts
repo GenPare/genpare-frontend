@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { Observable, of } from 'rxjs';
-import { map, switchMap } from 'rxjs/operators';
+import { map, switchMap, tap } from 'rxjs/operators';
 import { HttpClient } from '@angular/common/http';
 import { backendURL } from 'app/app.module';
 import { MapService } from './map.service';
@@ -125,12 +125,16 @@ export class DataManagementService {
   getProfileData(): Observable<ProfileData> {
     if (this.sessionId) {
       return this.http
-        .get<ResponseData>(backendURL + '/salary/own', {params: {sessionId: this.sessionId}})
+        .get<ResponseData>(backendURL + '/salary/own', {
+          params: { sessionId: this.sessionId },
+        })
         .pipe(
           map((data) => ({
             job_title: data.jobTitle,
             salary: data.salary,
-            education_degree: this.mapService.mapEducationDegreeBtoF(data.levelOfEducation),
+            education_degree: this.mapService.mapEducationDegreeBtoF(
+              data.levelOfEducation
+            ),
             federal_state: this.mapService.mapFederalStateBtoF(data.state),
           }))
         );
@@ -138,15 +142,20 @@ export class DataManagementService {
       return this.getSessionId().pipe(
         switchMap((sessionId) => {
           return this.http
-            .get<ResponseData>(backendURL + '/salary/own', {params: {sessionId: sessionId}})
+            .get<ResponseData>(backendURL + '/salary/own', {
+              params: { sessionId: sessionId },
+            })
             .pipe(
               map((data) => ({
                 job_title: data.jobTitle,
                 salary: data.salary,
-                education_degree: data.levelOfEducation,
-                federal_state: data.state,
+                education_degree: this.mapService.mapEducationDegreeBtoF(
+                  data.levelOfEducation
+                ),
+                federal_state: this.mapService.mapFederalStateBtoF(data.state),
               }))
-            );
+            )
+            .pipe(tap((_) => console.log(_)));
         })
       );
     }
