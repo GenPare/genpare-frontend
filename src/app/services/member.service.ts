@@ -3,13 +3,14 @@ import { Injectable, OnInit } from '@angular/core';
 import { AuthService } from '@auth0/auth0-angular';
 import { backendURL } from 'app/app.module';
 import { catchError, map, switchMap, tap } from 'rxjs/operators';
-import { Observable, EMPTY, of, Subject } from 'rxjs';
+import { Observable, of, Subject } from 'rxjs';
 import { DatePipe } from '@angular/common';
 import { MapService } from './map.service';
 
 interface sessionIdResponse {
-  sessionId: number;
+  sessionId: sessionIdType;
 }
+type sessionIdType = string;
 
 interface memberDataResponse {
   email: string;
@@ -22,9 +23,8 @@ interface memberDataResponse {
   providedIn: 'root',
 })
 export class MemberService implements OnInit {
-  private _cachedSessionID?: Subject<number>;
-  sessionID$?: Observable<number>;
-
+  private _cachedSessionID?: Subject<sessionIdType>;
+  sessionID$?: Observable<sessionIdType>;
   userEmail$: Observable<string>;
   pipe = new DatePipe('en-US');
 
@@ -35,8 +35,7 @@ export class MemberService implements OnInit {
   ) {
     this.userEmail$ = this.getEmail();
     if (!this._cachedSessionID) {
-      console.log('test');
-      this._cachedSessionID = new Subject<number>();
+      this._cachedSessionID = new Subject<sessionIdType>();
       this.getSessionId().subscribe((id) => {
         if (id) {
           this._cachedSessionID?.next(id);
@@ -55,7 +54,7 @@ export class MemberService implements OnInit {
     );
   }
 
-  private getSessionId(): Observable<number | undefined> {
+  private getSessionId(): Observable<sessionIdType | undefined> {
     return this.userEmail$.pipe(
       switchMap((mail) =>
         this.http
@@ -64,7 +63,6 @@ export class MemberService implements OnInit {
           })
           .pipe(map((jsonResponse) => jsonResponse.sessionId))
           .pipe(catchError(() => of(undefined)))
-          .pipe(tap((id) => console.log(id)))
       )
     );
   }
