@@ -19,8 +19,8 @@ export class CompareComponent implements OnInit {
     "Ausbildungsgrad",
     "Alter",
     "Bundesland",
-    "Geschlecht",
-    "Gehalt"
+    "Gehalt",
+    "Geschlecht"
   ]
 
   constructor(private dataManagementService: DataManagementService ) {
