@@ -11,7 +11,7 @@ import {
 } from 'app/data-management.service';
 import { MemberService } from 'app/services/member.service';
 import { Observable } from 'rxjs';
-import { tap } from 'rxjs/operators';
+import { switchMap, tap } from 'rxjs/operators';
 import { education_degrees, federal_states, genders } from './select-options';
 
 @Component({
@@ -66,22 +66,27 @@ export class DataManagementComponent {
       .subscribe();
   }
 
-  save(): void {
+  save() {
     if (!this.memberService.sessionID$) {
       if (this.nickname) {
-        this.memberService.registerMember(
-          this.nickname,
-          this.data_management.value.age,
-          this.data_management.value.gender
-        );
+        this.memberService
+          .registerMember(
+            this.nickname,
+            this.data_management.value.age,
+            this.data_management.value.gender
+          )
+          .subscribe(() => {
+            const newData = {
+              job_title: this.data_management.value.job_title,
+              salary: this.data_management.value.salary,
+              education_degree: this.data_management.value.education_degree,
+              federal_state: this.data_management.value.federal_state,
+            };
+            console.log('newData', newData);
+            return this.dataManagementService.newProfileData(newData);
+          });
+
         this.registeredEmitter.emit(true);
-        const newData = {
-          job_title: this.data_management.value.job,
-          salary: this.data_management.value.salary,
-          education_degree: this.data_management.value.education_degree,
-          federal_state: this.data_management.value.federal_state,
-        };
-        this.dataManagementService.newProfileData(newData);
       }
     }
   }

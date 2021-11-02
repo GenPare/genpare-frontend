@@ -2,17 +2,17 @@
     <div class="card-body">
       <h5 class="card-title bottom-gap">Datenverwaltung</h5>
       <div class="card-text">
-        <p class="bottom-gap">Bitte ermöglichen Sie allen anderen Nutzer*innen möglichst genaue Resultate, indem Sie Ihre Daten wahrheitsgemäß angeben und diese regelmäßig aktualisieren. Ihre Daten werden streng vertraulich behandelt und anderen Nutzer*innen anonymisiert angezeigt.</p>
+        <p class="bottom-gap">Bitte ermöglichen Sie allen anderen Nutzer*innen möglichst genaue Resultate, indem Sie Ihre Daten wahrheitsgemäß angeben und diese regelmäßig aktualisieren. Ihre Daten werden streng vertraulich behandelt und anderen Nutzer*innen anonymisiert angezeigt. Bei Fragen oder Bedenken wenden Sie sich bitte an <a href="mailto:support@genpare.de">support@genpare.de</a>.</p>
             <form [formGroup]="data_management">
                 <div class="form-group row">
                     <label class="col-sm-1 col-form-label" for="job">Beruf:</label>
                     <div class="col-sm-5">
-                        <input class="form-control" type="text" id="job" aria-describedby="job-small" formControlName="job_title" [(ngModel)]="data_management.value.job_title">
+                        <input class="form-control" type="text" id="job" aria-describedby="job-small" formControlName="job_title" [(ngModel)]="job_title">
                         <small class="form-text text-muted" id="job-small">Bitte geben Sie Ihren Beruf an.</small>
                     </div>
                     <label class="col-sm-1 col-form-label" for="education-degree">Bildungsgrad:</label>
                     <div class="col-sm-5">
-                        <select class="form-control" id="education-degree" aria-describedby="education-degree-small" formControlName="education_degree" [(ngModel)]="data_management.value.education_degree">
+                        <select class="form-control" id="education-degree" aria-describedby="education-degree-small" formControlName="education_degree" [(ngModel)]="education_degree">
                             <ng-container *ngFor="let education_degree of education_degrees">
                                 <option [ngValue]="education_degree">{{ education_degree }}</option>
                             </ng-container>
@@ -23,7 +23,7 @@
                 <div class="form-group row">
                     <label class="col-sm-1 col-form-label" for="federal-state">Bundesland:</label>
                     <div class="col-sm-5">
-                        <select class="form-control" id="federal-state" style="width: 100%" aria-describedby="federal-state-small" formControlName="federal_state" [(ngModel)]="data_management.value.federal_state">
+                        <select class="form-control" id="federal-state" style="width: 100%" aria-describedby="federal-state-small" formControlName="federal_state" [(ngModel)]="federal_state">
                             <ng-container *ngFor="let federal_state of federal_states">
                                 <option [ngValue]="federal_state">{{ federal_state }}</option>
                             </ng-container>    
@@ -33,7 +33,7 @@
                     <label class="col-sm-1 col-form-label" for="salary">Gehalt:</label>
                     <div class="col-sm-5">
                         <div class="input-group">
-                            <input class="form-control" type="number" min="0" id="salary" aria-describedby="salary-small" placeholder="z.B. 2000" formControlName="salary" [(ngModel)]="data_management.value.salary">
+                            <input class="form-control" type="number" min="0" id="salary" aria-describedby="salary-small" placeholder="z.B. 2000" formControlName="salary" [(ngModel)]="salary">
                             <div class="input-group-postpend">
                                 <div class="input-group-text">€</div>
                             </div>

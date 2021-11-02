@@ -1,9 +1,10 @@
 import { Injectable } from '@angular/core';
-import { Observable, of } from 'rxjs';
+import { EMPTY, Observable, of } from 'rxjs';
 import { map, switchMap, tap } from 'rxjs/operators';
 import { HttpClient } from '@angular/common/http';
 import { backendURL } from 'app/app.module';
 import { MapService } from './services/map.service';
+import { MemberService } from './services/member.service';
 
 export interface ProfileData {
   job_title: string;
@@ -37,11 +38,11 @@ interface Range {
   providedIn: 'root',
 })
 export class DataManagementService {
-  mock_session_id: number = 69;
-
-  sessionId?: number;
-
-  constructor(private http: HttpClient, private mapService: MapService) {}
+  constructor(
+    private http: HttpClient,
+    private mapService: MapService,
+    private memberService: MemberService
+  ) {}
 
   getCompareData(): Observable<CompareData[]> {
     return of([
@@ -91,59 +92,32 @@ export class DataManagementService {
   }
 
   newProfileData(data: ProfileData) {
-    if (this.sessionId) {
-      return this.http
-        .put(backendURL + '/salary/own', {
-          sessionId: this.sessionId,
+    if (this.memberService.sessionID$) {
+      return this.memberService.sessionID$.subscribe((id) => {
+        // TODO Programm erreicht diese Stelle nicht, wodurch die Salary Daten nicht gespeichert werden. Momentan wissen wir nicht wie der Fehler behoben wird.
+        // An dieser Stelle scheitert der Rest des Webapplikation
+        return this.http.put(backendURL + '/salary/own', {
+          sessionId: id,
           salary: data.salary,
           jobTitle: data.job_title,
           state: this.mapService.mapFederalStateFtoB(data.federal_state),
           levelOfEducation: this.mapService.mapEducationDegreeFtoB(
             data.education_degree
           ),
-        })
-        .subscribe();
+        });
+      });
     } else {
-      return this.getSessionId()
-        .pipe(
-          switchMap((sessionId) => {
-            return this.http.put(backendURL + '/salary/own', {
-              sessionId: sessionId,
-              salary: data.salary,
-              jobTitle: data.job_title,
-              state: this.mapService.mapFederalStateFtoB(data.federal_state),
-              levelOfEducation: this.mapService.mapEducationDegreeFtoB(
-                data.education_degree
-              ),
-            });
-          })
-        )
-        .subscribe();
+      return EMPTY;
     }
   }
 
   getProfileData(): Observable<ProfileData> {
-    if (this.sessionId) {
-      return this.http
-        .get<ResponseData>(backendURL + '/salary/own', {
-          params: { sessionId: this.sessionId },
-        })
-        .pipe(
-          map((data) => ({
-            job_title: data.jobTitle,
-            salary: data.salary,
-            education_degree: this.mapService.mapEducationDegreeBtoF(
-              data.levelOfEducation
-            ),
-            federal_state: this.mapService.mapFederalStateBtoF(data.state),
-          }))
-        );
-    } else {
-      return this.getSessionId().pipe(
-        switchMap((sessionId) => {
-          return this.http
+    if (this.memberService.sessionID$) {
+      return this.memberService.sessionID$.pipe(
+        switchMap((id) =>
+          this.http
             .get<ResponseData>(backendURL + '/salary/own', {
-              params: { sessionId: sessionId },
+              params: { sessionId: id },
             })
             .pipe(
               map((data) => ({
@@ -155,13 +129,10 @@ export class DataManagementService {
                 federal_state: this.mapService.mapFederalStateBtoF(data.state),
               }))
             )
-            .pipe(tap((_) => console.log(_)));
-        })
+        )
       );
+    } else {
+      return EMPTY;
     }
-  }
-
-  getSessionId(): Observable<number> {
-    return of(this.mock_session_id);
   }
 }

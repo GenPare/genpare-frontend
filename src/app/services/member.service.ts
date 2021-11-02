@@ -2,7 +2,7 @@ import { HttpClient } from '@angular/common/http';
 import { Injectable, OnInit } from '@angular/core';
 import { AuthService } from '@auth0/auth0-angular';
 import { backendURL } from 'app/app.module';
-import { catchError, map, switchMap, tap } from 'rxjs/operators';
+import { catchError, delay, map, switchMap, tap } from 'rxjs/operators';
 import { Observable, of, Subject } from 'rxjs';
 import { DatePipe } from '@angular/common';
 import { MapService } from './map.service';
@@ -36,14 +36,7 @@ export class MemberService implements OnInit {
     this.userEmail$ = this.getEmail();
     if (!this._cachedSessionID) {
       this._cachedSessionID = new Subject<sessionIdType>();
-      this.getSessionId().subscribe((id) => {
-        if (id) {
-          this._cachedSessionID?.next(id);
-          this.sessionID$ = this._cachedSessionID?.asObservable();
-        } else {
-          this.sessionID$ = undefined;
-        }
-      });
+      this.setSessionIdAttribute();
     }
   }
   ngOnInit(): void {}
@@ -62,9 +55,21 @@ export class MemberService implements OnInit {
             params: { email: mail },
           })
           .pipe(map((jsonResponse) => jsonResponse.sessionId))
+          .pipe(tap((id) => console.log(id)))
           .pipe(catchError(() => of(undefined)))
       )
     );
+  }
+
+  private setSessionIdAttribute() {
+    return this.getSessionId().subscribe((id) => {
+      if (id) {
+        this._cachedSessionID?.next(id);
+        this.sessionID$ = this._cachedSessionID?.asObservable();
+      } else {
+        this.sessionID$ = undefined;
+      }
+    });
   }
 
   getNickname(): Observable<string> {
@@ -86,17 +91,20 @@ export class MemberService implements OnInit {
     const formatDate = this.pipe.transform(birthdate, 'yyyy-MM-dd');
     gender = this.mapService.mapGenderFtoB(gender);
     console.log('im register', name, gender, birthdate);
-    this.userEmail$.subscribe((mail) =>
-      this.http
-        .post(backendURL + '/members', {
-          id: null,
-          email: mail,
-          name: name,
-          birthdate: formatDate,
-          gender: gender,
-        })
-        .subscribe()
-    );
+    return this.userEmail$
+      .pipe(
+        switchMap((mail) =>
+          this.http.post(backendURL + '/members', {
+            id: null,
+            email: mail,
+            name: name,
+            birthdate: formatDate,
+            gender: gender,
+          })
+        )
+      )
+      .pipe(tap(() => this.setSessionIdAttribute()))
+      .pipe(delay(1000));
   }
 
   invalidateSessionId() {
