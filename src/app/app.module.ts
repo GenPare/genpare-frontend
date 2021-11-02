@@ -1,5 +1,5 @@
 import { NgModule } from '@angular/core';
-import { DatePipe } from "@angular/common";
+import { CommonModule , DatePipe } from "@angular/common";
 import { BrowserModule } from '@angular/platform-browser';
 import { FormsModule, ReactiveFormsModule } from "@angular/forms";
 import { AppRoutingModule } from './app-routing.module';
@@ -10,13 +10,18 @@ import { MDBBootstrapModule } from "angular-bootstrap-md";
 import { StartPageComponent } from '@comp/start-page/start-page.component';
 import { CompareComponent } from '@comp/compare/compare.component';
 import { ProfileManagementComponent } from '@comp/profile-management/profile-management.component';
-import { DataManagementComponent } from '@shared/data-management/data-management.component';
-import { SupportPageComponent } from './components/support-page/support-page.component';
-import { HttpClientModule } from '@angular/common/http';
 import { ToastsContainerComponent } from './shared/toasts-container/toasts-container.component';
 import { HasEnteredDataGuard } from './guards/has-entered-data';
+import { SupportPageComponent } from './components/support-page/support-page.component';
+import { HttpClientModule } from '@angular/common/http';
+import { DataManagementComponent } from '@comp/data-management/data-management.component';
 
-export const backendURL = 'http://localhost:8080';
+export const backendURL = "http://localhost:8080"
+
+
+export class App {
+  constructor() {}
+}
 
 @NgModule({
   declarations: [
@@ -39,7 +44,8 @@ export const backendURL = 'http://localhost:8080';
       clientId: 'OLtqeuEcVpFPKkLIRaKJ3ENrv3hUUlWY'
     }),
     MDBBootstrapModule.forRoot(),
-    HttpClientModule
+    HttpClientModule,
+    CommonModule
   ],
   providers: [DatePipe, HasEnteredDataGuard],
   bootstrap: [AppComponent]

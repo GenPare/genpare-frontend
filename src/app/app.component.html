@@ -21,7 +21,9 @@
   </div>
   <div class="navbar-nav ml-auto">
     <div class="navbar-nav mr-auto">
-      <a class="nav-item nav-link" routerLink="/profile">{{ username }}</a>
+      <a class="nav-item nav-link" routerLink="/profile">{{
+        username$ | async
+      }}</a>
       <button type="button" class="btn btn-danger" (click)="auth.logout()">
         Logout
       </button>

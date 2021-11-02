@@ -1,5 +1,7 @@
-import { Component } from '@angular/core';
+import { Component, OnDestroy } from '@angular/core';
 import { AuthService } from '@auth0/auth0-angular';
+import { Observable, Subscription } from 'rxjs';
+import { MemberService } from './services/member.service';
 
 @Component({
   selector: 'app-root',
@@ -7,8 +9,12 @@ import { AuthService } from '@auth0/auth0-angular';
   styleUrls: ['./app.component.scss'],
 })
 export class AppComponent {
-  title: string = "genpare";
-  username: string = "genparer";
+  title: string = 'genpare';
+  username$: Observable<string>;
+  subscription = new Subscription();
 
-  constructor(public auth: AuthService) {}
+  constructor(public auth: AuthService, private memberService: MemberService) {
+    this.username$ = this.memberService.getNickname();
+  }
+
 }
