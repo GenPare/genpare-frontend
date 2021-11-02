@@ -8,20 +8,13 @@ import { MemberService } from './services/member.service';
   templateUrl: './app.component.html',
   styleUrls: ['./app.component.scss'],
 })
-export class AppComponent implements OnDestroy {
+export class AppComponent {
   title: string = 'genpare';
-  username?: string;
+  username$: Observable<string>;
   subscription = new Subscription();
 
   constructor(public auth: AuthService, private memberService: MemberService) {
-    this.subscription.add(
-      this.memberService.getNickname().subscribe((name) => {
-        console.log(name);
-        this.username = name;
-      })
-    );
+    this.username$ = this.memberService.getNickname();
   }
-  ngOnDestroy(): void {
-    this.subscription.unsubscribe();
-  }
+
 }

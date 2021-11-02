@@ -14,14 +14,13 @@
               class="col-5"
               [(ngModel)]="nickname"
               [disabled]="isRegistered"
+              placeholder="genparer123"
               required
             />
           </div>
           <div class="row">
             <div class="col-1">Passwort:</div>
             <div class="col-5">{{ password }}</div>
-            <div class="col-1">Account erstellt:</div>
-            <div class="col-5">{{ creationDate | date: "longDate" }}</div>
           </div>
         </div>
       </div>

@@ -1,6 +1,7 @@
 import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { MemberService } from 'app/services/member.service';
+import { tap } from 'rxjs/operators';
 import { education_degrees, federal_states, genders } from './select-options';
 
 @Component({
@@ -8,7 +9,7 @@ import { education_degrees, federal_states, genders } from './select-options';
   templateUrl: './data-management.component.html',
   styleUrls: ['./data-management.component.scss'],
 })
-export class DataManagementComponent implements OnInit {
+export class DataManagementComponent {
   @Input()
   nickname?: string;
 
@@ -28,27 +29,20 @@ export class DataManagementComponent implements OnInit {
     age: new FormControl('', Validators.required),
   });
 
-  constructor(private memberService: MemberService) {
-    this.memberService.getSessionId().subscribe(id => {
-      if (id) {
-        this.registeredEmitter.emit(true);
-      } else {
-        this.registeredEmitter.emit(false);
-      }
-    })
-  }
-
-  ngOnInit(): void {}
+  constructor(private memberService: MemberService) {}
 
   save(): void {
-    if (!this.memberService.sessionID && this.nickname) {
-      
-      this.memberService.registerMember(
-        this.nickname,
-        this.data_management.value.age,
-        this.data_management.value.gender
-      );
-      this.registeredEmitter.emit(true);
+    if (!this.memberService.sessionID$) {
+      console.log(this.nickname, 'penis');
+      if (this.nickname) {
+        console.log('im nickname')
+        this.memberService.registerMember(
+          this.nickname,
+          this.data_management.value.age,
+          this.data_management.value.gender
+        );
+        this.registeredEmitter.emit(true);
+      }
     }
   }
 }
