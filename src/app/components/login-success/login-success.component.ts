@@ -11,8 +11,7 @@ export class LoginSuccessComponent implements OnInit {
   constructor(private memberService: MemberService, private router: Router) {}
 
   ngOnInit(): void {
-    this.memberService
-      .setSessionId()
-      .subscribe(() => this.router.navigateByUrl('/profile'));
+    this.memberService.setSessionId();
+    this.router.navigateByUrl('/profile');
   }
 }

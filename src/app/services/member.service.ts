@@ -40,8 +40,8 @@ export class MemberService implements OnInit {
     );
   }
 
-  setSessionId(): Observable<sessionIdType | undefined> {
-    return this.getEmail()
+  setSessionId():void {
+    this.getEmail()
       .pipe(
         switchMap((mail) =>
           this.http
@@ -49,13 +49,14 @@ export class MemberService implements OnInit {
               params: { email: mail },
             })
             .pipe(map((jsonResponse) => jsonResponse.sessionId))
-            .pipe(tap((id) => sessionStorage.setItem('sessionId', id)))
-            .pipe(catchError(() => of(undefined)))
         )
-      );
+      )
+      .subscribe((id) => {
+        sessionStorage.setItem('sessionId', id);
+      });
   }
 
-  getSessionId() {
+  getSessionId(): string | null {
     return sessionStorage.getItem('sessionId');
   }
 
@@ -74,23 +75,17 @@ export class MemberService implements OnInit {
   registerMember(name: string, birthdate: Date, gender: string) {
     const formatDate = this.pipe.transform(birthdate, 'yyyy-MM-dd');
     gender = this.mapService.mapGenderFtoB(gender);
-    return this.getEmail()
-      .pipe(
-        switchMap((mail) => {
-          return this.http.post(backendURL + '/members', {
-            id: null,
-            email: mail,
-            name: name,
-            birthdate: formatDate,
-            gender: gender,
-          });
-        })
-      )
-      .pipe(
-        tap(() => {
-          this.router.navigateByUrl('/success');
-        })
-      );
+    return this.getEmail().pipe(
+      switchMap((mail) => {
+        return this.http.post(backendURL + '/members', {
+          id: null,
+          email: mail,
+          name: name,
+          birthdate: formatDate,
+          gender: gender,
+        });
+      })
+    );
   }
 
   invalidateSessionId(): Observable<Object> {
