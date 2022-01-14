@@ -17,7 +17,7 @@ export class ProfileManagementComponent {
   subscriptions = new Subscription();
 
   constructor(public auth: AuthService, private memberService: MemberService) {
-    this.email$ = this.memberService.userEmail$;
+    this.email$ = this.memberService.getEmail();
     this.isRegistered = this.memberService.getSessionId() ? true : false;
     this.memberService
       .getNickname()
