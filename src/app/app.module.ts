@@ -5,7 +5,6 @@ import { FormsModule, ReactiveFormsModule } from "@angular/forms";
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
 import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
-import { AuthModule } from '@auth0/auth0-angular';
 import { MDBBootstrapModule } from "angular-bootstrap-md";
 import { StartPageComponent } from '@comp/start-page/start-page.component';
 import { CompareComponent } from '@comp/compare/compare.component';
@@ -15,6 +14,9 @@ import { HasEnteredDataGuard } from './guards/has-entered-data';
 import { SupportPageComponent } from './components/support-page/support-page.component';
 import { HttpClientModule } from '@angular/common/http';
 import { DataManagementComponent } from '@comp/data-management/data-management.component';
+import { AuthModule } from '@auth0/auth0-angular';
+import { environment as env } from 'environments/environment.dev';
+import { LoginSuccessComponent } from './components/login-success/login-success.component';
 
 export const backendURL = "http://localhost:8080"
 
@@ -31,7 +33,8 @@ export class App {
     CompareComponent,
     StartPageComponent,
     ToastsContainerComponent,
-    SupportPageComponent
+    SupportPageComponent,
+    LoginSuccessComponent
   ],
   imports: [
     BrowserModule,
@@ -40,8 +43,7 @@ export class App {
     FormsModule,
     ReactiveFormsModule,
     AuthModule.forRoot({
-      domain: 'dev-t9d7tc1e.eu.auth0.com',
-      clientId: 'OLtqeuEcVpFPKkLIRaKJ3ENrv3hUUlWY'
+      ...env.auth
     }),
     MDBBootstrapModule.forRoot(),
     HttpClientModule,

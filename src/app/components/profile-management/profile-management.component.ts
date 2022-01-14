@@ -18,7 +18,7 @@ export class ProfileManagementComponent {
 
   constructor(public auth: AuthService, private memberService: MemberService) {
     this.email$ = this.memberService.userEmail$;
-    this.isRegistered = this.memberService.sessionID$ ? true : false;
+    this.isRegistered = this.memberService.getSessionId() ? true : false;
     this.memberService
       .getNickname()
       .subscribe(

@@ -23,8 +23,6 @@ interface memberDataResponse {
   providedIn: 'root',
 })
 export class MemberService implements OnInit {
-  private _cachedSessionID?: Subject<sessionIdType>;
-  sessionID$?: Observable<sessionIdType>;
   userEmail$: Observable<string>;
   pipe = new DatePipe('en-US');
 
@@ -34,10 +32,6 @@ export class MemberService implements OnInit {
     private mapService: MapService
   ) {
     this.userEmail$ = this.getEmail();
-    if (!this._cachedSessionID) {
-      this._cachedSessionID = new Subject<sessionIdType>();
-      this.setSessionIdAttribute();
-    }
   }
   ngOnInit(): void {}
 
@@ -47,7 +41,7 @@ export class MemberService implements OnInit {
     );
   }
 
-  private getSessionId(): Observable<sessionIdType | undefined> {
+  setSessionId(): Observable<sessionIdType | undefined> {
     return this.userEmail$.pipe(
       switchMap((mail) =>
         this.http
@@ -55,35 +49,25 @@ export class MemberService implements OnInit {
             params: { email: mail },
           })
           .pipe(map((jsonResponse) => jsonResponse.sessionId))
-          .pipe(tap((id) => console.log(id)))
+          .pipe(tap((id) => localStorage.setItem('sessionId', id)))
           .pipe(catchError(() => of(undefined)))
       )
     );
   }
 
-  private setSessionIdAttribute() {
-    return this.getSessionId().subscribe((id) => {
-      if (id) {
-        this._cachedSessionID?.next(id);
-        this.sessionID$ = this._cachedSessionID?.asObservable();
-      } else {
-        this.sessionID$ = undefined;
-      }
-    });
+  getSessionId() {
+    return localStorage.getItem('sessionId');
   }
 
   getNickname(): Observable<string> {
-    return this.sessionID$
-      ? this.sessionID$.pipe(
-          switchMap((id) =>
-            this.http
-              .get<memberDataResponse>(backendURL + '/members', {
-                params: { sessionId: id },
-              })
-              .pipe(map((jsonResponse) => jsonResponse.name))
-              .pipe(catchError(() => of('No Nickname')))
-          )
-        )
+    let sessionId = this.getSessionId();
+    return sessionId
+      ? this.http
+          .get<memberDataResponse>(backendURL + '/members', {
+            params: { sessionId },
+          })
+          .pipe(map((jsonResponse) => jsonResponse.name))
+          .pipe(catchError(() => of('No Nickname')))
       : of('No Nickname');
   }
 
@@ -103,7 +87,7 @@ export class MemberService implements OnInit {
           })
         )
       )
-      .pipe(tap(() => this.setSessionIdAttribute()))
+      .pipe(tap(() => this.setSessionId()))
       .pipe(delay(1000));
   }
 

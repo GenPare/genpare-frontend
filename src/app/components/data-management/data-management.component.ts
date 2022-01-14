@@ -67,7 +67,7 @@ export class DataManagementComponent {
   }
 
   save() {
-    if (!this.memberService.sessionID$) {
+    if (!this.memberService.getSessionId()) {
       if (this.nickname) {
         this.memberService
           .registerMember(
