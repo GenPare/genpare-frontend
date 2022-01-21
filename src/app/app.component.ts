@@ -17,4 +17,9 @@ export class AppComponent {
     this.username$ = this.memberService.getNickname();
   }
 
+  logout() {
+    this.memberService
+      .invalidateSessionId()
+      .subscribe(() => this.auth.logout());
+  }
 }
