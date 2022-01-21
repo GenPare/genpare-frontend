@@ -10,7 +10,6 @@ import { Observable, Subscription } from 'rxjs';
 })
 export class ProfileManagementComponent {
   email$: Observable<string>;
-  password: string = '********';
   nickname: string = 'nickname1';
   account_created: Date = new Date();
   isRegistered = false;

@@ -7,6 +7,5 @@ import { AuthService } from '@auth0/auth0-angular';
   styleUrls: ['./start-page.component.scss'],
 })
 export class StartPageComponent {
-  constructor(public auth: AuthService) {
-  }
+  constructor(public auth: AuthService) {}
 }

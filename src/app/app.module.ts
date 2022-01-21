@@ -1,12 +1,12 @@
 import { NgModule } from '@angular/core';
-import { CommonModule , DatePipe } from "@angular/common";
+import { CommonModule, DatePipe } from '@angular/common';
 import { BrowserModule } from '@angular/platform-browser';
-import { FormsModule, ReactiveFormsModule } from "@angular/forms";
+import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
 import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
 import { AuthModule } from '@auth0/auth0-angular';
-import { MDBBootstrapModule } from "angular-bootstrap-md";
+import { MDBBootstrapModule } from 'angular-bootstrap-md';
 import { StartPageComponent } from '@comp/start-page/start-page.component';
 import { CompareComponent } from '@comp/compare/compare.component';
 import { ProfileManagementComponent } from '@comp/profile-management/profile-management.component';
@@ -16,8 +16,7 @@ import { SupportPageComponent } from './components/support-page/support-page.com
 import { HttpClientModule } from '@angular/common/http';
 import { DataManagementComponent } from '@comp/data-management/data-management.component';
 
-export const backendURL = "http://localhost:8080"
-
+export const backendURL = 'http://localhost:8080';
 
 export class App {
   constructor() {}
@@ -31,7 +30,7 @@ export class App {
     CompareComponent,
     StartPageComponent,
     ToastsContainerComponent,
-    SupportPageComponent
+    SupportPageComponent,
   ],
   imports: [
     BrowserModule,
@@ -41,13 +40,13 @@ export class App {
     ReactiveFormsModule,
     AuthModule.forRoot({
       domain: 'dev-t9d7tc1e.eu.auth0.com',
-      clientId: 'OLtqeuEcVpFPKkLIRaKJ3ENrv3hUUlWY'
+      clientId: 'OLtqeuEcVpFPKkLIRaKJ3ENrv3hUUlWY',
     }),
     MDBBootstrapModule.forRoot(),
     HttpClientModule,
-    CommonModule
+    CommonModule,
   ],
   providers: [DatePipe, HasEnteredDataGuard],
-  bootstrap: [AppComponent]
+  bootstrap: [AppComponent],
 })
-export class AppModule { }
+export class AppModule {}

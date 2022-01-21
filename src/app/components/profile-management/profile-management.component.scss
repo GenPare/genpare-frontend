@@ -1,14 +1,10 @@
-@import 'src/app/shared/variables.scss';
+@import "src/app/shared/variables.scss";
 .card-title {
-    padding-bottom: 10px;
-}
-
-.upper-row {
-    margin-bottom: 37px;
+  padding-bottom: 10px;
 }
 
 button {
-    color: $primary-color;
-    background-color: $secondary-color;
-    border-color: $secondary-color;
+  color: $primary-color;
+  background-color: $secondary-color;
+  border-color: $secondary-color;
 }

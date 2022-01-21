@@ -8,9 +8,8 @@ describe('DataManagementComponent', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      declarations: [ DataManagementComponent ]
-    })
-    .compileComponents();
+      declarations: [DataManagementComponent],
+    }).compileComponents();
   });
 
   beforeEach(() => {

@@ -1,12 +1,19 @@
 import { Injectable } from '@angular/core';
-import { education_degrees_f, federal_states_f, genders_f } from "@shared/model/frontend_data";
-import { education_degrees_b, federal_states_b, genders_b } from "@shared/model/backend_data";
+import {
+  education_degrees_f,
+  federal_states_f,
+  genders_f,
+} from '@shared/model/frontend_data';
+import {
+  education_degrees_b,
+  federal_states_b,
+  genders_b,
+} from '@shared/model/backend_data';
 
 @Injectable({
-  providedIn: 'root'
+  providedIn: 'root',
 })
 export class MapService {
-
   gendersMapFtoB = new Map();
   federalStatesMapFtoB = new Map();
   educationDegreesMapFtoB = new Map();
@@ -20,27 +27,33 @@ export class MapService {
   }
 
   initialize(): void {
-    for(let i=0; i<federal_states_f.length; i++){
-      this.educationDegreesMapFtoB.set(education_degrees_f[i], education_degrees_b[i]);
+    for (let i = 0; i < federal_states_f.length; i++) {
+      this.educationDegreesMapFtoB.set(
+        education_degrees_f[i],
+        education_degrees_b[i]
+      );
     }
 
-    for(let i=0; i<federal_states_f.length; i++){
+    for (let i = 0; i < federal_states_f.length; i++) {
       this.federalStatesMapFtoB.set(federal_states_f[i], federal_states_b[i]);
     }
 
-    for(let i=0; i<genders_f.length; i++){
+    for (let i = 0; i < genders_f.length; i++) {
       this.gendersMapFtoB.set(genders_f[i], genders_b[i]);
     }
 
-    for(let i=0; i<federal_states_f.length; i++){
-      this.educationDegreesMapBtoF.set(education_degrees_b[i], education_degrees_f[i]);
+    for (let i = 0; i < federal_states_f.length; i++) {
+      this.educationDegreesMapBtoF.set(
+        education_degrees_b[i],
+        education_degrees_f[i]
+      );
     }
 
-    for(let i=0; i<federal_states_f.length; i++){
+    for (let i = 0; i < federal_states_f.length; i++) {
       this.federalStatesMapBtoF.set(federal_states_b[i], federal_states_f[i]);
     }
 
-    for(let i=0; i<genders_f.length; i++){
+    for (let i = 0; i < genders_f.length; i++) {
       this.gendersMapBtoF.set(genders_b[i], genders_f[i]);
     }
   }

@@ -4,23 +4,26 @@
     <h5 class="card-title">Accountverwaltung</h5>
     <div class="card-text">
       <div class="card-content">
-        <div class="container-fluid">
-          <div class="row upper-row">
+        <div class="form-group container-fluid">
+          <div class="row">
             <div class="col-1">Email:</div>
             <div class="col-5">{{ email$ | async }}</div>
-            <div class="col-1">Nickname:</div>
-            <input
-              type="text"
-              class="col-5"
-              [(ngModel)]="nickname"
-              [disabled]="isRegistered"
-              placeholder="genparer123"
-              required
-            />
-          </div>
-          <div class="row">
-            <div class="col-1">Passwort:</div>
-            <div class="col-5">{{ password }}</div>
+            <label class="col-1 col-form-label" for="nickname">Nickname:</label>
+            <div class="col-5">
+              <input
+                class="form-control"
+                type="text"
+                id="nickname"
+                aria-describedby="nickname-small"
+                formControlName="job_title"
+                [(ngModel)]="nickname"
+                [disabled]="isRegistered"
+                required
+              />
+              <small class="form-text text-muted" id="job-small"
+                >Bitte geben Sie Ihren Nickname ein.</small
+              >
+            </div>
           </div>
         </div>
       </div>
@@ -28,4 +31,7 @@
   </div>
 </div>
 
-<app-data-management [nickname]="nickname" (registeredEmitter)="onRegisteredEmitter($event)"></app-data-management>
+<app-data-management
+  [nickname]="nickname"
+  (registeredEmitter)="onRegisteredEmitter($event)"
+></app-data-management>

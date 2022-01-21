@@ -16,5 +16,4 @@ export class AppComponent {
   constructor(public auth: AuthService, private memberService: MemberService) {
     this.username$ = this.memberService.getNickname();
   }
-
 }

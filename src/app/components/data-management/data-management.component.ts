@@ -8,11 +8,10 @@ import {
 import {
   DataManagementService,
   ProfileData,
-} from 'app/data-management.service';
+} from 'app/services/data-management.service';
 import { MemberService } from 'app/services/member.service';
 import { Observable } from 'rxjs';
 import { switchMap, tap } from 'rxjs/operators';
-import { education_degrees, federal_states, genders } from './select-options';
 
 @Component({
   selector: 'app-data-management',
@@ -26,9 +25,9 @@ export class DataManagementComponent {
   @Output()
   registeredEmitter = new EventEmitter<boolean>();
 
-  education_degrees = education_degrees;
-  federal_states = federal_states;
-  genders = genders;
+  education_degrees = education_degrees_f;
+  federal_states = federal_states_f;
+  genders = genders_f;
 
   federal_state?: string;
   salary?: number;

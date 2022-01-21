@@ -1,89 +1,101 @@
 <h3>Vergleich</h3>
 
 <div class="card">
-    <div class="card-body">
-        <h5 class="card-title">Filter</h5>
-        <div class="card-text">
-            <form>
-                <div class="form-group row">
-                    <label class="col-sm-1 col-form-label">Gehalt:</label>
-                    <div class="col-sm">
-                        <div class="input-group">
-                            <input class="form-control" type="number" min="0" placeholder="Von">
-                            <div class="input-group-postpend">
-                                <div class="input-group-text">€</div>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="col-sm">
-                        <div class="input-group">
-                            <input class="form-control" type="number" placeholder="Bis">
-                            <div class="input-group-postpend">
-                                <div class="input-group-text">€</div>
-                            </div>
-                        </div>
-                    </div>
-                    <label class="col-sm-1 col-form-label">Alter:</label>
-                    <div class="col-sm">
-                        <input class="form-control" type="number" min="0" placeholder="Von">
-                    </div>
-                    <div class="col-sm">
-                        <input class="form-control" type="number" placeholder="Bis">
-                    </div>
-                </div>
-                <div class="form-group row">
-                    <label class="col-sm-1 col-form-label">Beruf:</label>
-                    <div class="col-sm-3">
-                        <select class="form-control" type="select">
-                            <ng-container>
-                                <option>Architekt</option>
-                            </ng-container>
-                        </select>
-                    </div>
-                    <label class="col-sm-1 col-form-label">Bundesland:</label>
-                    <div class="col-sm-3">
-                        <select class="form-control" type="select">
-                            <ng-container *ngFor="let federal_state of federal_states">
-                                <option>{{ federal_state }}</option>
-                            </ng-container>
-                        </select>
-                    </div>
-                    <label class="col-sm-1 col-form-label">Bildungsgrad:</label>
-                    <div class="col-sm-3">
-                        <select class="form-control" type="select">
-                            <ng-container *ngFor="let education_degree of education_degrees">
-                                <option>{{ education_degree }}</option>
-                            </ng-container>
-                        </select>
-                    </div>
-                </div>
-                <div class="form-group row">
-                    <div class="col-sm-1">
-                        <button type="button" class="btn btn-success" (click)="search()">Suchen</button>
-                    </div>
-                </div>
-            </form>
+  <div class="card-body">
+    <h5 class="card-title">Filter</h5>
+    <div class="card-text">
+      <form>
+        <div class="form-group row">
+          <label class="col-sm-1 col-form-label">Gehalt:</label>
+          <div class="col-sm">
+            <div class="input-group">
+              <input
+                class="form-control"
+                type="number"
+                min="0"
+                placeholder="Von"
+              />
+              <div class="input-group-postpend">
+                <div class="input-group-text">€</div>
+              </div>
+            </div>
+          </div>
+          <div class="col-sm">
+            <div class="input-group">
+              <input class="form-control" type="number" placeholder="Bis" />
+              <div class="input-group-postpend">
+                <div class="input-group-text">€</div>
+              </div>
+            </div>
+          </div>
+          <label class="col-sm-1 col-form-label">Alter:</label>
+          <div class="col-sm">
+            <input
+              class="form-control"
+              type="number"
+              min="0"
+              placeholder="Von"
+            />
+          </div>
+          <div class="col-sm">
+            <input class="form-control" type="number" placeholder="Bis" />
+          </div>
         </div>
+        <div class="form-group row">
+          <label class="col-sm-1 col-form-label">Beruf:</label>
+          <div class="col-sm-3">
+            <select class="form-control" type="select">
+              <ng-container>
+                <option>Architekt</option>
+              </ng-container>
+            </select>
+          </div>
+          <label class="col-sm-1 col-form-label">Bundesland:</label>
+          <div class="col-sm-3">
+            <select class="form-control" type="select">
+              <ng-container *ngFor="let federal_state of federal_states">
+                <option>{{ federal_state }}</option>
+              </ng-container>
+            </select>
+          </div>
+          <label class="col-sm-1 col-form-label">Bildungsgrad:</label>
+          <div class="col-sm-3">
+            <select class="form-control" type="select">
+              <ng-container *ngFor="let education_degree of education_degrees">
+                <option>{{ education_degree }}</option>
+              </ng-container>
+            </select>
+          </div>
+        </div>
+        <div class="form-group row">
+          <div class="col-sm-1">
+            <button type="button" class="btn btn-success" (click)="search()">
+              Suchen
+            </button>
+          </div>
+        </div>
+      </form>
     </div>
+  </div>
 </div>
 
 <div class="card">
-    <div class="card-body">
-        <h5 class="card-title">Ergebnisse</h5>
-        <div class="card-text">
-            <table class="table table-striped">
-                <tr>
-                    <th *ngFor="let header of table_headers">{{ header }}</th>
-                </tr>
-                <tr *ngFor="let data of data$ | async">
-                    <td>{{ data.job_title }}</td>
-                    <td>{{ data.education_degree }}</td>
-                    <td>{{ data.age.min }} - {{ data.age.max }}</td>
-                    <td>{{ data.federal_state }}</td>
-                    <td>{{ data.salary.min }}€ - {{ data.salary.max }}€</td>
-                    <td>{{ data.gender }}</td>
-                </tr>
-            </table>
-        </div>
+  <div class="card-body">
+    <h5 class="card-title">Ergebnisse</h5>
+    <div class="card-text">
+      <table class="table table-striped">
+        <tr>
+          <th *ngFor="let header of table_headers">{{ header }}</th>
+        </tr>
+        <tr *ngFor="let data of data$ | async">
+          <td>{{ data.job_title }}</td>
+          <td>{{ data.education_degree }}</td>
+          <td>{{ data.age.min }} - {{ data.age.max }}</td>
+          <td>{{ data.federal_state }}</td>
+          <td>{{ data.salary.min }}€ - {{ data.salary.max }}€</td>
+          <td>{{ data.gender }}</td>
+        </tr>
+      </table>
     </div>
+  </div>
 </div>
