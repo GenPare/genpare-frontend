@@ -34,13 +34,13 @@
   </svg>
   <div class="button-container" *ngIf="!(auth.isAuthenticated$ | async)">
     <button
-      (click)="auth.loginWithRedirect({ appState: { target: '/profile' } })"
+      (click)="loginWithRedirect()"
       class="btn btn-primary log-button btn-lg"
     >
       Anmelden
     </button>
     <button
-      (click)="auth.loginWithRedirect({ screen_hint: 'signup' })"
+      (click)="registerWithRedirect()"
       class="btn btn-primary sign-button btn-lg"
     >
       Registrieren

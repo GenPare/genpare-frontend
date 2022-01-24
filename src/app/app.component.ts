@@ -16,4 +16,9 @@ export class AppComponent {
   constructor(public auth: AuthService, private memberService: MemberService) {
     this.username$ = this.memberService.getNickname();
   }
+  logout() {
+    this.memberService
+      .invalidateSessionId()
+      .subscribe(() => this.auth.logout());
+  }
 }

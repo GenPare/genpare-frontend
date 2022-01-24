@@ -66,7 +66,7 @@ export class DataManagementComponent {
   }
 
   save() {
-    if (!this.memberService.sessionID$) {
+    if (!this.memberService.getSessionId()) {
       if (this.nickname) {
         this.memberService
           .registerMember(
@@ -81,8 +81,8 @@ export class DataManagementComponent {
               education_degree: this.data_management.value.education_degree,
               federal_state: this.data_management.value.federal_state,
             };
-            console.log('newData', newData);
-            return this.dataManagementService.newProfileData(newData);
+            this.dataManagementService.newProfileData(newData);
+            this.memberService.setSessionId();
           });
 
         this.registeredEmitter.emit(true);
