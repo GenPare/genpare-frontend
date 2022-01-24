@@ -8,7 +8,7 @@ import { AuthService } from '@auth0/auth0-angular';
 })
 export class StartPageComponent {
   constructor(public auth: AuthService) {}
-}
+
 
   loginWithRedirect() {
     this.auth.loginWithRedirect({ appState: { target: '/success', } })
@@ -17,3 +17,4 @@ export class StartPageComponent {
   registerWithRedirect() {
     this.auth.loginWithRedirect({ screen_hint: 'signup', target:'/success' })
   }
+}

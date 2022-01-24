@@ -38,11 +38,15 @@ interface Range {
   providedIn: 'root',
 })
 export class DataManagementService {
+  sessionId: string | null;
+
   constructor(
     private http: HttpClient,
     private mapService: MapService,
     private memberService: MemberService
-  ) {}
+  ) {
+    this.sessionId = this.memberService.getSessionId();
+  }
 
   getCompareData(): Observable<CompareData[]> {
     return of([
@@ -92,19 +96,15 @@ export class DataManagementService {
   }
 
   newProfileData(data: ProfileData) {
-    if (this.memberService.sessionID$) {
-      return this.memberService.sessionID$.subscribe((id) => {
-        // TODO Programm erreicht diese Stelle nicht, wodurch die Salary Daten nicht gespeichert werden. Momentan wissen wir nicht wie der Fehler behoben wird.
-        // An dieser Stelle scheitert der Rest der Webapplikation
-        return this.http.put(backendURL + '/salary/own', {
-          sessionId: id,
-          salary: data.salary,
-          jobTitle: data.job_title,
-          state: this.mapService.mapFederalStateFtoB(data.federal_state),
-          levelOfEducation: this.mapService.mapEducationDegreeFtoB(
-            data.education_degree
-          ),
-        });
+    if (this.sessionId) {
+      return this.http.put(backendURL + '/salary/own', {
+        sessionId: this.sessionId,
+        salary: data.salary,
+        jobTitle: data.job_title,
+        state: this.mapService.mapFederalStateFtoB(data.federal_state),
+        levelOfEducation: this.mapService.mapEducationDegreeFtoB(
+          data.education_degree
+        ),
       });
     } else {
       return EMPTY;
@@ -112,25 +112,21 @@ export class DataManagementService {
   }
 
   getProfileData(): Observable<ProfileData> {
-    if (this.memberService.sessionID$) {
-      return this.memberService.sessionID$.pipe(
-        switchMap((id) =>
-          this.http
-            .get<ResponseData>(backendURL + '/salary/own', {
-              params: { sessionId: id },
-            })
-            .pipe(
-              map((data) => ({
-                job_title: data.jobTitle,
-                salary: data.salary,
-                education_degree: this.mapService.mapEducationDegreeBtoF(
-                  data.levelOfEducation
-                ),
-                federal_state: this.mapService.mapFederalStateBtoF(data.state),
-              }))
-            )
-        )
-      );
+    if (this.sessionId) {
+      return this.http
+        .get<ResponseData>(backendURL + '/salary/own', {
+          params: { sessionId: this.sessionId },
+        })
+        .pipe(
+          map((data) => ({
+            job_title: data.jobTitle,
+            salary: data.salary,
+            education_degree: this.mapService.mapEducationDegreeBtoF(
+              data.levelOfEducation
+            ),
+            federal_state: this.mapService.mapFederalStateBtoF(data.state),
+          }))
+        );
     } else {
       return EMPTY;
     }
