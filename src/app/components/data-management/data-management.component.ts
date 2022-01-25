@@ -66,6 +66,7 @@ export class DataManagementComponent {
   }
 
   save() {
+    console.log("save:" + this.memberService.getSessionId())
     if (!this.memberService.getSessionId()) {
       if (this.nickname) {
         this.memberService
@@ -74,17 +75,16 @@ export class DataManagementComponent {
             this.data_management.value.age,
             this.data_management.value.gender
           )
-          .subscribe(() => {
+          .pipe(switchMap(() => {
             const newData = {
               job_title: this.data_management.value.job_title,
               salary: this.data_management.value.salary,
               education_degree: this.data_management.value.education_degree,
               federal_state: this.data_management.value.federal_state,
             };
-            this.dataManagementService.newProfileData(newData);
-            this.memberService.setSessionId();
-          });
-
+            return this.dataManagementService.newProfileData(newData);
+          }))
+          .subscribe(() => this.memberService.setSessionId());
         this.registeredEmitter.emit(true);
       }
     }
