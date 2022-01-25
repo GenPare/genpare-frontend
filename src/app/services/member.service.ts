@@ -40,8 +40,8 @@ export class MemberService implements OnInit {
     );
   }
 
-  setSessionId():void {
-    this.getEmail()
+  setSessionId(): Observable<Object> {
+    return this.getEmail()
       .pipe(
         switchMap((mail) =>
           this.http
@@ -51,9 +51,12 @@ export class MemberService implements OnInit {
             .pipe(map((jsonResponse) => jsonResponse.sessionId))
         )
       )
-      .subscribe((id) => {
-        sessionStorage.setItem('sessionId', id);
-      });
+      .pipe(
+        tap((id) => {
+          console.log('setting ID');
+          sessionStorage.setItem('sessionId', id);
+        })
+      );
   }
 
   getSessionId(): string | null {

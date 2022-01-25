@@ -10,7 +10,7 @@ import {
   ProfileData,
 } from 'app/services/data-management.service';
 import { MemberService } from 'app/services/member.service';
-import { Observable } from 'rxjs';
+import { EMPTY, Observable } from 'rxjs';
 import { switchMap, tap } from 'rxjs/operators';
 
 @Component({
@@ -66,27 +66,29 @@ export class DataManagementComponent {
   }
 
   save() {
-    console.log("save:" + this.memberService.getSessionId())
     if (!this.memberService.getSessionId()) {
       if (this.nickname) {
-        this.memberService
+        return this.memberService
           .registerMember(
             this.nickname,
             this.data_management.value.age,
             this.data_management.value.gender
           )
-          .pipe(switchMap(() => {
-            const newData = {
-              job_title: this.data_management.value.job_title,
-              salary: this.data_management.value.salary,
-              education_degree: this.data_management.value.education_degree,
-              federal_state: this.data_management.value.federal_state,
-            };
-            return this.dataManagementService.newProfileData(newData);
-          }))
-          .subscribe(() => this.memberService.setSessionId());
-        this.registeredEmitter.emit(true);
+          .pipe(switchMap(() => this.memberService.setSessionId()))
+          .pipe(
+            switchMap(() => {
+              const newData = {
+                job_title: this.data_management.value.job_title,
+                salary: this.data_management.value.salary,
+                education_degree: this.data_management.value.education_degree,
+                federal_state: this.data_management.value.federal_state,
+              };
+              return this.dataManagementService.newProfileData(newData);
+            })
+          )
+          .subscribe(() => this.registeredEmitter.emit(true));
       }
     }
+    return EMPTY;
   }
 }
