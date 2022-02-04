@@ -46,7 +46,6 @@ export class DataManagementService {
     private memberService: MemberService
   ) {
     this.sessionId = this.memberService.getSessionId();
-    console.log(this.sessionId);
   }
 
   getCompareData(): Observable<CompareData[]> {
@@ -102,7 +101,6 @@ export class DataManagementService {
 
   newProfileData(data: ProfileData) {
     this.getSessionId();
-    console.log("newProfileData:" + this.sessionId);
     if (this.sessionId) {
       return this.http.put(backendURL + '/salary/own', {
         sessionId: this.sessionId,
@@ -120,6 +118,7 @@ export class DataManagementService {
 
   getProfileData(): Observable<ProfileData> {
     if (this.sessionId) {
+      console.log("fetch profile data");
       return this.http
         .get<ResponseData>(backendURL + '/salary/own', {
           params: { sessionId: this.sessionId },

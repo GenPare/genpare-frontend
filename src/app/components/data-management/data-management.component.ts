@@ -34,7 +34,7 @@ export class DataManagementComponent {
   education_degree?: string;
   job_title?: string;
 
-  existingData$: Observable<ProfileData>;
+  existingData$?: Observable<ProfileData>;
 
   data_management = new FormGroup({
     job_title: new FormControl('', Validators.required),
@@ -48,10 +48,11 @@ export class DataManagementComponent {
   constructor(
     private memberService: MemberService,
     private dataManagementService: DataManagementService
-  ) {
-    this.federal_states = federal_states_f;
-    this.genders = genders_f;
-    this.education_degrees = education_degrees_f;
+  ) { }
+
+  ngOnInit(): void {
+    console.log(this.memberService.getSessionId());
+    console.log("calling getProfileData-method");
     this.existingData$ = this.dataManagementService.getProfileData();
     this.existingData$
       .pipe(
