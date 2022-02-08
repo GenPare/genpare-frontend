@@ -1,4 +1,4 @@
-import { Component, OnDestroy } from '@angular/core';
+import { Component } from '@angular/core';
 import { AuthService } from '@auth0/auth0-angular';
 import { Observable, Subscription } from 'rxjs';
 import { MemberService } from './services/member.service';
@@ -10,12 +10,15 @@ import { MemberService } from './services/member.service';
 })
 export class AppComponent {
   title: string = 'genpare';
-  username$: Observable<string>;
+  nickname$: Observable<string>;
+  defaultNickname: string;
   subscription = new Subscription();
 
   constructor(public auth: AuthService, private memberService: MemberService) {
-    this.username$ = this.memberService.getNickname();
+    this.nickname$ = this.memberService.nicknameSubject$;
+    this.defaultNickname = this.memberService.defaultNickname;
   }
+
   logout() {
     this.memberService
       .invalidateSessionId()

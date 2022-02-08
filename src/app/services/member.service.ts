@@ -2,11 +2,10 @@ import { HttpClient } from '@angular/common/http';
 import { Injectable, OnInit } from '@angular/core';
 import { AuthService } from '@auth0/auth0-angular';
 import { backendURL } from 'app/app.module';
-import { catchError, delay, map, switchMap, tap } from 'rxjs/operators';
-import { Observable, of, Subject } from 'rxjs';
+import { catchError, map, switchMap, tap } from 'rxjs/operators';
+import { Observable, Subject } from 'rxjs';
 import { DatePipe } from '@angular/common';
 import { MapService } from './map.service';
-import { Router } from '@angular/router';
 
 interface sessionIdResponse {
   sessionId: sessionIdType;
@@ -25,12 +24,13 @@ interface memberDataResponse {
 })
 export class MemberService implements OnInit {
   pipe = new DatePipe('en-US');
+  defaultNickname = 'genparer';
+  public nicknameSubject$ = new Subject<string>();
 
   constructor(
     private http: HttpClient,
     private auth: AuthService,
-    private mapService: MapService,
-    private router: Router
+    private mapService: MapService
   ) {}
   ngOnInit(): void {}
 
@@ -53,42 +53,53 @@ export class MemberService implements OnInit {
       )
       .pipe(
         tap((id) => {
-          console.log('setting ID');
           sessionStorage.setItem('sessionId', id);
+          this.getNickname(id);
         })
       );
   }
 
   getSessionId(): string | null {
-    return sessionStorage.getItem('sessionId');
+    const id = sessionStorage.getItem('sessionId');
+    if (id) {
+      this.getNickname(id);
+    }
+    return id;
   }
 
-  getNickname(): Observable<string> {
-    let sessionId = this.getSessionId();
-    return sessionId
-      ? this.http
-          .get<memberDataResponse>(backendURL + '/members', {
-            params: { sessionId },
-          })
-          .pipe(map((jsonResponse) => jsonResponse.name))
-          .pipe(catchError(() => of('No Nickname')))
-      : of('No Nickname');
+  private getNickname(sessionId: string): void {
+    if (sessionId) {
+      this.http
+        .get<memberDataResponse>(backendURL + '/members', {
+          params: { sessionId },
+        })
+        .pipe(map((jsonResponse) => jsonResponse.name))
+        .pipe(catchError(() => this.defaultNickname))
+        .subscribe((nickname) => {
+          this.nicknameSubject$.next(nickname);
+        });
+    } else {
+      //TODO Errorhandling
+      this.nicknameSubject$.next(this.defaultNickname);
+    }
   }
 
-  registerMember(name: string, birthdate: Date, gender: string) {
+  registerMember(name: string, birthdate: Date, gender: string): Observable<Object> {
     const formatDate = this.pipe.transform(birthdate, 'yyyy-MM-dd');
     gender = this.mapService.mapGenderFtoB(gender);
-    return this.getEmail().pipe(
-      switchMap((mail) => {
-        return this.http.post(backendURL + '/members', {
-          id: null,
-          email: mail,
-          name: name,
-          birthdate: formatDate,
-          gender: gender,
-        });
-      })
-    );
+    return this.getEmail()
+      .pipe(
+        switchMap((mail) => {
+          return this.http.post(backendURL + '/members', {
+            id: null,
+            email: mail,
+            name: name,
+            birthdate: formatDate,
+            gender: gender,
+          });
+        })
+      )
+      .pipe(switchMap(() => this.setSessionId()));
   }
 
   invalidateSessionId(): Observable<Object> {

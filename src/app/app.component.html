@@ -21,9 +21,17 @@
   </div>
   <div class="navbar-nav ml-auto">
     <div class="navbar-nav mr-auto">
-      <a class="nav-item nav-link" routerLink="/profile">{{
-        username$ | async
-      }}</a>
+      <a
+        class="nav-item nav-link"
+        routerLink="/profile"
+        *ngIf="nickname$ | async; else noNickname"
+        >{{ nickname$ | async }}</a
+      >
+      <ng-template #noNickname
+        ><a class="nav-item nav-link" routerLink="/profile">{{
+          defaultNickname
+        }}</a></ng-template
+      >
       <button type="button" class="btn btn-danger" (click)="logout()">
         Logout
       </button>
@@ -32,4 +40,4 @@
 </nav>
 
 <router-outlet></router-outlet>
-<app-toasts-container></app-toasts-container>
+<app-toasts-container class="toast-container"></app-toasts-container>

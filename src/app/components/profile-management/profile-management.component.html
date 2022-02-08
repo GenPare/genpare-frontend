@@ -15,12 +15,11 @@
                 type="text"
                 id="nickname"
                 aria-describedby="nickname-small"
-                formControlName="job_title"
                 [(ngModel)]="nickname"
                 [disabled]="isRegistered"
                 required
               />
-              <small class="form-text text-muted" id="job-small"
+              <small class="form-text text-muted" id="nickname-small" *ngIf="!isRegistered"
                 >Bitte geben Sie Ihren Nickname ein.</small
               >
             </div>

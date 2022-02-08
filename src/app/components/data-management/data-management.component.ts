@@ -1,4 +1,4 @@
-import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
+import { Component, EventEmitter, Input, Output } from '@angular/core';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
 import {
   education_degrees_f,
@@ -10,6 +10,7 @@ import {
   ProfileData,
 } from 'app/services/data-management.service';
 import { MemberService } from 'app/services/member.service';
+import { ToastService } from 'app/services/toast.service';
 import { EMPTY, Observable } from 'rxjs';
 import { switchMap, tap } from 'rxjs/operators';
 
@@ -18,9 +19,9 @@ import { switchMap, tap } from 'rxjs/operators';
   templateUrl: './data-management.component.html',
   styleUrls: ['./data-management.component.scss'],
 })
-export class DataManagementComponent {
+export class DataManagementComponent{
   @Input()
-  nickname?: string;
+  nickname: string | undefined;
 
   @Output()
   registeredEmitter = new EventEmitter<boolean>();
@@ -47,7 +48,8 @@ export class DataManagementComponent {
 
   constructor(
     private memberService: MemberService,
-    private dataManagementService: DataManagementService
+    private dataManagementService: DataManagementService,
+    private toastService: ToastService
   ) {
     this.federal_states = federal_states_f;
     this.genders = genders_f;
@@ -74,7 +76,7 @@ export class DataManagementComponent {
             this.data_management.value.age,
             this.data_management.value.gender
           )
-          .pipe(switchMap(() => this.memberService.setSessionId()))
+          .pipe(tap(() => this.toastService.show("Daten gespeichert!",{classname: 'bg-success text-light'})))
           .pipe(
             switchMap(() => {
               const newData = {
@@ -87,6 +89,8 @@ export class DataManagementComponent {
             })
           )
           .subscribe(() => this.registeredEmitter.emit(true));
+      } else {
+        this.toastService.show("Bitte einen Nickname angeben",{ classname: 'bg-danger text-light'})
       }
     }
     return EMPTY;
