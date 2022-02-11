@@ -1,8 +1,8 @@
 import { Injectable } from '@angular/core';
 import { EMPTY, Observable, of } from 'rxjs';
-import { map, switchMap, tap } from 'rxjs/operators';
+import { map } from 'rxjs/operators';
 import { HttpClient } from '@angular/common/http';
-import { backendURL } from 'app/app.module';
+import { environment as env } from 'environments/environment.dev';
 import { MapService } from './services/map.service';
 import { MemberService } from './services/member.service';
 
@@ -97,7 +97,7 @@ export class DataManagementService {
 
   newProfileData(data: ProfileData) {
     if (this.sessionId) {
-      return this.http.put(backendURL + '/salary/own', {
+      return this.http.put(env.backendURL + '/salary/own', {
         sessionId: this.sessionId,
         salary: data.salary,
         jobTitle: data.job_title,
@@ -114,7 +114,7 @@ export class DataManagementService {
   getProfileData(): Observable<ProfileData> {
     if (this.sessionId) {
       return this.http
-        .get<ResponseData>(backendURL + '/salary/own', {
+        .get<ResponseData>(env.backendURL + '/salary/own', {
           params: { sessionId: this.sessionId },
         })
         .pipe(

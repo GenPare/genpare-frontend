@@ -5,4 +5,5 @@ export const environment = {
     clientId: 'OLtqeuEcVpFPKkLIRaKJ3ENrv3hUUlWY',
     redirectUri: window.location.origin,
   },
+  backendURL: 'http://localhost:8080',
 };
