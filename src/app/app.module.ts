@@ -22,7 +22,7 @@ import { JwtModule } from '@auth0/angular-jwt';
 export const backendURL = 'http://localhost:8080';
 
 export function tokenGetter() {
-  return sessionStorage.getItem('sessionId');
+  return sessionStorage.getItem('access_token');
 }
 
 export class App {
@@ -54,7 +54,7 @@ export class App {
     JwtModule.forRoot({
       config: {
         tokenGetter: tokenGetter,
-        allowedDomains: ['localhost']
+        allowedDomains: ['http://localhost:8080/*']
       },
     }),
     CommonModule,
