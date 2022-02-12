@@ -17,6 +17,8 @@ import { DataManagementComponent } from '@comp/data-management/data-management.c
 import { AuthModule } from '@auth0/auth0-angular';
 import { environment as env } from 'environments/environment.dev';
 import { LoginSuccessComponent } from './components/login-success/login-success.component';
+import { IsLoggedIn } from './guards/is-logged-in';
+import { LoginButtonsComponent } from './shared/login-buttons/login-buttons.component';
 
 export const backendURL = "http://localhost:8080"
 
@@ -34,7 +36,8 @@ export class App {
     StartPageComponent,
     ToastsContainerComponent,
     SupportPageComponent,
-    LoginSuccessComponent
+    LoginSuccessComponent,
+    LoginButtonsComponent
   ],
   imports: [
     BrowserModule,
@@ -49,7 +52,7 @@ export class App {
     HttpClientModule,
     CommonModule
   ],
-  providers: [DatePipe, HasEnteredDataGuard],
+  providers: [DatePipe, HasEnteredDataGuard,IsLoggedIn],
   bootstrap: [AppComponent]
 })
 export class AppModule { }
