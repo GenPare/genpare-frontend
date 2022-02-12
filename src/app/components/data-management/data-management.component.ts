@@ -14,6 +14,7 @@ import { ToastService } from 'app/services/toast.service';
 import { EMPTY, Observable } from 'rxjs';
 import { switchMap, tap } from 'rxjs/operators';
 
+type SaveButtonText = 'Speichern' | 'Aktualisieren';
 @Component({
   selector: 'app-data-management',
   templateUrl: './data-management.component.html',
@@ -46,6 +47,9 @@ export class DataManagementComponent {
     age: new FormControl('', Validators.required),
   });
 
+  sessionIdExists?: boolean;
+  saveButtonText?: SaveButtonText;
+
   constructor(
     private memberService: MemberService,
     private dataManagementService: DataManagementService,
@@ -53,8 +57,13 @@ export class DataManagementComponent {
   ) { }
 
   ngOnInit(): void {
-    console.log(this.memberService.getSessionId());
-    console.log("calling getProfileData-method");
+    console.log(this.memberService.getSessionId())
+    this.sessionIdExists = this.memberService.getSessionId() !== null;
+    if(this.sessionIdExists) {
+      this.saveButtonText = 'Aktualisieren';
+    } else {
+      this.saveButtonText = 'Speichern';
+    }
     this.existingData$ = this.dataManagementService.getProfileData();
     this.existingData$
       .pipe(
@@ -88,6 +97,9 @@ export class DataManagementComponent {
               };
               return this.dataManagementService.newProfileData(newData);
             })
+          )
+          .pipe(
+            tap(() => this.saveButtonText = 'Aktualisieren')
           )
           .subscribe(() => this.registeredEmitter.emit(true));
       } else {
