@@ -13,7 +13,6 @@ import { ToastsContainerComponent } from './shared/toasts-container/toasts-conta
 import { HasEnteredDataGuard } from './guards/has-entered-data';
 import { SupportPageComponent } from './components/support-page/support-page.component';
 import { HttpClientModule } from '@angular/common/http';
-import { DataManagementComponent } from '@comp/data-management/data-management.component';
 import { AuthModule } from '@auth0/auth0-angular';
 import { environment as env } from 'environments/environment.dev';
 import { LoginSuccessComponent } from './components/login-success/login-success.component';
@@ -27,7 +26,6 @@ export class App {
 @NgModule({
   declarations: [
     AppComponent,
-    DataManagementComponent,
     ProfileManagementComponent,
     CompareComponent,
     StartPageComponent,
