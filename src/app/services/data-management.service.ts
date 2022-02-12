@@ -99,7 +99,7 @@ export class DataManagementService {
     this.sessionId = this.memberService.getSessionId();
   }
 
-  newProfileData(data: ProfileData) {
+  newProfileData(data: ProfileData):Observable<Object | never> {
     this.getSessionId();
     if (this.sessionId) {
       return this.http.put(backendURL + '/salary/own', {

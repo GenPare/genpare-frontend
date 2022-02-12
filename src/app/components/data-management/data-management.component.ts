@@ -10,6 +10,7 @@ import {
   ProfileData,
 } from 'app/services/data-management.service';
 import { MemberService } from 'app/services/member.service';
+import { ToastService } from 'app/services/toast.service';
 import { EMPTY, Observable } from 'rxjs';
 import { switchMap, tap } from 'rxjs/operators';
 
@@ -20,7 +21,7 @@ import { switchMap, tap } from 'rxjs/operators';
 })
 export class DataManagementComponent {
   @Input()
-  nickname?: string;
+  nickname: string | undefined;
 
   @Output()
   registeredEmitter = new EventEmitter<boolean>();
@@ -47,7 +48,8 @@ export class DataManagementComponent {
 
   constructor(
     private memberService: MemberService,
-    private dataManagementService: DataManagementService
+    private dataManagementService: DataManagementService,
+    private toastService: ToastService
   ) { }
 
   ngOnInit(): void {
@@ -75,7 +77,7 @@ export class DataManagementComponent {
             this.data_management.value.age,
             this.data_management.value.gender
           )
-          .pipe(switchMap(() => this.memberService.setSessionId()))
+          .pipe(tap(() => this.toastService.show("Daten gespeichert!",{classname: 'bg-success text-light'})))
           .pipe(
             switchMap(() => {
               const newData = {
@@ -88,6 +90,8 @@ export class DataManagementComponent {
             })
           )
           .subscribe(() => this.registeredEmitter.emit(true));
+      } else {
+        this.toastService.show("Bitte einen Nickname angeben",{ classname: 'bg-danger text-light'})
       }
     }
     return EMPTY;
