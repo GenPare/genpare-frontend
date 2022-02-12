@@ -61,9 +61,6 @@ export class MemberService implements OnInit {
 
   getSessionId(): string | null {
     const id = sessionStorage.getItem('sessionId');
-    if (id) {
-      this.getNickname(id);
-    }
     return id;
   }
 

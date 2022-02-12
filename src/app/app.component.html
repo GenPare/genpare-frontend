@@ -24,8 +24,8 @@
       <a
         class="nav-item nav-link"
         routerLink="/profile"
-        *ngIf="nickname$ | async; else noNickname"
-        >{{ nickname$ | async }}</a
+        *ngIf="nickname; else noNickname"
+        >{{ nickname }}</a
       >
       <ng-template #noNickname
         ><a class="nav-item nav-link" routerLink="/profile">{{

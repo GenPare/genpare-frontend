@@ -10,12 +10,11 @@ import { MemberService } from './services/member.service';
 })
 export class AppComponent {
   title: string = 'genpare';
-  nickname$: Observable<string>;
+  nickname?: string;
   defaultNickname: string;
-  subscription = new Subscription();
 
   constructor(public auth: AuthService, private memberService: MemberService) {
-    this.nickname$ = this.memberService.nicknameSubject$;
+    this.memberService.nicknameSubject$.subscribe((nickname) => this.nickname = nickname);
     this.defaultNickname = this.memberService.defaultNickname;
   }
 
