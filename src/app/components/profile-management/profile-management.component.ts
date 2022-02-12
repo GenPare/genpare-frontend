@@ -23,7 +23,6 @@ type SaveButtonText = 'Speichern' | 'Aktualisieren';
 })
 export class ProfileManagementComponent implements OnDestroy {
   email$: Observable<string>;
-  existingData$?: Observable<ProfileData>;
   nickname: string = '';
   account_created: Date = new Date();
   isRegistered = false;
@@ -32,11 +31,6 @@ export class ProfileManagementComponent implements OnDestroy {
   education_degrees = education_degrees_f;
   federal_states = federal_states_f;
   genders = genders_f;
-
-  federal_state?: string;
-  salary?: number;
-  education_degree?: string;
-  job_title?: string;
 
   data_management = new FormGroup({
     job_title: new FormControl('', Validators.required),
@@ -71,17 +65,20 @@ export class ProfileManagementComponent implements OnDestroy {
     } else {
       this.saveButtonText = 'Speichern';
     }
-    this.existingData$ = this.dataManagementService.getProfileData();
-    this.existingData$
-      .pipe(
-        tap((data) => {
-          (this.federal_state = data.federal_state),
-            (this.salary = data.salary),
-            (this.education_degree = data.education_degree),
-            (this.job_title = data.job_title);
-        })
-      )
-      .subscribe();
+    this.dataManagementService.getProfileData()
+      .subscribe((data) => {
+        this.data_management.patchValue({
+          "federal_state": data.federal_state,
+          "salary": data.salary,
+          "education_degree": data.education_degree,
+          "job_title": data.job_title
+        })});
+    this.memberService.getMemberInfo()
+    .subscribe((data) => {
+      this.data_management.patchValue({
+        "gender": data.gender,
+        "age": data.birthdate
+      })});
   }
 
   save() {

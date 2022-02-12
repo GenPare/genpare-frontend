@@ -52,7 +52,6 @@
               id="job"
               aria-describedby="job-small"
               formControlName="job_title"
-              [(ngModel)]="job_title"
             />
             <small class="form-text text-muted" id="job-small"
               >Bitte geben Sie Ihren Beruf an.</small
@@ -67,7 +66,6 @@
               id="education-degree"
               aria-describedby="education-degree-small"
               formControlName="education_degree"
-              [(ngModel)]="education_degree"
             >
               <ng-container *ngFor="let education_degree of education_degrees">
                 <option [ngValue]="education_degree">
@@ -91,7 +89,6 @@
               style="width: 100%"
               aria-describedby="federal-state-small"
               formControlName="federal_state"
-              [(ngModel)]="federal_state"
             >
               <ng-container *ngFor="let federal_state of federal_states">
                 <option [ngValue]="federal_state">{{ federal_state }}</option>
@@ -112,7 +109,6 @@
                 aria-describedby="salary-small"
                 placeholder="z.B. 2000"
                 formControlName="salary"
-                [(ngModel)]="salary"
               />
               <div class="input-group-postpend">
                 <div class="input-group-text">€</div>

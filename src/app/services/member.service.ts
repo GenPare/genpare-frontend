@@ -3,7 +3,7 @@ import { Injectable, OnInit } from '@angular/core';
 import { AuthService } from '@auth0/auth0-angular';
 import { backendURL } from 'app/app.module';
 import { catchError, map, switchMap, tap } from 'rxjs/operators';
-import { Observable, Subject } from 'rxjs';
+import { EMPTY, Observable, Subject } from 'rxjs';
 import { DatePipe } from '@angular/common';
 import { MapService } from './map.service';
 
@@ -15,6 +15,11 @@ type sessionIdType = string;
 interface memberDataResponse {
   email: string;
   name: string;
+  birthdate: Date;
+  gender: string;
+}
+
+interface memberInfo {
   birthdate: Date;
   gender: string;
 }
@@ -54,7 +59,7 @@ export class MemberService implements OnInit {
       .pipe(
         tap((id) => {
           sessionStorage.setItem('sessionId', id);
-          this.getNickname(id);
+          this.getMemberInfo();
         })
       );
   }
@@ -64,20 +69,21 @@ export class MemberService implements OnInit {
     return id;
   }
 
-  private getNickname(sessionId: string): void {
+  getMemberInfo(): Observable<memberInfo> {
+    let sessionId = this.getSessionId();
     if (sessionId) {
-      this.http
+      return this.http
         .get<memberDataResponse>(backendURL + '/members', {
           params: { sessionId },
         })
-        .pipe(map((jsonResponse) => jsonResponse.name))
-        .pipe(catchError(() => this.defaultNickname))
-        .subscribe((nickname) => {
-          this.nicknameSubject$.next(nickname);
-        });
+        .pipe(tap((memberData) => this.nicknameSubject$.next(memberData.name)))
+        .pipe(map((memberData) => ({
+          birthdate: memberData.birthdate,
+          gender: this.mapService.mapGenderBtoF(memberData.gender)
+        })));
     } else {
-      //TODO Errorhandling
       this.nicknameSubject$.next(this.defaultNickname);
+      return EMPTY;
     }
   }
 
