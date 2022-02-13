@@ -42,7 +42,7 @@ export class ProfileManagementComponent implements OnInit, OnDestroy {
 
   constructor(
     private memberService: MemberService,
-    private dataManagementService: JobInformationService,
+    private jobInformationService: JobInformationService,
     private router: Router,
     private toastService: ToastService,
     private fb: FormBuilder
@@ -77,7 +77,7 @@ export class ProfileManagementComponent implements OnInit, OnDestroy {
 
   private fillForm(): void {
     const member$ = this.memberService.getMemberInfo();
-    const salary$ = this.dataManagementService.getJobInformation();
+    const salary$ = this.jobInformationService.getJobInformation();
     this.subscriptions.add(
       combineLatest([member$, salary$]).subscribe(([memberInfo, jobInfo]) => {
         this.profileForm.patchValue({
@@ -104,7 +104,7 @@ export class ProfileManagementComponent implements OnInit, OnDestroy {
             )
             .pipe(
               switchMap(() =>
-                this.dataManagementService.newJobInformation({
+                this.jobInformationService.newJobInformation({
                   jobTitle: this.profileForm.value.job_title,
                   salary: this.profileForm.value.salary,
                   levelOfEducation: this.profileForm.value.education_degree,
@@ -125,6 +125,15 @@ export class ProfileManagementComponent implements OnInit, OnDestroy {
         this.toastService.show('Bitte alle Felder ausfüllen', {
           classname: 'bg-danger text-light',
         });
+      }
+    } else {
+      if (this.profileForm.valid){
+        this.jobInformationService.modifyJobInformation({
+          jobTitle: this.profileForm.value.job_title,
+          salary: this.profileForm.value.salary,
+          levelOfEducation: this.profileForm.value.education_degree,
+          state: this.profileForm.value.federal_state,
+        }).subscribe();
       }
     }
   }

@@ -121,4 +121,22 @@ export class JobInformationService {
       return EMPTY;
     }
   }
+
+  modifyJobInformation(data: JobInfo): Observable<Object | never> {
+    const sessionId = this.memberService.getSessionId();
+    if (sessionId) {
+      console.log("modifying");
+      return this.http.patch(backendURL + '/salary/own', {
+        sessionId: sessionId,
+        salary: data.salary,
+        jobTitle: data.jobTitle,
+        state: this.mapService.mapFederalStateFtoB(data.state),
+        levelOfEducation: this.mapService.mapEducationDegreeFtoB(
+          data.levelOfEducation
+        ),
+      });
+    } else {
+      return EMPTY;
+    }
+  }
 }
