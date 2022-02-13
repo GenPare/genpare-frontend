@@ -4,9 +4,21 @@ Welcome to the Frontend-Repository of GenPare! The following steps will help you
 
 ## Installing
 
+### Prerequisites:
+
+- [Docker](https://docs.docker.com/get-docker/)
+- [Docker Compose](https://docs.docker.com/compose/install/
+
+### Building the image
+
+If you already have a frontend image present, you need to remove it, or changes won't be applied. To check if you have an image present use `docker ps`.
+
+To run the frontend in a container use: 
+`docker-compose up`.
+
 ### Install Angular 
 
-As this is an Angular-Application, Angular and [Node.js](https://nodejs.org/en/download/) (v14.18.1) are required. If not already installed, install Node.js first. Then, install the Angular CLI via npm by running the following command: `npm install -g @angular/cli`.
+As an alternative to docker you can use the following instruction to install the frontend locally. As this is an Angular-Application, Angular and [Node.js](https://nodejs.org/en/download/) (v14.18.1) are required. If not already installed, install Node.js first. Then, install the Angular CLI via npm by running the following command: `npm install -g @angular/cli`.
 
 ### Install Dependencies
 
