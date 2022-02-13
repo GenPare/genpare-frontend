@@ -7,7 +7,7 @@ Welcome to the Frontend-Repository of GenPare! The following steps will help you
 ### Prerequisites:
 
 - [Docker](https://docs.docker.com/get-docker/)
-- [Docker Compose](https://docs.docker.com/compose/install/
+- [Docker Compose](https://docs.docker.com/compose/install/)
 
 ### Building the image
 
