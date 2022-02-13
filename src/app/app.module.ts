@@ -19,7 +19,6 @@ import { environment as env } from 'environments/environment.dev';
 import { LoginSuccessComponent } from './components/login-success/login-success.component';
 import { JwtModule } from '@auth0/angular-jwt';
 
-
 export function tokenGetter() {
   return sessionStorage.getItem('access_token');
 }
@@ -47,13 +46,14 @@ export class App {
     ReactiveFormsModule,
     AuthModule.forRoot({
       ...env.auth,
+      audience: 'genpare',
     }),
     MDBBootstrapModule.forRoot(),
     HttpClientModule,
     JwtModule.forRoot({
       config: {
         tokenGetter: tokenGetter,
-        allowedDomains: ["localhost:8080"]
+        allowedDomains: ['localhost:8080']
       },
     }),
     CommonModule,
