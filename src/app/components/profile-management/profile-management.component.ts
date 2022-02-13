@@ -1,18 +1,16 @@
-import { Component, OnDestroy } from '@angular/core';
-import { FormControl, FormGroup, Validators } from '@angular/forms';
+import { Component, OnDestroy, OnInit } from '@angular/core';
+import { FormBuilder, Validators } from '@angular/forms';
+import { Router } from '@angular/router';
 import {
   education_degrees_f,
   federal_states_f,
   genders_f,
 } from '@shared/model/frontend_data';
-import {
-  DataManagementService,
-  ProfileData,
-} from 'app/services/data-management.service';
+import { JobInformationService } from 'app/services/job-information.service';
 import { MemberService } from 'app/services/member.service';
 import { ToastService } from 'app/services/toast.service';
-import { EMPTY, Observable, Subscription,  } from 'rxjs';
-import { switchMap, tap } from 'rxjs/operators';
+import { combineLatest, Observable, Subscription } from 'rxjs';
+import { switchMap } from 'rxjs/operators';
 
 type SaveButtonText = 'Speichern' | 'Aktualisieren';
 
@@ -21,103 +19,113 @@ type SaveButtonText = 'Speichern' | 'Aktualisieren';
   templateUrl: './profile-management.component.html',
   styleUrls: ['./profile-management.component.scss'],
 })
-export class ProfileManagementComponent implements OnDestroy {
+export class ProfileManagementComponent implements OnInit, OnDestroy {
   email$: Observable<string>;
-  nickname: string = '';
-  account_created: Date = new Date();
-  isRegistered = false;
   subscriptions = new Subscription();
 
   education_degrees = education_degrees_f;
   federal_states = federal_states_f;
   genders = genders_f;
 
-  data_management = new FormGroup({
-    job_title: new FormControl('', Validators.required),
-    education_degree: new FormControl('', Validators.required),
-    federal_state: new FormControl('', Validators.required),
-    salary: new FormControl('', Validators.required),
-    gender: new FormControl('', Validators.required),
-    age: new FormControl('', Validators.required),
+  profileForm = this.fb.group({
+    job_title: ['', Validators.required],
+    education_degree: ['', Validators.required],
+    federal_state: ['', Validators.required],
+    salary: ['', Validators.required],
+    gender: ['', Validators.required],
+    age: ['', Validators.required],
+    nickname: ['', Validators.required],
   });
-
-  sessionIdExists?: boolean;
-  saveButtonText?: SaveButtonText;
+  
+  isRegistered: boolean;
+  saveButtonText: SaveButtonText;
 
   constructor(
     private memberService: MemberService,
-    private dataManagementService: DataManagementService,
-    private toastService: ToastService
+    private dataManagementService: JobInformationService,
+    private router: Router,
+    private toastService: ToastService,
+    private fb: FormBuilder
   ) {
     this.email$ = this.memberService.getEmail();
-    this.isRegistered = this.memberService.getSessionId() ? true : false;
+    if (this.memberService.getSessionId()) {
+      this.isRegistered = true;
+      this.saveButtonText = 'Aktualisieren';
+    } else {
+      this.isRegistered = false;
+      this.saveButtonText = 'Speichern';
+    }
+  }
+
+  ngOnInit(): void {
+    if (this.isRegistered) {
+      this.subscriptions.add(
+        this.memberService.nickname$.subscribe((nickname) => {
+          this.profileForm.patchValue({ nickname });
+        })
+      );
+      this.profileForm.get('nickname')?.disable();
+      this.profileForm.get('age')?.disable();
+      this.profileForm.get('gender')?.disable();
+      this.fillForm();
+    }
+  }
+
+  ngOnDestroy(): void {
+    this.subscriptions.unsubscribe();
+  }
+
+  private fillForm(): void {
+    const member$ = this.memberService.getMemberInfo();
+    const salary$ = this.dataManagementService.getJobInformation();
     this.subscriptions.add(
-      this.memberService.nicknameSubject$.subscribe((nickname) => {
-        this.nickname = nickname;
+      combineLatest([member$, salary$]).subscribe(([memberInfo, jobInfo]) => {
+        this.profileForm.patchValue({
+          federal_state: jobInfo.state,
+          salary: jobInfo.salary,
+          education_degree: jobInfo.levelOfEducation,
+          job_title: jobInfo.jobTitle,
+          gender: memberInfo.gender,
+          age: memberInfo.birthdate,
+        });
       })
     );
   }
 
-  ngOnInit(): void {
-    this.sessionIdExists = this.memberService.getSessionId() !== null;
-    if(this.sessionIdExists) {
-      this.saveButtonText = 'Aktualisieren';
-    } else {
-      this.saveButtonText = 'Speichern';
-    }
-    this.dataManagementService.getProfileData()
-      .subscribe((data) => {
-        this.data_management.patchValue({
-          "federal_state": data.federal_state,
-          "salary": data.salary,
-          "education_degree": data.education_degree,
-          "job_title": data.job_title
-        })});
-    this.memberService.getMemberInfo()
-    .subscribe((data) => {
-      this.data_management.patchValue({
-        "gender": data.gender,
-        "age": data.birthdate
-      })});
-  }
-
-  save() {
-    if (!this.memberService.getSessionId()) {
-      if (this.nickname) {
-        return this.memberService
-          .registerMember(
-            this.nickname,
-            this.data_management.value.age,
-            this.data_management.value.gender
-          )
-          .pipe(tap(() => this.toastService.show("Daten gespeichert!",{classname: 'bg-success text-light'})))
-          .pipe(
-            switchMap(() => {
-              const newData = {
-                job_title: this.data_management.value.job_title,
-                salary: this.data_management.value.salary,
-                education_degree: this.data_management.value.education_degree,
-                federal_state: this.data_management.value.federal_state,
-              };
-              return this.dataManagementService.newProfileData(newData);
+  save(): void {
+    if (!this.isRegistered) {
+      if (this.profileForm.valid) {
+        this.subscriptions.add(
+          this.memberService
+            .registerMember(
+              this.profileForm.value.nickname,
+              this.profileForm.value.age,
+              this.profileForm.value.gender
+            )
+            .pipe(
+              switchMap(() =>
+                this.dataManagementService.newJobInformation({
+                  jobTitle: this.profileForm.value.job_title,
+                  salary: this.profileForm.value.salary,
+                  levelOfEducation: this.profileForm.value.education_degree,
+                  state: this.profileForm.value.federal_state,
+                })
+              )
+            )
+            .subscribe(() => {
+              this.toastService.show('Daten gespeichert!', {
+                classname: 'bg-success text-light',
+              });
+              this.saveButtonText = 'Aktualisieren';
+              this.isRegistered = true;
+              this.router.navigateByUrl('/compare');
             })
-          )
-          .pipe(
-            tap(() => this.saveButtonText = 'Aktualisieren')
-          )
-          .subscribe(() => this.onRegisteredEmitter(true));
+        );
       } else {
-        this.toastService.show("Bitte einen Nickname angeben",{ classname: 'bg-danger text-light'})
+        this.toastService.show('Bitte alle Felder ausfüllen', {
+          classname: 'bg-danger text-light',
+        });
       }
     }
-    return EMPTY;
-  }
-
-  ngOnDestroy(): void {
-    this.subscriptions.unsubscribe()
-  }
-
-  onRegisteredEmitter(bool: boolean) {
-    this.isRegistered = bool;
   }
 }

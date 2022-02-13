@@ -1,19 +1,12 @@
 import { Injectable } from '@angular/core';
 import { EMPTY, Observable, of } from 'rxjs';
-import { map, switchMap, tap } from 'rxjs/operators';
 import { HttpClient } from '@angular/common/http';
 import { backendURL } from 'app/app.module';
 import { MapService } from './map.service';
 import { MemberService } from './member.service';
+import { map } from 'rxjs/operators';
 
-export interface ProfileData {
-  job_title: string;
-  salary: number;
-  education_degree: string;
-  federal_state: string;
-}
-
-interface ResponseData {
+export interface JobInfo {
   salary: number;
   jobTitle: string;
   state: string;
@@ -37,16 +30,12 @@ interface Range {
 @Injectable({
   providedIn: 'root',
 })
-export class DataManagementService {
-  sessionId: string | null;
-
+export class JobInformationService {
   constructor(
     private http: HttpClient,
     private mapService: MapService,
     private memberService: MemberService
-  ) {
-    this.sessionId = this.memberService.getSessionId();
-  }
+  ) {}
 
   getCompareData(): Observable<CompareData[]> {
     return of([
@@ -95,20 +84,16 @@ export class DataManagementService {
     ]);
   }
 
-  getSessionId() {
-    this.sessionId = this.memberService.getSessionId();
-  }
-
-  newProfileData(data: ProfileData):Observable<Object | never> {
-    this.getSessionId();
-    if (this.sessionId) {
+  newJobInformation(data: JobInfo): Observable<Object | never> {
+    const sessionId = this.memberService.getSessionId();
+    if (sessionId) {
       return this.http.put(backendURL + '/salary/own', {
-        sessionId: this.sessionId,
+        sessionId: sessionId,
         salary: data.salary,
-        jobTitle: data.job_title,
-        state: this.mapService.mapFederalStateFtoB(data.federal_state),
+        jobTitle: data.jobTitle,
+        state: this.mapService.mapFederalStateFtoB(data.state),
         levelOfEducation: this.mapService.mapEducationDegreeFtoB(
-          data.education_degree
+          data.levelOfEducation
         ),
       });
     } else {
@@ -116,21 +101,20 @@ export class DataManagementService {
     }
   }
 
-  getProfileData(): Observable<ProfileData> {
-    if (this.sessionId) {
-      console.log("fetch profile data");
+  getJobInformation(): Observable<JobInfo> {
+    const sessionId = this.memberService.getSessionId();
+    if (sessionId) {
       return this.http
-        .get<ResponseData>(backendURL + '/salary/own', {
-          params: { sessionId: this.sessionId },
+        .get<JobInfo>(backendURL + '/salary/own', {
+          params: { sessionId: sessionId },
         })
         .pipe(
-          map((data) => ({
-            job_title: data.jobTitle,
-            salary: data.salary,
-            education_degree: this.mapService.mapEducationDegreeBtoF(
-              data.levelOfEducation
+          map((backendResponse) => ({
+            ...backendResponse,
+            levelOfEducation: this.mapService.mapEducationDegreeBtoF(
+              backendResponse.levelOfEducation
             ),
-            federal_state: this.mapService.mapFederalStateBtoF(data.state),
+            state: this.mapService.mapFederalStateBtoF(backendResponse.state),
           }))
         );
     } else {

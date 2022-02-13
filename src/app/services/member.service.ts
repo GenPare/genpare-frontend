@@ -3,7 +3,7 @@ import { Injectable, OnInit } from '@angular/core';
 import { AuthService } from '@auth0/auth0-angular';
 import { backendURL } from 'app/app.module';
 import { catchError, map, switchMap, tap } from 'rxjs/operators';
-import { EMPTY, Observable, Subject } from 'rxjs';
+import { BehaviorSubject, EMPTY, Observable, of } from 'rxjs';
 import { DatePipe } from '@angular/common';
 import { MapService } from './map.service';
 
@@ -30,13 +30,17 @@ interface memberInfo {
 export class MemberService implements OnInit {
   pipe = new DatePipe('en-US');
   defaultNickname = 'genparer';
-  public nicknameSubject$ = new Subject<string>();
+  private nicknameSubject$ = new BehaviorSubject<string>(this.defaultNickname);
+  public nickname$: Observable<string>;
 
   constructor(
     private http: HttpClient,
     private auth: AuthService,
     private mapService: MapService
-  ) {}
+  ) {
+    this.nickname$ = this.nicknameSubject$.asObservable();
+    this.updateNickname(this.getSessionId());
+  }
   ngOnInit(): void {}
 
   getEmail(): Observable<string> {
@@ -59,7 +63,7 @@ export class MemberService implements OnInit {
       .pipe(
         tap((id) => {
           sessionStorage.setItem('sessionId', id);
-          this.getMemberInfo();
+          this.updateNickname(id);
         })
       );
   }
@@ -69,6 +73,25 @@ export class MemberService implements OnInit {
     return id;
   }
 
+  private updateNickname(sessionId: string | null) {
+    if (sessionId) {
+      this.http
+        .get<memberDataResponse>(backendURL + '/members', {
+          params: { sessionId },
+        })
+        .pipe(map((memberData) => memberData.name))
+        .pipe(
+          catchError((err) => {
+            console.error(err);
+            return of(this.defaultNickname);
+          })
+        )
+        .subscribe((nickname) => this.nicknameSubject$.next(nickname));
+    } else {
+      this.nicknameSubject$.next(this.defaultNickname);
+    }
+  }
+
   getMemberInfo(): Observable<memberInfo> {
     let sessionId = this.getSessionId();
     if (sessionId) {
@@ -76,18 +99,22 @@ export class MemberService implements OnInit {
         .get<memberDataResponse>(backendURL + '/members', {
           params: { sessionId },
         })
-        .pipe(tap((memberData) => this.nicknameSubject$.next(memberData.name)))
-        .pipe(map((memberData) => ({
-          birthdate: memberData.birthdate,
-          gender: this.mapService.mapGenderBtoF(memberData.gender)
-        })));
+        .pipe(
+          map((memberData) => ({
+            birthdate: memberData.birthdate,
+            gender: this.mapService.mapGenderBtoF(memberData.gender),
+          }))
+        );
     } else {
-      this.nicknameSubject$.next(this.defaultNickname);
       return EMPTY;
     }
   }
 
-  registerMember(name: string, birthdate: Date, gender: string): Observable<Object> {
+  registerMember(
+    name: string,
+    birthdate: Date,
+    gender: string
+  ): Observable<Object> {
     const formatDate = this.pipe.transform(birthdate, 'yyyy-MM-dd');
     gender = this.mapService.mapGenderFtoB(gender);
     return this.getEmail()

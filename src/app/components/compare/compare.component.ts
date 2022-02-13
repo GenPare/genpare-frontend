@@ -1,9 +1,9 @@
 import { Component, OnInit } from '@angular/core';
 import { Observable } from 'rxjs';
 import {
-  DataManagementService,
+  JobInformationService,
   CompareData,
-} from '../../services/data-management.service';
+} from '../../services/job-information.service';
 import {
   education_degrees_f,
   federal_states_f,
@@ -28,7 +28,7 @@ export class CompareComponent implements OnInit {
     'Geschlecht',
   ];
 
-  constructor(private dataManagementService: DataManagementService) {
+  constructor(private dataManagementService: JobInformationService) {
     this.federal_states = federal_states_f;
     this.education_degrees = education_degrees_f;
     this.data$ = dataManagementService.getCompareData();

@@ -1,4 +1,5 @@
 <h3>Profilverwaltung</h3>
+<form [formGroup]="profileForm">
 <div class="card">
   <div class="card-body">
     <h5 class="card-title">Accountverwaltung</h5>
@@ -15,9 +16,7 @@
                 type="text"
                 id="nickname"
                 aria-describedby="nickname-small"
-                [(ngModel)]="nickname"
-                [disabled]="isRegistered"
-                required
+                formControlName="nickname"
               />
               <small class="form-text text-muted" id="nickname-small" *ngIf="!isRegistered"
                 >Bitte geben Sie Ihren Nickname ein.</small
@@ -42,7 +41,6 @@
         Bedenken wenden Sie sich bitte an
         <a href="mailto:support@genpare.de">support@genpare.de</a>.
       </p>
-      <form [formGroup]="data_management">
         <div class="form-group row">
           <label class="col-sm-1 col-form-label" for="job">Beruf:</label>
           <div class="col-sm-5">
@@ -162,7 +160,7 @@
             </button>
           </div>
         </div>
-      </form>
+      </div>
     </div>
   </div>
-</div>
+</form>

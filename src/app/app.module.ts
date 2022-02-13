@@ -16,6 +16,7 @@ import { HttpClientModule } from '@angular/common/http';
 import { AuthModule } from '@auth0/auth0-angular';
 import { environment as env } from 'environments/environment.dev';
 import { LoginSuccessComponent } from './components/login-success/login-success.component';
+import { NavBarComponent } from './components/nav-bar/nav-bar.component';
 
 export const backendURL = 'http://localhost:8080';
 
@@ -31,7 +32,8 @@ export class App {
     StartPageComponent,
     ToastsContainerComponent,
     SupportPageComponent,
-    LoginSuccessComponent
+    LoginSuccessComponent,
+    NavBarComponent
   ],
   imports: [
     BrowserModule,
