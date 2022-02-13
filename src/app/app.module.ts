@@ -53,7 +53,7 @@ export class App {
     JwtModule.forRoot({
       config: {
         tokenGetter: tokenGetter,
-        allowedDomains: [env.backendURL]
+        allowedDomains: ["localhost:8080"]
       },
     }),
     CommonModule,
