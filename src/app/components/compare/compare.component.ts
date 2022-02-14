@@ -15,9 +15,11 @@ import {
   styleUrls: ['./compare.component.scss'],
 })
 export class CompareComponent implements OnInit {
+  data$: Observable<CompareData[]>;
+  jobTitles$: Observable<string[]>;
+
   federal_states: string[];
   education_degrees: string[];
-  data$: Observable<CompareData[]>;
 
   table_headers: string[] = [
     'Beruf',
@@ -28,10 +30,11 @@ export class CompareComponent implements OnInit {
     'Geschlecht',
   ];
 
-  constructor(private dataManagementService: JobInformationService) {
+  constructor(private jobInformationService: JobInformationService) {
     this.federal_states = federal_states_f;
     this.education_degrees = education_degrees_f;
-    this.data$ = dataManagementService.getCompareData();
+    this.data$ = jobInformationService.getCompareData();
+    this.jobTitles$ = this.jobInformationService.getJobTitles();
   }
 
   ngOnInit(): void {}

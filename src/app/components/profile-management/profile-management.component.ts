@@ -68,6 +68,7 @@ export class ProfileManagementComponent implements OnInit, OnDestroy {
       this.profileForm.get('age')?.disable();
       this.profileForm.get('gender')?.disable();
       this.fillForm();
+      console.log(this.jobInformationService.getJobTitles().subscribe());
     }
   }
 

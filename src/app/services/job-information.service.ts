@@ -125,7 +125,6 @@ export class JobInformationService {
   modifyJobInformation(data: JobInfo): Observable<Object | never> {
     const sessionId = this.memberService.getSessionId();
     if (sessionId) {
-      console.log("modifying");
       return this.http.patch(backendURL + '/salary/own', {
         sessionId: sessionId,
         salary: data.salary,
@@ -138,5 +137,9 @@ export class JobInformationService {
     } else {
       return EMPTY;
     }
+  }
+
+  getJobTitles(): Observable<string[]> {
+    	return this.http.get<string[]>(backendURL + '/salary/info');
   }
 }

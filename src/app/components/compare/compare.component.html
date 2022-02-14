@@ -46,7 +46,7 @@
           <div class="col-sm-3">
             <select class="form-control" type="select">
               <ng-container>
-                <option>Architekt</option>
+                <option *ngFor="let title of jobTitles$ | async">{{ title }}</option>
               </ng-container>
             </select>
           </div>
