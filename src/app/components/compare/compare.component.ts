@@ -8,6 +8,7 @@ import {
   education_degrees_f,
   federal_states_f,
 } from '@shared/model/frontend_data';
+import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
 
 @Component({
   selector: 'app-compare',
@@ -30,7 +31,16 @@ export class CompareComponent implements OnInit {
     'Geschlecht',
   ];
 
-  constructor(private jobInformationService: JobInformationService) {
+  filterForm =  new FormGroup({
+    salary_start: new FormControl('', Validators.required),
+    salary_end: new FormControl('', Validators.required),
+    age: new FormControl('', Validators.required),
+    job: new FormControl('', Validators.required),
+    state: new FormControl('', Validators.required),
+    education: new FormControl('', Validators.required),
+  })
+  
+  constructor(private jobInformationService: JobInformationService, private fb: FormBuilder) {
     this.federal_states = federal_states_f;
     this.education_degrees = education_degrees_f;
     this.data$ = jobInformationService.getCompareData();
