@@ -18,6 +18,8 @@ import { AuthModule } from '@auth0/auth0-angular';
 import { environment as env } from 'environments/environment.dev';
 import { LoginSuccessComponent } from './components/login-success/login-success.component';
 import { JwtModule } from '@auth0/angular-jwt';
+import { IsLoggedIn } from './guards/is-logged-in';
+import { LoginButtonsComponent } from './shared/login-buttons/login-buttons.component';
 
 export function tokenGetter() {
   return sessionStorage.getItem('access_token');
@@ -37,6 +39,7 @@ export class App {
     ToastsContainerComponent,
     SupportPageComponent,
     LoginSuccessComponent,
+    LoginButtonsComponent
   ],
   imports: [
     BrowserModule,
@@ -45,8 +48,7 @@ export class App {
     FormsModule,
     ReactiveFormsModule,
     AuthModule.forRoot({
-      ...env.auth,
-      audience: 'genpare',
+      ...env.auth
     }),
     MDBBootstrapModule.forRoot(),
     HttpClientModule,
@@ -58,7 +60,7 @@ export class App {
     }),
     CommonModule,
   ],
-  providers: [DatePipe, HasEnteredDataGuard],
-  bootstrap: [AppComponent],
+  providers: [DatePipe, HasEnteredDataGuard,IsLoggedIn],
+  bootstrap: [AppComponent]
 })
 export class AppModule {}

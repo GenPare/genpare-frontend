@@ -1,6 +1,7 @@
-import { Component, OnDestroy } from '@angular/core';
+import { Component } from '@angular/core';
 import { AuthService } from '@auth0/auth0-angular';
-import { Observable, Subscription } from 'rxjs';
+import { Observable, of, Subscription } from 'rxjs';
+import { catchError } from 'rxjs/operators';
 import { MemberService } from './services/member.service';
 
 @Component({
@@ -18,8 +19,10 @@ export class AppComponent {
   }
 
   logout() {
+    this.auth.logout()
     this.memberService
       .invalidateSessionId()
-      .subscribe(() => this.auth.logout());
+      .pipe(catchError(() => of(undefined)))
+      .subscribe(() => {});
   }
 }

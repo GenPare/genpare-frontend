@@ -16,11 +16,9 @@ export class LoginSuccessComponent implements OnInit {
   ) {}
 
   ngOnInit(): void {
-    this.memberService.setSessionId();
-    this.auth.idTokenClaims$.subscribe((token) => {
-      if (token){
-        sessionStorage.setItem('access_token', token.__raw);
-      }
+    this.auth.getAccessTokenSilently().subscribe((token) => {
+      sessionStorage.setItem('access_token', token);
+      this.memberService.setSessionId();
       this.router.navigateByUrl('/profile');
     });
   }

@@ -32,18 +32,5 @@
       d="M148.52,237.27v-87c0-8.27,5.38-8,5.38-8h23.16c3,0,12.89-.06,12.89.83,0,21.24-17.42,35.12-41.53,35.1a42.36,42.36,0,1,1,0-84.71c23.39,0,42.35,13.75,42.35,37.14"
     />
   </svg>
-  <div class="button-container" *ngIf="!(auth.isAuthenticated$ | async)">
-    <button
-      (click)="loginWithRedirect()"
-      class="btn btn-primary log-button btn-lg"
-    >
-      Anmelden
-    </button>
-    <button
-      (click)="registerWithRedirect()"
-      class="btn btn-primary sign-button btn-lg"
-    >
-      Registrieren
-    </button>
-  </div>
+  <app-login-buttons></app-login-buttons>
 </div>

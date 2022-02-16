@@ -11,25 +11,6 @@
   flex-direction: column;
   align-items: center;
 
-  .button-container {
-    padding: 1rem;
-    width: 100%;
-    display: flex;
-    justify-content: center;
-  }
-
-  .log-button {
-    color: $primary-color;
-    background-color: $secondary-color;
-    border-color: $secondary-color;
-    margin: 0 3rem;
-  }
-  .sign-button {
-    color: $secondary-color;
-    background-color: $primary-color;
-    border-color: $secondary-color;
-    margin: 0 3rem;
-  }
 
   .title {
     color: $secondary-color;
