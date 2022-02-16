@@ -1,12 +1,12 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable, OnInit } from '@angular/core';
 import { AuthService } from '@auth0/auth0-angular';
-import { backendURL } from 'app/app.module';
 import { catchError, map, switchMap, tap } from 'rxjs/operators';
 import { Observable, of } from 'rxjs';
 import { DatePipe } from '@angular/common';
 import { MapService } from './map.service';
 import { Router } from '@angular/router';
+import { environment as env } from 'environments/environment.dev';
 
 interface sessionIdResponse {
   sessionId: sessionIdType;
@@ -45,7 +45,7 @@ export class MemberService implements OnInit {
       .pipe(
         switchMap((mail) =>
           this.http
-            .get<sessionIdResponse>(backendURL + '/members/session', {
+            .get<sessionIdResponse>(env.backendURL + '/members/session', {
               params: { email: mail },
             })
             .pipe(map((jsonResponse) => jsonResponse.sessionId))
@@ -64,7 +64,7 @@ export class MemberService implements OnInit {
     let sessionId = this.getSessionId();
     return sessionId
       ? this.http
-          .get<memberDataResponse>(backendURL + '/members', {
+          .get<memberDataResponse>(env.backendURL + '/members', {
             params: { sessionId },
           })
           .pipe(map((jsonResponse) => jsonResponse.name))
@@ -77,7 +77,7 @@ export class MemberService implements OnInit {
     gender = this.mapService.mapGenderFtoB(gender);
     return this.getEmail().pipe(
       switchMap((mail) => {
-        return this.http.post(backendURL + '/members', {
+        return this.http.post(env.backendURL + '/members', {
           id: null,
           email: mail,
           name: name,
@@ -92,7 +92,7 @@ export class MemberService implements OnInit {
     return this.getEmail()
       .pipe(
         switchMap((mail) =>
-          this.http.delete(backendURL + '/members/session', {
+          this.http.delete(env.backendURL + '/members/session', {
             params: {
               email: mail,
             },

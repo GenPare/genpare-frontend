@@ -1,11 +1,11 @@
 import { NgModule } from '@angular/core';
-import { CommonModule , DatePipe } from "@angular/common";
+import { CommonModule, DatePipe } from '@angular/common';
 import { BrowserModule } from '@angular/platform-browser';
-import { FormsModule, ReactiveFormsModule } from "@angular/forms";
+import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
 import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
-import { MDBBootstrapModule } from "angular-bootstrap-md";
+import { MDBBootstrapModule } from 'angular-bootstrap-md';
 import { StartPageComponent } from '@comp/start-page/start-page.component';
 import { CompareComponent } from '@comp/compare/compare.component';
 import { ProfileManagementComponent } from '@comp/profile-management/profile-management.component';
@@ -17,11 +17,13 @@ import { DataManagementComponent } from '@comp/data-management/data-management.c
 import { AuthModule } from '@auth0/auth0-angular';
 import { environment as env } from 'environments/environment.dev';
 import { LoginSuccessComponent } from './components/login-success/login-success.component';
+import { JwtModule } from '@auth0/angular-jwt';
 import { IsLoggedIn } from './guards/is-logged-in';
 import { LoginButtonsComponent } from './shared/login-buttons/login-buttons.component';
 
-export const backendURL = "http://localhost:8080"
-
+export function tokenGetter() {
+  return sessionStorage.getItem('access_token');
+}
 
 export class App {
   constructor() {}
@@ -50,9 +52,15 @@ export class App {
     }),
     MDBBootstrapModule.forRoot(),
     HttpClientModule,
-    CommonModule
+    JwtModule.forRoot({
+      config: {
+        tokenGetter: tokenGetter,
+        allowedDomains: ['localhost:8080']
+      },
+    }),
+    CommonModule,
   ],
   providers: [DatePipe, HasEnteredDataGuard,IsLoggedIn],
   bootstrap: [AppComponent]
 })
-export class AppModule { }
+export class AppModule {}
