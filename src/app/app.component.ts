@@ -19,10 +19,9 @@ export class AppComponent {
   }
 
   logout() {
-    this.auth.logout()
     this.memberService
       .invalidateSessionId()
       .pipe(catchError(() => of(undefined)))
-      .subscribe(() => {});
+      .subscribe(() => this.auth.logout());
   }
 }
