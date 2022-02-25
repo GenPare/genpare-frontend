@@ -18,9 +18,8 @@ export class HasEnteredDataGuard implements CanActivate {
     } else {
       this.auth.isAuthenticated$.subscribe((isAuth) => {
         if (isAuth) {
-          this.toastService.show(
-            'Sie können erst Vergleichen, wenn Sie Ihre Daten eingeben haben.',
-            { classname: 'bg-danger text-light', delay: 15000 }
+          this.toastService.showDanger(
+            'Sie können erst Vergleichen, wenn Sie Ihre Daten eingeben haben.'
           );
         }
       });
