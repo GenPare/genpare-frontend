@@ -1,46 +1,73 @@
 <h3>Profilverwaltung</h3>
 <form [formGroup]="profileForm">
-<div class="card">
-  <div class="card-body">
-    <h5 class="card-title">Accountverwaltung</h5>
-    <div class="card-text">
-      <div class="card-content">
-        <div class="form-group container-fluid">
-          <div class="row">
-            <div class="col-1">Email:</div>
-            <div class="col-5">{{ email$ | async }}</div>
-            <label class="col-1 col-form-label" for="nickname">Nickname:</label>
-            <div class="col-5">
-              <input
-                class="form-control"
-                type="text"
-                id="nickname"
-                aria-describedby="nickname-small"
-                formControlName="nickname"
-              />
-              <small class="form-text text-muted" id="nickname-small" *ngIf="!isRegistered"
-                >Bitte geben Sie Ihren Nickname ein.</small
-              >
-            </div>
+  <div class="card">
+    <div class="card-body">
+      
+      <div class="card-text">
+        <p class="bottom-gap">
+          Bitte ermöglichen Sie allen anderen Nutzer*innen möglichst genaue
+          Resultate, indem Sie Ihre Daten wahrheitsgemäß angeben und diese
+          regelmäßig aktualisieren. Ihre Daten werden streng vertraulich
+          behandelt und anderen Nutzer*innen anonymisiert angezeigt. Bei Fragen
+          oder Bedenken wenden Sie sich bitte an
+          <a href="mailto:support@genpare.de">support@genpare.de</a>.
+        </p>
+        <div class="form-group row">
+          <div class="col-1">Email:</div>
+          <div class="col-5">{{ email$ | async }}</div>
+          <label class="col-sm-1 col-form-label" for="age">Alter:</label>
+          <div class="col-sm-5">
+            <input
+              class="form-control"
+              min="1900-01-01"
+              type="date"
+              id="age"
+              aria-describedby="age-small"
+              formControlName="age"
+            />
+            <small class="form-text text-muted" id="age-small" *ngIf="!isRegistered"
+              >Bitte geben Sie Ihr Geburtsdatum an.</small
+            >
           </div>
         </div>
-      </div>
-    </div>
-  </div>
-</div>
-
-<div class="card">
-  <div class="card-body">
-    <h5 class="card-title bottom-gap">Datenverwaltung</h5>
-    <div class="card-text">
-      <p class="bottom-gap">
-        Bitte ermöglichen Sie allen anderen Nutzer*innen möglichst genaue
-        Resultate, indem Sie Ihre Daten wahrheitsgemäß angeben und diese
-        regelmäßig aktualisieren. Ihre Daten werden streng vertraulich behandelt
-        und anderen Nutzer*innen anonymisiert angezeigt. Bei Fragen oder
-        Bedenken wenden Sie sich bitte an
-        <a href="mailto:support@genpare.de">support@genpare.de</a>.
-      </p>
+        <div class="form-group row">
+          <label class="col-1 col-form-label" for="nickname">Nickname:</label>
+          <div class="col-5">
+            <input
+              class="form-control"
+              type="text"
+              id="nickname"
+              aria-describedby="nickname-small"
+              formControlName="nickname"
+            />
+            <small
+              class="form-text text-muted"
+              id="nickname-small"
+              >Bitte geben Sie Ihren Nickname ein.</small
+            >
+          </div>
+          <label class="col-sm-1 col-form-label" for="gender"
+          >Geschlecht:</label
+        >
+        <div class="col-sm-5">
+          <select
+            class="form-control"
+            id="gender"
+            style="width: 100%"
+            aria-describedby="gender-small"
+            formControlName="gender"
+          >
+          <option class="disabled-option" disabled>Bitte wählen Sie Ihr Geschlecht</option>
+            <ng-container *ngFor="let gender of genders">
+              <option [value]="gender">{{ gender }}</option>
+            </ng-container>
+          </select>
+          <small class="form-text text-muted" id="gender-small"
+            >Bitte geben Sie Ihr Geschlecht an.</small
+          >
+        </div>
+          
+        </div>
         <div class="form-group row">
           <label class="col-sm-1 col-form-label" for="job">Beruf:</label>
           <div class="col-sm-5">
@@ -65,6 +92,8 @@
               aria-describedby="education-degree-small"
               formControlName="education_degree"
             >
+            <option class="disabled-option" disabled>Bitte wählen Sie Ihren höchsten Bildungsabschluss</option>
+
               <ng-container *ngFor="let education_degree of education_degrees">
                 <option [ngValue]="education_degree">
                   {{ education_degree }}
@@ -75,27 +104,9 @@
               >Bitte geben Sie Ihren höchsten Bildungsabschluss an.</small
             >
           </div>
+          
         </div>
         <div class="form-group row">
-          <label class="col-sm-1 col-form-label" for="federal-state"
-            >Bundesland:</label
-          >
-          <div class="col-sm-5">
-            <select
-              class="form-control"
-              id="federal-state"
-              style="width: 100%"
-              aria-describedby="federal-state-small"
-              formControlName="federal_state"
-            >
-              <ng-container *ngFor="let federal_state of federal_states">
-                <option [ngValue]="federal_state">{{ federal_state }}</option>
-              </ng-container>
-            </select>
-            <small class="form-text text-muted" id="federal-state-small"
-              >Bitte geben Sie Ihr Bundesland an.</small
-            >
-          </div>
           <label class="col-sm-1 col-form-label" for="salary">Gehalt:</label>
           <div class="col-sm-5">
             <div class="input-group">
@@ -116,46 +127,31 @@
               >Bitte geben Sie Ihr Monatsgehalt in Euro an.</small
             >
           </div>
-        </div>
-        <div class="form-group row">
-          <label class="col-sm-1 col-form-label" for="gender"
-            >Geschlecht:</label
+          <label class="col-sm-1 col-form-label" for="federal-state"
+            >Bundesland:</label
           >
           <div class="col-sm-5">
             <select
               class="form-control"
-              id="gender"
+              id="federal-state"
               style="width: 100%"
-              aria-describedby="gender-small"
-              formControlName="gender"
+              aria-describedby="federal-state-small"
+              formControlName="federal_state"
             >
-              <ng-container *ngFor="let gender of genders">
-                <option [value]="gender">{{ gender }}</option>
+            <option class="disabled-option" disabled>Bitte wählen Sie Ihr Bundesland</option>
+              <ng-container *ngFor="let federal_state of federal_states">
+                <option [ngValue]="federal_state">{{ federal_state }}</option>
               </ng-container>
             </select>
-            <small class="form-text text-muted" id="gender-small"
-              >Bitte geben Sie Ihr Geschlecht an.</small
-            >
-          </div>
-          <label class="col-sm-1 col-form-label" for="age">Alter:</label>
-          <div class="col-sm-5">
-            <input
-              class="form-control"
-              min="1900-01-01"
-              type="date"
-              id="age"
-              aria-describedby="age-small"
-              formControlName="age"
-            />
-            <small class="form-text text-muted" id="age-small"
-              >Bitte geben Sie Ihr Geburtsdatum an.</small
+            <small class="form-text text-muted" id="federal-state-small"
+              >Bitte geben Sie Ihr Bundesland an.</small
             >
           </div>
         </div>
         <div class="row">
           <div class="col-sm-1"></div>
           <div class="col-sm-5">
-            <button type="button" class="btn btn-success" (click)="save()">
+            <button type="button" class="btn btn-success" (click)="save()" [disabled]="!(profileForm.valid && profileForm.dirty)">
               {{ saveButtonText }}
             </button>
           </div>

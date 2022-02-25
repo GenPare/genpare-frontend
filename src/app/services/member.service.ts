@@ -132,6 +132,16 @@ export class MemberService implements OnInit {
       .pipe(switchMap(() => this.setSessionId()));
   }
 
+  editNickname(newName: string): Observable<Object> {
+    let sessionId = this.getSessionId();
+    return this.http
+      .patch(backendURL + '/members', {
+        name: newName,
+        sessionId,
+      })
+      .pipe(tap(() => this.updateNickname(sessionId)));
+  }
+
   invalidateSessionId(): Observable<Object> {
     return this.getEmail()
       .pipe(
