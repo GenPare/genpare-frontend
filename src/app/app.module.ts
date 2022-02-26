@@ -18,7 +18,13 @@ import { environment as env } from 'environments/environment.dev';
 import { LoginSuccessComponent } from './components/login-success/login-success.component';
 import { NavBarComponent } from './components/nav-bar/nav-bar.component';
 
-export const backendURL = 'http://localhost:8080';
+import { JwtModule } from '@auth0/angular-jwt';
+import { IsLoggedIn } from './guards/is-logged-in';
+import { LoginButtonsComponent } from './shared/login-buttons/login-buttons.component';
+
+export function tokenGetter() {
+  return sessionStorage.getItem('access_token');
+}
 
 export class App {
   constructor() {}
@@ -33,7 +39,8 @@ export class App {
     ToastsContainerComponent,
     SupportPageComponent,
     LoginSuccessComponent,
-    NavBarComponent
+    NavBarComponent,
+    LoginButtonsComponent
   ],
   imports: [
     BrowserModule,
@@ -46,9 +53,15 @@ export class App {
     }),
     MDBBootstrapModule.forRoot(),
     HttpClientModule,
+    JwtModule.forRoot({
+      config: {
+        tokenGetter: tokenGetter,
+        allowedDomains: ['localhost:8080']
+      },
+    }),
     CommonModule,
   ],
-  providers: [DatePipe, HasEnteredDataGuard],
-  bootstrap: [AppComponent],
+  providers: [DatePipe, HasEnteredDataGuard,IsLoggedIn],
+  bootstrap: [AppComponent]
 })
 export class AppModule {}
