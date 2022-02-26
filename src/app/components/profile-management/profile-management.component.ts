@@ -1,5 +1,11 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
-import { FormBuilder, Validators } from '@angular/forms';
+import {
+  AbstractControl,
+  FormBuilder,
+  ValidationErrors,
+  ValidatorFn,
+  Validators,
+} from '@angular/forms';
 import { Router } from '@angular/router';
 import {
   education_degrees_f,
@@ -13,6 +19,21 @@ import { combineLatest, Observable, of, Subscription } from 'rxjs';
 import { switchMap } from 'rxjs/operators';
 
 type SaveButtonText = 'Speichern' | 'Aktualisieren';
+
+function minAge(years: number): ValidatorFn {
+  return (control: AbstractControl): ValidationErrors | null => {
+    const valueDate = new Date(control.value).getTime();
+    const minDate = new Date().setFullYear(new Date().getFullYear() - years);
+    return valueDate > minDate
+      ? {
+          minAge: {
+            minimumDate: new Date(minDate),
+            actualDate: new Date(control.value),
+          },
+        }
+      : null;
+  };
+}
 
 @Component({
   selector: 'app-profile-management',
@@ -28,13 +49,22 @@ export class ProfileManagementComponent implements OnInit, OnDestroy {
   genders = genders_f;
 
   profileForm = this.fb.group({
-    job_title: ['', Validators.required],
+    job_title: [
+      '',
+      [Validators.required, Validators.minLength(4), Validators.maxLength(50)],
+    ],
     education_degree: ['', Validators.required],
     federal_state: ['', Validators.required],
-    salary: ['', Validators.required],
+    salary: [
+      '',
+      [Validators.required, Validators.min(50), Validators.max(1000000)],
+    ],
     gender: ['', Validators.required],
-    age: ['', Validators.required],
-    nickname: ['', Validators.required],
+    age: ['', [Validators.required, minAge(15)]],
+    nickname: [
+      '',
+      [Validators.required, Validators.minLength(4), Validators.maxLength(25)],
+    ],
   });
 
   isRegistered: boolean;
@@ -57,6 +87,10 @@ export class ProfileManagementComponent implements OnInit, OnDestroy {
     }
   }
 
+  get formControls(): { [key: string]: AbstractControl } {
+    return this.profileForm.controls;
+  }
+
   ngOnInit(): void {
     if (this.isRegistered) {
       this.subscriptions.add(
@@ -67,7 +101,6 @@ export class ProfileManagementComponent implements OnInit, OnDestroy {
       this.profileForm.get('age')?.disable();
       this.profileForm.get('gender')?.disable();
       this.fillForm();
-      console.log(this.jobInformationService.getJobTitles().subscribe());
     }
   }
 
@@ -94,66 +127,60 @@ export class ProfileManagementComponent implements OnInit, OnDestroy {
 
   save(): void {
     //TODO in Methoden auslagern
-    if (this.profileForm.valid) {
-      if (!this.isRegistered) {
-        this.subscriptions.add(
-          this.memberService
-            .registerMember(
-              this.profileForm.value.nickname,
-              this.profileForm.value.age,
-              this.profileForm.value.gender
+    if (!this.isRegistered) {
+      this.subscriptions.add(
+        this.memberService
+          .registerMember(
+            this.profileForm.value.nickname,
+            this.profileForm.value.age,
+            this.profileForm.value.gender
+          )
+          .pipe(
+            switchMap(() =>
+              this.jobInformationService.newJobInformation({
+                jobTitle: this.profileForm.value.job_title,
+                salary: this.profileForm.value.salary,
+                levelOfEducation: this.profileForm.value.education_degree,
+                state: this.profileForm.value.federal_state,
+              })
             )
-            .pipe(
-              switchMap(() =>
-                this.jobInformationService.newJobInformation({
-                  jobTitle: this.profileForm.value.job_title,
-                  salary: this.profileForm.value.salary,
-                  levelOfEducation: this.profileForm.value.education_degree,
-                  state: this.profileForm.value.federal_state,
-                })
-              )
-            )
-            .subscribe(() => {
-              this.toastService.show('Daten gespeichert!', {
-                classname: 'bg-success text-light',
-              });
-              this.saveButtonText = 'Aktualisieren';
-              this.isRegistered = true;
-              this.router.navigateByUrl('/compare');
-            })
-        );
-      } else {
-        let editNickname$: Observable<Object> = of({});
-        let modifyJob$: Observable<Object> = of({});
-
-        if (this.profileForm.get('nickname')?.dirty) {
-          editNickname$ = this.memberService.editNickname(
-            this.profileForm.value.nickname
-          );
-          this.profileForm.get('nickname')?.markAsPristine();
-        }
-
-        if (this.profileForm.dirty) {
-          modifyJob$ = this.jobInformationService.modifyJobInformation({
-            jobTitle: this.profileForm.value.job_title,
-            salary: this.profileForm.value.salary,
-            levelOfEducation: this.profileForm.value.education_degree,
-            state: this.profileForm.value.federal_state,
-          });
-        }
-        this.subscriptions.add(
-          combineLatest([editNickname$, modifyJob$]).subscribe(() => {
-            this.toastService.show('Daten aktualisiert!', {
+          )
+          .subscribe(() => {
+            this.toastService.show('Daten gespeichert!', {
               classname: 'bg-success text-light',
             });
+            this.saveButtonText = 'Aktualisieren';
+            this.isRegistered = true;
             this.router.navigateByUrl('/compare');
           })
-        );
-      }
+      );
     } else {
-      this.toastService.show('Bitte alle Felder ausfüllen', {
-        classname: 'bg-danger text-light',
-      });
+      let editNickname$: Observable<Object> = of({});
+      let modifyJob$: Observable<Object> = of({});
+
+      if (this.profileForm.get('nickname')?.dirty) {
+        editNickname$ = this.memberService.editNickname(
+          this.profileForm.value.nickname
+        );
+        this.profileForm.get('nickname')?.markAsPristine();
+      }
+
+      if (this.profileForm.dirty) {
+        modifyJob$ = this.jobInformationService.modifyJobInformation({
+          jobTitle: this.profileForm.value.job_title,
+          salary: this.profileForm.value.salary,
+          levelOfEducation: this.profileForm.value.education_degree,
+          state: this.profileForm.value.federal_state,
+        });
+      }
+      this.subscriptions.add(
+        combineLatest([editNickname$, modifyJob$]).subscribe(() => {
+          this.toastService.show('Daten aktualisiert!', {
+            classname: 'bg-success text-light',
+          });
+          this.router.navigateByUrl('/compare');
+        })
+      );
     }
   }
 }

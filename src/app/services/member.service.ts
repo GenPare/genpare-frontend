@@ -135,7 +135,7 @@ export class MemberService implements OnInit {
   editNickname(newName: string): Observable<Object> {
     let sessionId = this.getSessionId();
     return this.http
-      .patch(backendURL + '/members', {
+      .patch(env.backendURL + '/members', {
         name: newName,
         sessionId,
       })

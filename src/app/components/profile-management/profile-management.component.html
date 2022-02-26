@@ -1,8 +1,7 @@
 <h3>Profilverwaltung</h3>
-<form [formGroup]="profileForm">
+<form [formGroup]="profileForm" class="needs-validation" (ngSubmit)="save()">
   <div class="card">
     <div class="card-body">
-      
       <div class="card-text">
         <p class="bottom-gap">
           Bitte ermöglichen Sie allen anderen Nutzer*innen möglichst genaue
@@ -19,15 +18,40 @@
           <div class="col-sm-5">
             <input
               class="form-control"
+              [ngClass]="{
+                'is-invalid': formControls.age.errors && formControls.age.dirty
+              }"
               min="1900-01-01"
               type="date"
               id="age"
               aria-describedby="age-small"
               formControlName="age"
             />
-            <small class="form-text text-muted" id="age-small" *ngIf="!isRegistered"
+            <small
+              class="form-text text-muted"
+              id="age-small"
+              *ngIf="
+                !isRegistered &&
+                !(formControls.age.dirty && formControls.age.errors)
+              "
               >Bitte geben Sie Ihr Geburtsdatum an.</small
             >
+            <ng-container
+              *ngIf="
+                formControls.age.dirty &&
+                formControls.age.errors &&
+                !isRegistered
+              "
+            >
+              <small *ngIf="formControls.age.errors.minAge" class="red-text"
+                >Sie müssen mindestens 15 Jahre alt sein.</small
+              >
+              <small
+                *ngIf="formControls.age.errors.required"
+                class="red-text"
+                >Bitte geben Sie Ihr Geburtsdatum an.</small
+              >
+            </ng-container>
           </div>
         </div>
         <div class="form-group row">
@@ -35,6 +59,10 @@
           <div class="col-5">
             <input
               class="form-control"
+              [ngClass]="{
+                'is-invalid':
+                  formControls.nickname.errors && formControls.nickname.dirty
+              }"
               type="text"
               id="nickname"
               aria-describedby="nickname-small"
@@ -43,44 +71,113 @@
             <small
               class="form-text text-muted"
               id="nickname-small"
-              >Bitte geben Sie Ihren Nickname ein.</small
+              *ngIf="
+                !(formControls.nickname.dirty && formControls.nickname.errors)
+              "
+              >Bitte geben Sie Ihren Nickname an.</small
             >
+            <ng-container
+              *ngIf="
+                formControls.nickname.dirty && formControls.nickname.errors
+              "
+            >
+              <small
+                *ngIf="formControls.nickname.errors.minlength"
+                class="red-text"
+                >Bitte Nickname muss aus mindestens
+                {{
+                  formControls.nickname.errors.minlength.requiredLength
+                }}
+                Zeichen bestehen.</small
+              >
+              <small
+                *ngIf="formControls.nickname.errors.maxlength"
+                class="red-text"
+                >Bitte Berufname darf maximal
+                {{
+                  formControls.nickname.errors.maxlength.requiredLength
+                }}
+                Zeichen bestehen.</small
+              >
+              <small
+                *ngIf="formControls.nickname.errors.required"
+                class="red-text"
+                >Bitte geben Sie Ihren Nickname an.</small
+              >
+            </ng-container>
           </div>
           <label class="col-sm-1 col-form-label" for="gender"
-          >Geschlecht:</label
-        >
-        <div class="col-sm-5">
-          <select
-            class="form-control"
-            id="gender"
-            style="width: 100%"
-            aria-describedby="gender-small"
-            formControlName="gender"
+            >Geschlecht:</label
           >
-          <option class="disabled-option" disabled>Bitte wählen Sie Ihr Geschlecht</option>
-            <ng-container *ngFor="let gender of genders">
-              <option [value]="gender">{{ gender }}</option>
-            </ng-container>
-          </select>
-          <small class="form-text text-muted" id="gender-small"
-            >Bitte geben Sie Ihr Geschlecht an.</small
-          >
-        </div>
-          
+          <div class="col-sm-5">
+            <select
+              class="form-control"
+              id="gender"
+              style="width: 100%"
+              aria-describedby="gender-small"
+              formControlName="gender"
+              mdbTooltip="Um Sinnvoll die Gehälter vergleichen zu können, wurde auf weitere Geschlechter zur Auswahl verzichtet."
+            >
+              <option class="disabled-option" disabled>
+                Bitte wählen Sie Ihr Geschlecht
+              </option>
+              <option *ngFor="let gender of genders" [value]="gender">
+                {{ gender }}
+              </option>
+            </select>
+            <small class="form-text text-muted" id="gender-small"
+              >Bitte geben Sie Ihr Geschlecht an.</small
+            >
+          </div>
         </div>
         <div class="form-group row">
           <label class="col-sm-1 col-form-label" for="job">Beruf:</label>
           <div class="col-sm-5">
             <input
               class="form-control"
+              [ngClass]="{
+                'is-invalid':
+                  formControls.job_title.errors && formControls.job_title.dirty
+              }"
               type="text"
               id="job"
               aria-describedby="job-small"
               formControlName="job_title"
             />
-            <small class="form-text text-muted" id="job-small"
+            <small
+              class="form-text text-muted"
+              id="job-small"
+              *ngIf="
+                !(formControls.job_title.dirty && formControls.job_title.errors)
+              "
               >Bitte geben Sie Ihren Beruf an.</small
             >
+            <div
+              *ngIf="
+                formControls.job_title.dirty && formControls.job_title.errors
+              "
+              class="red-text"
+            >
+              <small *ngIf="formControls.job_title.errors.minlength"
+                >Bitte Berufname muss aus mindestens
+                {{
+                  formControls.job_title.errors.minlength.requiredLength
+                }}
+                Buchstaben bestehen.</small
+              >
+              <small *ngIf="formControls.job_title.errors.maxlength"
+                >Bitte Berufname darf maximal
+                {{
+                  formControls.job_title.errors.maxlength.requiredLength
+                }}
+                Buchstaben bestehen.</small
+              >
+              <small
+                *ngIf="formControls.job_title.errors.required"
+                class="red-text"
+                >Bitte geben Sie Ihren Beruf an.</small
+              >
+            </div>
           </div>
           <label class="col-sm-1 col-form-label" for="education-degree"
             >Bildungsgrad:</label
@@ -92,28 +189,34 @@
               aria-describedby="education-degree-small"
               formControlName="education_degree"
             >
-            <option class="disabled-option" disabled>Bitte wählen Sie Ihren höchsten Bildungsabschluss</option>
-
-              <ng-container *ngFor="let education_degree of education_degrees">
-                <option [ngValue]="education_degree">
-                  {{ education_degree }}
-                </option>
-              </ng-container>
+              <option class="disabled-option" disabled>
+                Bitte wählen Sie Ihren höchsten Bildungsabschluss
+              </option>
+              <option
+                *ngFor="let education_degree of education_degrees"
+                [ngValue]="education_degree"
+              >
+                {{ education_degree }}
+              </option>
             </select>
             <small class="form-text text-muted" id="education_degree-small"
               >Bitte geben Sie Ihren höchsten Bildungsabschluss an.</small
             >
           </div>
-          
         </div>
         <div class="form-group row">
           <label class="col-sm-1 col-form-label" for="salary">Gehalt:</label>
           <div class="col-sm-5">
             <div class="input-group">
               <input
+                [ngClass]="{
+                  'is-invalid':
+                    formControls.salary.errors && formControls.salary.dirty
+                }"
                 class="form-control"
                 type="number"
                 min="0"
+                max="1000000"
                 id="salary"
                 aria-describedby="salary-small"
                 placeholder="z.B. 2000"
@@ -123,9 +226,33 @@
                 <div class="input-group-text">€</div>
               </div>
             </div>
-            <small class="form-text text-muted" id="salary-small"
+
+            <small
+              class="form-text text-muted"
+              id="salary-small"
+              *ngIf="!(formControls.salary.dirty && formControls.salary.errors)"
               >Bitte geben Sie Ihr Monatsgehalt in Euro an.</small
             >
+
+            <ng-container
+              *ngIf="formControls.salary.dirty && formControls.salary.errors"
+            >
+              <small *ngIf="formControls.salary.errors.min" class="red-text"
+                >Ihr Gehalt muss mindestens
+                {{ formControls.salary.errors.min.requiredMin }} € betragen
+                .</small
+              >
+              <small *ngIf="formControls.salary.errors.max" class="red-text"
+                >Ihr Gehalt darf maxmimal
+                {{ formControls.salary.errors.max.requiredMax }} €
+                betragen.</small
+              >
+              <small
+                *ngIf="formControls.salary.errors.required"
+                class="red-text"
+                >Bitte geben Sie Ihr Monatsgehalt in Euro an.</small
+              >
+            </ng-container>
           </div>
           <label class="col-sm-1 col-form-label" for="federal-state"
             >Bundesland:</label
@@ -138,7 +265,9 @@
               aria-describedby="federal-state-small"
               formControlName="federal_state"
             >
-            <option class="disabled-option" disabled>Bitte wählen Sie Ihr Bundesland</option>
+              <option class="disabled-option" disabled>
+                Bitte wählen Sie Ihr Bundesland
+              </option>
               <ng-container *ngFor="let federal_state of federal_states">
                 <option [ngValue]="federal_state">{{ federal_state }}</option>
               </ng-container>
@@ -151,7 +280,11 @@
         <div class="row">
           <div class="col-sm-1"></div>
           <div class="col-sm-5">
-            <button type="button" class="btn btn-success" (click)="save()" [disabled]="!(profileForm.valid && profileForm.dirty)">
+            <button
+              type="submit"
+              class="btn btn-success"
+              [disabled]="!(profileForm.valid && profileForm.dirty)"
+            >
               {{ saveButtonText }}
             </button>
           </div>
