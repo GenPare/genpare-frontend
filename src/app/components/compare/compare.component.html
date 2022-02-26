@@ -90,8 +90,14 @@
 <div class="card">
   <div class="card-body">
     <h5 class="card-title">Ergebnisse</h5>
-    <div class="card-text" *ngIf="responseData">
-      <table class="table table-striped">
+    <div class="card-text">
+      <p *ngIf="initialState">
+        Hier werden die Ergebnisse nach einer erfolgreichen Suche angezeigt.
+      </p>
+      <p *ngIf="!initialState && responseData.length===0">
+        Für Ihre Suche sind keine Ergebnisse vorhanden.
+      </p>
+      <table class="table table-striped" *ngIf="responseData.length>0 && !initialState">
         <tr>
           <th *ngFor="let header of table_headers">{{ header }}</th>
         </tr>

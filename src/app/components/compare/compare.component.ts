@@ -29,6 +29,8 @@ export class CompareComponent {
   private readonly minimumFilterAmount = 1;
   readonly noSelectionText = "- Bitte Auswählen -";
 
+  initialState: boolean;
+
   jobTitles$: Observable<string[]>;
   responseData$: Observable<CompResponseData>;
   responseData: CompareData[];
@@ -61,6 +63,7 @@ export class CompareComponent {
     this.jobTitles$ = this.jobInformationService.getJobTitles();
     this.responseData$ = of({results: []});
     this.responseData = [];
+    this.initialState = true;
   }
 
   search(): void {
@@ -74,6 +77,7 @@ export class CompareComponent {
       this.responseData$ = this.jobInformationService.getCompareData(requestData);
       this.responseData$.subscribe((response) => {
         this.responseData = response.results[0].results;
+        this.initialState = false;
         console.log(this.responseData);
       });
     }
