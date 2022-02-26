@@ -1,0 +1,14 @@
+<div class="button-container" *ngIf="!(auth.isAuthenticated$ | async)">
+    <button
+      (click)="loginWithRedirect()"
+      class="btn btn-primary log-button btn-lg"
+    >
+      Anmelden
+    </button>
+    <button
+      (click)="registerWithRedirect()"
+      class="btn btn-primary sign-button btn-lg"
+    >
+      Registrieren
+    </button>
+  </div>

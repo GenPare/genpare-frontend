@@ -14,13 +14,13 @@ import {
   providedIn: 'root',
 })
 export class MapService {
-  gendersMapFtoB = new Map();
-  federalStatesMapFtoB = new Map();
-  educationDegreesMapFtoB = new Map();
+  private gendersMapFtoB = new Map();
+  private federalStatesMapFtoB = new Map();
+  private educationDegreesMapFtoB = new Map();
 
-  gendersMapBtoF = new Map();
-  federalStatesMapBtoF = new Map();
-  educationDegreesMapBtoF = new Map();
+  private gendersMapBtoF = new Map();
+  private federalStatesMapBtoF = new Map();
+  private educationDegreesMapBtoF = new Map();
 
   constructor() {
     this.initialize();

@@ -1,11 +1,11 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable, OnInit } from '@angular/core';
 import { AuthService } from '@auth0/auth0-angular';
-import { backendURL } from 'app/app.module';
 import { catchError, map, switchMap, tap } from 'rxjs/operators';
-import { BehaviorSubject, EMPTY, Observable, of } from 'rxjs';
+import { BehaviorSubject, Observable, of } from 'rxjs';
 import { DatePipe } from '@angular/common';
 import { MapService } from './map.service';
+import { environment as env } from 'environments/environment.dev';
 
 interface sessionIdResponse {
   sessionId: sessionIdType;
@@ -54,7 +54,7 @@ export class MemberService implements OnInit {
       .pipe(
         switchMap((mail) =>
           this.http
-            .get<sessionIdResponse>(backendURL + '/members/session', {
+            .get<sessionIdResponse>(env.backendURL + '/members/session', {
               params: { email: mail },
             })
             .pipe(map((jsonResponse) => jsonResponse.sessionId))
@@ -76,7 +76,7 @@ export class MemberService implements OnInit {
   private updateNickname(sessionId: string | null) {
     if (sessionId) {
       this.http
-        .get<memberDataResponse>(backendURL + '/members', {
+        .get<memberDataResponse>(env.backendURL + '/members', {
           params: { sessionId },
         })
         .pipe(map((memberData) => memberData.name))
@@ -96,7 +96,7 @@ export class MemberService implements OnInit {
     let sessionId = this.getSessionId();
     if (sessionId) {
       return this.http
-        .get<memberDataResponse>(backendURL + '/members', {
+        .get<memberDataResponse>(env.backendURL + '/members', {
           params: { sessionId },
         })
         .pipe(
@@ -106,7 +106,7 @@ export class MemberService implements OnInit {
           }))
         );
     } else {
-      return EMPTY;
+      return of();
     }
   }
 
@@ -120,7 +120,7 @@ export class MemberService implements OnInit {
     return this.getEmail()
       .pipe(
         switchMap((mail) => {
-          return this.http.post(backendURL + '/members', {
+          return this.http.post(env.backendURL + '/members', {
             id: null,
             email: mail,
             name: name,
@@ -146,7 +146,7 @@ export class MemberService implements OnInit {
     return this.getEmail()
       .pipe(
         switchMap((mail) =>
-          this.http.delete(backendURL + '/members/session', {
+          this.http.delete(env.backendURL + '/members/session', {
             params: {
               email: mail,
             },
