@@ -4,7 +4,7 @@ import { HttpClient } from '@angular/common/http';
 import { backendURL } from 'app/app.module';
 import { MapService } from './map.service';
 import { MemberService } from './member.service';
-import { map } from 'rxjs/operators';
+import { map, tap } from 'rxjs/operators';
 
 export interface JobInfo {
   salary: number;
@@ -13,16 +13,25 @@ export interface JobInfo {
   levelOfEducation: string;
 }
 
+export interface CompRequestData {
+  filters: any[],
+  resultTransformers: any[],
+}
+
+export interface CompResponseData {
+  results: any[]
+}
+
 export interface CompareData {
-  job_title: string;
+  jobTitle: string;
   salary: Range;
   age: Range;
-  education_degree: string;
-  federal_state: string;
+  levelOfEducation: string;
+  state: string;
   gender: string;
 }
 
-interface Range {
+export interface Range {
   min: number;
   max: number;
 }
@@ -37,51 +46,8 @@ export class JobInformationService {
     private memberService: MemberService
   ) {}
 
-  getCompareData(): Observable<CompareData[]> {
-    return of([
-      {
-        job_title: 'Polizist',
-        salary: {
-          min: 4000,
-          max: 4500,
-        },
-        age: {
-          min: 45,
-          max: 49,
-        },
-        education_degree: 'Ausbildung',
-        federal_state: 'Brandenburg',
-        gender: 'weiblich',
-      },
-      {
-        job_title: 'Krankenpfleger',
-        salary: {
-          min: 2500,
-          max: 3000,
-        },
-        age: {
-          min: 45,
-          max: 49,
-        },
-        education_degree: 'Abitur',
-        federal_state: 'Berlin',
-        gender: 'männlich',
-      },
-      {
-        job_title: 'Anwalt',
-        salary: {
-          min: 5500,
-          max: 6000,
-        },
-        age: {
-          min: 45,
-          max: 49,
-        },
-        education_degree: 'Master',
-        federal_state: 'Hessen',
-        gender: 'divers',
-      },
-    ]);
+  getCompareData(req: CompRequestData): Observable<CompResponseData> {
+    return this.http.post<CompResponseData>(backendURL + '/salary', req);
   }
 
   newJobInformation(data: JobInfo): Observable<Object | never> {
@@ -140,6 +106,6 @@ export class JobInformationService {
   }
 
   getJobTitles(): Observable<string[]> {
-    	return this.http.get<string[]>(backendURL + '/salary/info');
+    return this.http.get<string[]>(backendURL + '/salary/info');
   }
 }
