@@ -30,6 +30,7 @@ export class CompareComponent {
   readonly noSelectionText = "- Bitte Auswählen -";
 
   initialState: boolean;
+  emptyFormGroup: boolean;
 
   jobTitles$: Observable<string[]>;
   responseData$: Observable<CompResponseData>;
@@ -64,6 +65,15 @@ export class CompareComponent {
     this.responseData$ = of({results: []});
     this.responseData = [];
     this.initialState = true;
+    this.emptyFormGroup = true;
+    this.filterForm.valueChanges.subscribe(() => this.emptyFormGroup =
+      this.filterForm.value.age_start 
+      || this.filterForm.value.age_end 
+      || this.filterForm.value.salary_start 
+      || this.filterForm.value.salary_end 
+      || this.filterForm.value.job === this.noSelectionText
+      || this.filterForm.value.state === this.noSelectionText
+      || this.filterForm.value.education === this.noSelectionText)
   }
 
   search(): void {
@@ -144,13 +154,20 @@ export class CompareComponent {
       //Error: zu wenig Filter
       throw new Error("zu wenig filter");
     }
+    console.log(filters);
+
     return filters;
   }
 
-  valid() {
-    if(this.filterForm.value.salary_end - this.filterForm.value.salary_start < 0) {  
-      //Error: Minimum größer als Maximum
-      throw new Error("min max salary");
-    }
+  resetFilters(): void {
+    this.filterForm.reset( { job: '', education: '', state: ''});
+    // this.filterForm.patchValue({ job: this.noSelectionText });
+    // this.filterForm.patchValue({ state: this.noSelectionText });
+    // this.filterForm.patchValue({ education: this.noSelectionText });
+    console.log(this.filterForm.value)
   }
+
+  checkFormGroup(): boolean {
+    return true;
+  }    
 }

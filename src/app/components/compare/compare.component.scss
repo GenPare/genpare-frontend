@@ -17,3 +17,12 @@ td {
 .no-selection-option {
   background-color: #e9ecef;
 }
+
+.button-row {
+  display: flex;
+  flex-direction: row;
+}
+
+.button {
+  margin: 10px;
+}
