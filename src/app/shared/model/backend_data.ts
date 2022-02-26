@@ -17,7 +17,7 @@ export const federal_states_b: string[] = [
   'THURINGIA',
 ];
 
-export const genders_b: string[] = ['FEMALE', 'MALE', 'DIVERSE'];
+export const genders_b: string[] = [ 'MALE', 'FEMALE', 'DIVERSE'];
 
 export const education_degrees_b: string[] = [
   'NONE',
