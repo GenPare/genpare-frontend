@@ -22,6 +22,7 @@ import { map } from 'rxjs/operators';
 })
 export class CompareComponent {
   private readonly minimumFilterAmount = 1;
+  readonly noSelectionText = "- Bitte Auswählen -";
 
   jobTitles$: Observable<string[]>;
   responseData$: Observable<CompResponseData>;
@@ -39,8 +40,6 @@ export class CompareComponent {
     'Geschlecht',
   ];
 
-  noSelectionText: string;
-
   filterForm =  new FormGroup({
     salary_start: new FormControl(''),
     salary_end: new FormControl(''),
@@ -55,7 +54,6 @@ export class CompareComponent {
     this.federal_states = federal_states_f;
     this.education_degrees = education_degrees_f;
     this.jobTitles$ = this.jobInformationService.getJobTitles();
-    this.noSelectionText = "-keine Auswahl-";
     this.responseData$ = of({results: []});
     this.responseData = [];
   }
