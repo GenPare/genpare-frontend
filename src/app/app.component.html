@@ -1,35 +1,3 @@
-<nav class="navbar navbar-expand-lg" *ngIf="auth.isAuthenticated$ | async">
-  <a class="navbar-brand" routerLink="/compare">GenPare</a>
-  <button
-    class="navbar-toggler"
-    type="button"
-    data-toggle="collapse"
-    data-target="#navbarNavAltMarkup"
-    aria-controls="navbarNavAltMarkup"
-    aria-expanded="false"
-    aria-label="Toggle navigation"
-  >
-    <span class="navbar-toggler-icon"></span>
-  </button>
-  <div class="collapse navbar-collapse" id="navbarNavAltMarkup">
-    <div class="navbar-nav">
-      <a class="nav-item nav-link" routerLink="/compare">Vergleich</a>
-    </div>
-    <div class="navbar-nav">
-      <a class="nav-item nav-link" routerLink="/support">Kontakt</a>
-    </div>
-  </div>
-  <div class="navbar-nav ml-auto">
-    <div class="navbar-nav mr-auto">
-      <a class="nav-item nav-link" routerLink="/profile">{{
-        username$ | async
-      }}</a>
-      <button type="button" class="btn btn-danger" (click)="logout()">
-        Logout
-      </button>
-    </div>
-  </div>
-</nav>
-
+<app-nav-bar></app-nav-bar>
 <router-outlet></router-outlet>
 <app-toasts-container class="toast-container"></app-toasts-container>

@@ -8,7 +8,7 @@ import { map } from 'rxjs/operators';
 export class IsLoggedIn implements CanActivate {
   constructor(private auth: AuthService, private router: Router) {}
 
-  canActivate(): Observable<boolean|UrlTree>{
+  canActivate(): Observable<boolean | UrlTree> {
     return this.auth.isAuthenticated$.pipe(
       map((isAuth) => {
         return isAuth ? isAuth : this.router.parseUrl('/start');

@@ -1,4 +1,4 @@
-@import "./shared/variables.scss";
+@import "src/app/shared/variables.scss";
 
 .navbar {
   background-color: $secondary-color;
@@ -12,16 +12,8 @@
   color: $primary-color;
 }
 
-.toast-container {
-  margin-top: 4rem;
-}
-
 button {
   color: $secondary-color;
   background-color: $primary-color;
   border-color: $primary-color;
-}
-
-.toast-container {
-  margin-top: 4rem;
 }

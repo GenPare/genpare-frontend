@@ -1,14 +1,24 @@
-@import 'src/app/shared/variables.scss';
+@import "src/app/shared/variables.scss";
 .card-title {
-    padding-bottom: 10px;
-}
-
-.upper-row {
-    margin-bottom: 37px;
+  padding-bottom: 10px;
 }
 
 button {
-    color: $primary-color;
-    background-color: $secondary-color;
-    border-color: $secondary-color;
+  color: $primary-color;
+  background-color: $secondary-color;
+  border-color: $secondary-color;
+}
+
+button:disabled {
+  color: #ffffff;
+  background-color: #6c757d;
+  border-color: #6c757d;
+}
+
+.disabled-option:disabled {
+  background-color: #e9ecef;
+}
+
+.red-text {
+  color: #dc3545;
 }

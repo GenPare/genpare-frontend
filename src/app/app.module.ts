@@ -13,10 +13,11 @@ import { ToastsContainerComponent } from './shared/toasts-container/toasts-conta
 import { HasEnteredDataGuard } from './guards/has-entered-data';
 import { SupportPageComponent } from './components/support-page/support-page.component';
 import { HttpClientModule } from '@angular/common/http';
-import { DataManagementComponent } from '@comp/data-management/data-management.component';
 import { AuthModule } from '@auth0/auth0-angular';
 import { environment as env } from 'environments/environment.dev';
 import { LoginSuccessComponent } from './components/login-success/login-success.component';
+import { NavBarComponent } from './components/nav-bar/nav-bar.component';
+
 import { JwtModule } from '@auth0/angular-jwt';
 import { IsLoggedIn } from './guards/is-logged-in';
 import { LoginButtonsComponent } from './shared/login-buttons/login-buttons.component';
@@ -32,14 +33,14 @@ export class App {
 @NgModule({
   declarations: [
     AppComponent,
-    DataManagementComponent,
     ProfileManagementComponent,
     CompareComponent,
     StartPageComponent,
     ToastsContainerComponent,
     SupportPageComponent,
     LoginSuccessComponent,
-    LoginButtonsComponent
+    NavBarComponent,
+    LoginButtonsComponent,
   ],
   imports: [
     BrowserModule,
@@ -48,19 +49,19 @@ export class App {
     FormsModule,
     ReactiveFormsModule,
     AuthModule.forRoot({
-      ...env.auth
+      ...env.auth,
     }),
     MDBBootstrapModule.forRoot(),
     HttpClientModule,
     JwtModule.forRoot({
       config: {
         tokenGetter: tokenGetter,
-        allowedDomains: ['localhost:8080']
+        allowedDomains: ['localhost:8080'],
       },
     }),
     CommonModule,
   ],
-  providers: [DatePipe, HasEnteredDataGuard,IsLoggedIn],
-  bootstrap: [AppComponent]
+  providers: [DatePipe, HasEnteredDataGuard, IsLoggedIn],
+  bootstrap: [AppComponent],
 })
 export class AppModule {}

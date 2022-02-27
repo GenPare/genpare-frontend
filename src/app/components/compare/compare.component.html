@@ -1,89 +1,193 @@
 <h3>Vergleich</h3>
 
 <div class="card">
-    <div class="card-body">
-        <h5 class="card-title">Filter</h5>
-        <div class="card-text">
-            <form>
-                <div class="form-group row">
-                    <label class="col-sm-1 col-form-label">Gehalt:</label>
-                    <div class="col-sm">
-                        <div class="input-group">
-                            <input class="form-control" type="number" min="0" placeholder="Von">
-                            <div class="input-group-postpend">
-                                <div class="input-group-text">€</div>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="col-sm">
-                        <div class="input-group">
-                            <input class="form-control" type="number" placeholder="Bis">
-                            <div class="input-group-postpend">
-                                <div class="input-group-text">€</div>
-                            </div>
-                        </div>
-                    </div>
-                    <label class="col-sm-1 col-form-label">Alter:</label>
-                    <div class="col-sm">
-                        <input class="form-control" type="number" min="0" placeholder="Von">
-                    </div>
-                    <div class="col-sm">
-                        <input class="form-control" type="number" placeholder="Bis">
-                    </div>
-                </div>
-                <div class="form-group row">
-                    <label class="col-sm-1 col-form-label">Beruf:</label>
-                    <div class="col-sm-3">
-                        <select class="form-control" type="select">
-                            <ng-container>
-                                <option>Architekt</option>
-                            </ng-container>
-                        </select>
-                    </div>
-                    <label class="col-sm-1 col-form-label">Bundesland:</label>
-                    <div class="col-sm-3">
-                        <select class="form-control" type="select">
-                            <ng-container *ngFor="let federal_state of federal_states">
-                                <option>{{ federal_state }}</option>
-                            </ng-container>
-                        </select>
-                    </div>
-                    <label class="col-sm-1 col-form-label">Bildungsgrad:</label>
-                    <div class="col-sm-3">
-                        <select class="form-control" type="select">
-                            <ng-container *ngFor="let education_degree of education_degrees">
-                                <option>{{ education_degree }}</option>
-                            </ng-container>
-                        </select>
-                    </div>
-                </div>
-                <div class="form-group row">
-                    <div class="col-sm-1">
-                        <button type="button" class="btn btn-success" (click)="search()">Suchen</button>
-                    </div>
-                </div>
-            </form>
+  <div class="card-body">
+    <h5 class="card-title">Filter</h5>
+    <div class="card-text">
+      <p>
+        Bitte geben Sie mindestens einen Filter an. Das Gehalt wird in
+        500er-Schritten und das Alter in 5er-Schritten angegeben.
+      </p>
+      <form [formGroup]="filterForm" class="needs-validation">
+        <div class="form-group row">
+          <label class="col-sm-1 col-form-label" for="salary"
+            >Monatsgehalt:</label
+          >
+          <div class="col-sm">
+            <div class="input-group">
+              <input
+                class="form-control"
+                [ngClass]="{
+                  'is-invalid':
+                    formControls.salary_start.errors &&
+                    formControls.salary_start.dirty
+                }"
+                type="number"
+                id="salary"
+                min="0"
+                step="500"
+                placeholder="Von"
+                aria-describedby="salary-start-small"
+                formControlName="salary_start"
+              />
+              <div class="input-group-postpend">
+                <div class="input-group-text">€</div>
+              </div>
+            </div>
+            <small class="form-text text-muted" id="salary-start-small">
+              Das Gehalt muss mindestens 50€ betragen.
+            </small>
+          </div>
+          <div class="col-sm">
+            <div class="input-group">
+              <input
+                class="form-control"
+                [ngClass]="{
+                  'is-invalid':
+                    formControls.salary_end.errors &&
+                    formControls.salary_end.dirty
+                }"
+                type="number"
+                placeholder="Bis"
+                step="500"
+                [min]="filterForm.value.salary_start"
+                aria-describedby="salary-end-small"
+                formControlName="salary_end"
+              />
+              <div class="input-group-postpend">
+                <div class="input-group-text">€</div>
+              </div>
+            </div>
+            <small class="form-text text-muted" id="salary-end-small">
+              Das Gehalt darf maximal 1.000.000€ betragen.
+            </small>
+          </div>
+          <label class="col-sm-1 col-form-label">Alter:</label>
+          <div class="col-sm">
+            <input
+              class="form-control"
+              [ngClass]="{
+                'is-invalid':
+                  formControls.age_start.errors && formControls.age_start.dirty
+              }"
+              type="number"
+              min="0"
+              step="5"
+              placeholder="Von"
+              aria-describedby="age-start-small"
+              formControlName="age_start"
+            />
+            <small class="form-text text-muted" id="age-start-small">
+              Das Alter muss mindestens 5 betragen.
+            </small>
+          </div>
+          <div class="col-sm">
+            <input
+              class="form-control"
+              [ngClass]="{
+                'is-invalid':
+                  formControls.age_end.errors && formControls.age_end.dirty
+              }"
+              type="number"
+              placeholder="Bis"
+              step="5"
+              [min]="filterForm.value.age_start"
+              aria-describedby="age-end-small"
+              formControlName="age_end"
+            />
+            <small
+              *ngIf="!formControls.age_end.errors"
+              class="form-text text-muted"
+              id="age-end-small"
+            >
+              Das Alter darf maximal 100 betragen.
+            </small>
+          </div>
         </div>
+        <div class="form-group row">
+          <label class="col-sm-1 col-form-label">Beruf:</label>
+          <div class="col-sm-3">
+            <select class="form-control" type="select" formControlName="job">
+              <option value="" class="no-selection-option">
+                {{ noSelectionText }}
+              </option>
+              <ng-container>
+                <option *ngFor="let title of jobTitles$ | async">
+                  {{ title }}
+                </option>
+              </ng-container>
+            </select>
+          </div>
+          <label class="col-sm-1 col-form-label">Bundesland:</label>
+          <div class="col-sm-3">
+            <select class="form-control" type="select" formControlName="state">
+              <option value="" class="no-selection-option">
+                {{ noSelectionText }}
+              </option>
+              <ng-container *ngFor="let federal_state of federal_states">
+                <option>{{ federal_state }}</option>
+              </ng-container>
+            </select>
+          </div>
+          <label class="col-sm-1 col-form-label">Bildungsgrad:</label>
+          <div class="col-sm-3">
+            <select
+              class="form-control"
+              type="select"
+              formControlName="education"
+            >
+              <option value="" class="no-selection-option">
+                {{ noSelectionText }}
+              </option>
+              <ng-container *ngFor="let education_degree of education_degrees">
+                <option>{{ education_degree }}</option>
+              </ng-container>
+            </select>
+          </div>
+        </div>
+      </form>
+      <div class="button-row">
+        <div class="button">
+          <button
+            type="button"
+            class="btn btn-success"
+            (click)="search()"
+            [disabled]="!(filterForm.valid && filterForm.dirty)"
+          >
+            Suchen
+          </button>
+        </div>
+      </div>
     </div>
+  </div>
 </div>
 
 <div class="card">
-    <div class="card-body">
-        <h5 class="card-title">Ergebnisse</h5>
-        <div class="card-text">
-            <table class="table table-striped">
-                <tr>
-                    <th *ngFor="let header of table_headers">{{ header }}</th>
-                </tr>
-                <tr *ngFor="let data of data$ | async">
-                    <td>{{ data.job_title }}</td>
-                    <td>{{ data.education_degree }}</td>
-                    <td>{{ data.age.min }} - {{ data.age.max }}</td>
-                    <td>{{ data.federal_state }}</td>
-                    <td>{{ data.salary.min }}€ - {{ data.salary.max }}€</td>
-                    <td>{{ data.gender }}</td>
-                </tr>
-            </table>
-        </div>
+  <div class="card-body">
+    <h5 class="card-title">Ergebnisse</h5>
+    <div class="card-text">
+      <p *ngIf="initialState">
+        Hier werden die Ergebnisse nach einer erfolgreichen Suche angezeigt.
+      </p>
+      <p *ngIf="!initialState && responseData.length === 0">
+        Für Ihre Suche sind keine Ergebnisse vorhanden.
+      </p>
+      <table
+        class="table table-striped"
+        *ngIf="responseData.length > 0 && !initialState"
+      >
+        <tr>
+          <th *ngFor="let header of table_headers">{{ header }}</th>
+        </tr>
+        <tr *ngFor="let data of responseData">
+          <td>{{ data.jobTitle }}</td>
+          <td>{{ data.levelOfEducation }}</td>
+          <td>{{ data.age.min }} - {{ data.age.max }}</td>
+          <td>{{ data.state }}</td>
+          <td>{{ data.salary.min }}€ - {{ data.salary.max }}€</td>
+          <td>{{ data.gender }}</td>
+        </tr>
+      </table>
     </div>
+  </div>
 </div>

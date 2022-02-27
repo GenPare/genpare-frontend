@@ -1,26 +1,26 @@
-@import '~bootstrap/scss/bootstrap';
-@import 'app/shared/variables.scss';
+@import "~bootstrap/scss/bootstrap";
+@import "app/shared/variables.scss";
 
 body {
-    font-family: Arial, Helvetica, sans-serif;
-    background-color: $primary-color;
+  font-family: Arial, Helvetica, sans-serif;
+  background-color: $primary-color;
 }
 
 ::selection {
-    color: $primary-color;
-    background-color: $secondary-color;
+  color: $primary-color;
+  background-color: $secondary-color;
 }
 
 h3 {
-    margin-left: $padding-big;
-    margin-right: $padding-big;
-    margin-top: $padding-small;
-    margin-bottom: $padding-small;
-    color: $secondary-color;
+  margin-left: $padding-big;
+  margin-right: $padding-big;
+  margin-top: $padding-small;
+  margin-bottom: $padding-small;
+  color: $secondary-color;
 }
 
 .card {
-    margin-left: $padding-big;
-    margin-right: $padding-big;
-    margin-bottom: $padding-big;
+  margin-left: $padding-big;
+  margin-right: $padding-big;
+  margin-bottom: $padding-big;
 }

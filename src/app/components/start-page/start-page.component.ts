@@ -7,14 +7,13 @@ import { AuthService } from '@auth0/auth0-angular';
   styleUrls: ['./start-page.component.scss'],
 })
 export class StartPageComponent {
-  constructor(public auth: AuthService) {
-  }
+  constructor(public auth: AuthService) {}
 
   loginWithRedirect() {
-    this.auth.loginWithRedirect({ appState: { target: '/success', } })
+    this.auth.loginWithRedirect({ appState: { target: '/success' } });
   }
 
   registerWithRedirect() {
-    this.auth.loginWithRedirect({ screen_hint: 'signup', target:'/success' })
+    this.auth.loginWithRedirect({ screen_hint: 'signup', target: '/success' });
   }
 }
