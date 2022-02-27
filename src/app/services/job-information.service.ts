@@ -3,7 +3,7 @@ import { EMPTY, Observable, of } from 'rxjs';
 import { HttpClient } from '@angular/common/http';
 import { MapService } from './map.service';
 import { MemberService } from './member.service';
-import { map } from 'rxjs/operators';
+import { map, switchMap, tap } from 'rxjs/operators';
 import { environment as env } from 'environments/environment.dev';
 
 export interface JobInfo {
@@ -19,7 +19,7 @@ export interface CompRequestData {
 }
 
 export interface CompResponseData {
-  results: any[]
+  results: { results: CompareData[] }[]
 }
 
 export interface CompareData {
@@ -46,8 +46,21 @@ export class JobInformationService {
     private memberService: MemberService
   ) {}
 
-  getCompareData(req: CompRequestData): Observable<CompResponseData> {
-    return this.http.post<CompResponseData>(env.backendURL + '/salary', req);
+  getCompareData(req: CompRequestData): Observable<CompareData[]> {
+    return this.http.post<CompResponseData>(env.backendURL + '/salary', req)
+    .pipe(map((res) => (res.results[0].results)))
+    .pipe(tap((res) => console.log(res)))
+    .pipe(map((arr) => (
+      arr.map((element) => ({
+        age: element.age,
+        salary: element.salary,
+        jobTitle: element.jobTitle,
+        gender: this.mapService.mapGenderBtoF(element.gender),
+        state: this.mapService.mapFederalStateBtoF(element.state),
+        levelOfEducation: this.mapService.mapEducationDegreeBtoF(element.levelOfEducation)
+      }))
+    )))
+    .pipe(tap((res) => console.log(res)));
   }
 
   newJobInformation(data: JobInfo): Observable<Object | never> {

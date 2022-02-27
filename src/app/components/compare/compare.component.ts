@@ -33,7 +33,7 @@ export class CompareComponent {
   emptyFormGroup: boolean;
 
   jobTitles$: Observable<string[]>;
-  responseData$: Observable<CompResponseData>;
+  responseData$: Observable<CompareData[]>;
   responseData: CompareData[];
 
   federal_states: string[];
@@ -56,13 +56,15 @@ export class CompareComponent {
     job: new FormControl(''),
     state: new FormControl(''),
     education: new FormControl(''),
+  }, {
+
   })
   
   constructor(private jobInformationService: JobInformationService, private mapService: MapService, private toastService: ToastService) {
     this.federal_states = federal_states_f;
     this.education_degrees = education_degrees_f;
     this.jobTitles$ = this.jobInformationService.getJobTitles();
-    this.responseData$ = of({results: []});
+    this.responseData$ = of([]);
     this.responseData = [];
     this.initialState = true;
     this.emptyFormGroup = true;
@@ -85,11 +87,10 @@ export class CompareComponent {
         }]
       }
       this.responseData$ = this.jobInformationService.getCompareData(requestData);
-      this.responseData$.subscribe((response) => {
-        this.responseData = response.results[0].results;
+      this.responseData$.subscribe((data) => {
+        this.responseData = data;
         this.initialState = false;
-        console.log(this.responseData);
-      });
+      })
     }
   }
 
@@ -150,11 +151,10 @@ export class CompareComponent {
       })
     }
     
-    if(filters.length === 0) {
+    if(filters.length < this.minimumFilterAmount) {
       //Error: zu wenig Filter
       throw new Error("zu wenig filter");
     }
-    console.log(filters);
 
     return filters;
   }
@@ -164,7 +164,6 @@ export class CompareComponent {
     // this.filterForm.patchValue({ job: this.noSelectionText });
     // this.filterForm.patchValue({ state: this.noSelectionText });
     // this.filterForm.patchValue({ education: this.noSelectionText });
-    console.log(this.filterForm.value)
   }
 
   checkFormGroup(): boolean {
