@@ -96,7 +96,7 @@
           <label class="col-sm-1 col-form-label">Beruf:</label>
           <div class="col-sm-3">
             <select class="form-control" type="select" formControlName="job">
-              <option class="no-selection-option">{{ noSelectionText }}</option>
+              <option value="" class="no-selection-option">{{ noSelectionText }}</option>
               <ng-container>
                 <option *ngFor="let title of jobTitles$ | async">{{ title }}</option>
               </ng-container>
@@ -105,7 +105,7 @@
           <label class="col-sm-1 col-form-label">Bundesland:</label>
           <div class="col-sm-3">
             <select class="form-control" type="select" formControlName="state">
-              <option class="no-selection-option">{{ noSelectionText }}</option>
+              <option value="" class="no-selection-option">{{ noSelectionText }}</option>
               <ng-container *ngFor="let federal_state of federal_states">
                 <option>{{ federal_state }}</option>
               </ng-container>
@@ -114,7 +114,7 @@
           <label class="col-sm-1 col-form-label">Bildungsgrad:</label>
           <div class="col-sm-3">
             <select class="form-control" type="select" formControlName="education">
-              <option class="no-selection-option">{{ noSelectionText }}</option>
+              <option value="" class="no-selection-option">{{ noSelectionText }}</option>
               <ng-container *ngFor="let education_degree of education_degrees">
                 <option>{{ education_degree }}</option>
               </ng-container>

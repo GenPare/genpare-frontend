@@ -20,11 +20,35 @@ function minSmallerMax(minControlName: string, maxControlName: string): Validato
   return (control: AbstractControl): ValidationErrors | null => {
     const minControl = control.get(minControlName);
     const maxControl = control.get(maxControlName);
-    return minControl?.value > maxControl?.value
+    if(minControl?.value && maxControl?.value) {
+      return minControl?.value < maxControl?.value
       ? {
           minSmallerMax: {
             minimumValue: minControl?.value,
             maximumValue: maxControl?.value,
+          },
+        }
+      : null;
+    } else {
+      return null;
+    }
+  };
+}
+
+function requireOneControl(): ValidatorFn {
+  return (formGroup: AbstractControl): ValidationErrors | null => {
+    let filledControls: number = 0;
+    for(const [key, value] of Object.entries(formGroup.value)) {
+      if (value !== '') {
+        filledControls += 1;
+      }
+    }
+    console.log(filledControls)
+    return filledControls === 0
+      ? {
+          requireOneControl: {
+            requiredControls: filledControls,
+            actualControls: 1,
           },
         }
       : null;
@@ -92,7 +116,11 @@ export class CompareComponent {
       []
     ]
   }, {
-    validator: [minSmallerMax("salary_start", "salary_end"), minSmallerMax("age_start", "age_end")]
+    validator: [
+      minSmallerMax("salary_start", "salary_end"), 
+      minSmallerMax("age_start", "age_end"), 
+      requireOneControl()
+    ]
   })
 
   get formControls(): { [key: string]: AbstractControl } {
