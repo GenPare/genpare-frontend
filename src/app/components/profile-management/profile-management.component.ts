@@ -22,13 +22,28 @@ type SaveButtonText = 'Speichern' | 'Aktualisieren';
 
 function minAge(years: number): ValidatorFn {
   return (control: AbstractControl): ValidationErrors | null => {
-    const valueDate = new Date(control.value).getTime();
-    const minDate = new Date().setFullYear(new Date().getFullYear() - years);
-    return valueDate > minDate
+    const valueDate = new Date(control.value).getTime()
+    const actualAge =  new Date(new Date().getTime() - valueDate).getFullYear() - 1970;
+    return actualAge < years
       ? {
           minAge: {
-            minimumDate: new Date(minDate),
-            actualDate: new Date(control.value),
+            minimumAge: years,
+            actualAge,
+          },
+        }
+      : null;
+  };
+}
+
+function maxAge(years: number): ValidatorFn {
+  return (control: AbstractControl): ValidationErrors | null => {
+    const valueDate = new Date(control.value).getTime();
+    const actualAge =  new Date(new Date().getTime() - valueDate).getFullYear() - 1970;
+    return actualAge > years
+      ? {
+          maxAge: {
+            maximumAge: years,
+            actualAge
           },
         }
       : null;
@@ -60,7 +75,7 @@ export class ProfileManagementComponent implements OnInit, OnDestroy {
       [Validators.required, Validators.min(50), Validators.max(1000000)],
     ],
     gender: ['', Validators.required],
-    age: ['', [Validators.required, minAge(15)]],
+    age: ['', [Validators.required, minAge(15), maxAge(99)]],
     nickname: [
       '',
       [Validators.required, Validators.minLength(4), Validators.maxLength(25)],
