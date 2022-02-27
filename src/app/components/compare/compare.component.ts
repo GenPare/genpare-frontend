@@ -164,9 +164,18 @@ export class CompareComponent {
 
     if(salary_start || salary_end) {
       if(salary_end && !salary_start) {
+        let carry = this.filterForm.value.salary_end % 500;
+        this.filterForm.patchValue({ salary_end: this.filterForm.value.salary_end - carry });
         this.filterForm.patchValue({ salary_start: this.salaryMinimum });
       } else if (salary_start && !salary_end){
+        let carry = this.filterForm.value.salary_start % 500;
+        this.filterForm.patchValue({ salary_start: this.filterForm.value.salary_start - carry });
         this.filterForm.patchValue({ salary_end: this.salaryMaximum });
+      } else if(salary_end && salary_start) {
+        let carry_start = this.filterForm.value.salary_start % 500;
+        this.filterForm.patchValue({ salary_start: this.filterForm.value.salary_start - carry_start });
+        let carry_end = this.filterForm.value.salary_end % 500;
+        this.filterForm.patchValue({ salary_end: this.filterForm.value.salary_end - carry_end });
       }
       filters.push({
         name: "salary",
@@ -177,9 +186,18 @@ export class CompareComponent {
 
     if(age_start || age_end) {
       if(age_end && !age_start) {
+        let carry = this.filterForm.value.age_end % 5;
+        this.filterForm.patchValue({ age_end: this.filterForm.value.age_end - carry });
         this.filterForm.patchValue({ age_start: this.ageMinimum });
       } else if(age_start && !age_end){
+        let carry = this.filterForm.value.age_start % 5;
+        this.filterForm.patchValue({ age_start: this.filterForm.value.age_start - carry });
         this.filterForm.patchValue({ age_end: this.ageMaximum });
+      } else if(age_start && age_end) {
+        let carry_start = this.filterForm.value.age_start % 5;
+        this.filterForm.patchValue({ age_start: this.filterForm.value.age_start - carry_start });
+        let carry_end = this.filterForm.value.age_end % 5;
+        this.filterForm.patchValue({ age_end: this.filterForm.value.age_end - carry_end });
       }
       filters.push({
         name: "age",
