@@ -43,8 +43,8 @@
                 }"
                 type="number" 
                 placeholder="Bis" 
-                min="0" 
                 step="500" 
+                [min]="filterForm.value.salary_start"
                 aria-describedby="salary-end-small"
                 formControlName="salary_end"
               />
@@ -55,7 +55,6 @@
             <small class="form-text text-muted" id="salary-end-small">
               Das Gehalt darf maximal 1.000.000€ betragen.
             </small>
-            
           </div>
           <label class="col-sm-1 col-form-label">Alter:</label>
           <div class="col-sm">
@@ -83,12 +82,12 @@
               }"
               type="number" 
               placeholder="Bis" 
-              min="0" 
               step="5" 
+              [min]="filterForm.value.age_start"
               aria-describedby="age-end-small"
               formControlName="age_end"
             />
-            <small class="form-text text-muted" id="age-end-small">
+            <small *ngIf="!(formControls.age_end.errors)" class="form-text text-muted" id="age-end-small">
               Das Alter darf maximal 100 betragen.
             </small>
           </div>
@@ -136,7 +135,15 @@
         </div>
         <div class="button">
           <button type="button" class="btn btn-danger" (click)="resetFilters()" 
-          [disabled]="emptyFormGroup">
+          [disabled]="!(
+            filterForm.value.age_start 
+            || filterForm.value.age_end 
+            || filterForm.value.salary_start 
+            || filterForm.value.salary_end 
+            || filterForm.value.job === noSelectionText
+            || filterForm.value.state === noSelectionText
+            || filterForm.value.education === noSelectionText
+            )">
             Filter löschen
           </button>
         </div>

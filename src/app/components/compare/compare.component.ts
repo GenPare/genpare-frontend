@@ -11,10 +11,25 @@ import {
   education_degrees_f,
   federal_states_f,
 } from '@shared/model/frontend_data';
-import { AbstractControl, FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
+import { AbstractControl, FormBuilder, FormControl, FormGroup, ValidationErrors, ValidatorFn, Validators } from '@angular/forms';
 import { MapService } from 'app/services/map.service';
 import { filter, map } from 'rxjs/operators';
 import { ToastService } from 'app/services/toast.service';
+
+function minSmallerMax(minControlName: string, maxControlName: string): ValidatorFn {
+  return (control: AbstractControl): ValidationErrors | null => {
+    const minControl = control.get(minControlName);
+    const maxControl = control.get(maxControlName);
+    return minControl?.value > maxControl?.value
+      ? {
+          minSmallerMax: {
+            minimumValue: minControl?.value,
+            maximumValue: maxControl?.value,
+          },
+        }
+      : null;
+  };
+}
 
 @Component({
   selector: 'app-compare',
@@ -22,15 +37,14 @@ import { ToastService } from 'app/services/toast.service';
   styleUrls: ['./compare.component.scss'],
 })
 export class CompareComponent {
-  private readonly salaryMinimum = 50;
-  private readonly salaryMaximum = 1000000;
-  private readonly ageMinimum = 15;
-  private readonly ageMaximum = 100;
+  readonly salaryMinimum = 50;
+  readonly salaryMaximum = 1000000;
+  readonly ageMinimum = 15;
+  readonly ageMaximum = 100;
   private readonly minimumFilterAmount = 1;
   readonly noSelectionText = "- Bitte Auswählen -";
 
   initialState: boolean;
-  emptyFormGroup: boolean;
 
   jobTitles$: Observable<string[]>;
   responseData$: Observable<CompareData[]>;
@@ -78,7 +92,7 @@ export class CompareComponent {
       []
     ]
   }, {
-
+    validator: [minSmallerMax("salary_start", "salary_end"), minSmallerMax("age_start", "age_end")]
   })
 
   get formControls(): { [key: string]: AbstractControl } {
@@ -92,15 +106,10 @@ export class CompareComponent {
     this.responseData$ = of([]);
     this.responseData = [];
     this.initialState = true;
-    this.emptyFormGroup = true;
-    this.filterForm.valueChanges.subscribe(() => this.emptyFormGroup =
-      this.filterForm.value.age_start 
-      || this.filterForm.value.age_end 
-      || this.filterForm.value.salary_start 
-      || this.filterForm.value.salary_end 
-      || this.filterForm.value.job === this.noSelectionText
-      || this.filterForm.value.state === this.noSelectionText
-      || this.filterForm.value.education === this.noSelectionText)
+    this.filterForm.valueChanges.subscribe((changes) => {
+      console.log(changes);
+      console.log(this.filterForm.errors)
+    })
   }
 
   search(): void {
@@ -186,9 +195,9 @@ export class CompareComponent {
 
   resetFilters(): void {
     this.filterForm.reset( { job: '', education: '', state: ''});
-    // this.filterForm.patchValue({ job: this.noSelectionText });
-    // this.filterForm.patchValue({ state: this.noSelectionText });
-    // this.filterForm.patchValue({ education: this.noSelectionText });
+    this.filterForm.patchValue({ job: this.noSelectionText });
+    this.filterForm.patchValue({ state: this.noSelectionText });
+    this.filterForm.patchValue({ education: this.noSelectionText });
   }
 
   checkFormGroup(): boolean {
