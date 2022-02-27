@@ -4,46 +4,93 @@
   <div class="card-body">
     <h5 class="card-title">Filter</h5>
     <div class="card-text">
-      <form [formGroup]="filterForm">
+      <p>
+        Bitte geben Sie mindestens einen Filter an. Das Gehalt wird in 500er-Schritten 
+        und das Alter in 5er-Schritten angegeben.
+      </p>
+      <form [formGroup]="filterForm" class="needs-validation">
         <div class="form-group row">
-          <label class="col-sm-1 col-form-label" for="nickname">Gehalt:</label>
+          <label class="col-sm-1 col-form-label" for="salary">Monatsgehalt:</label>
           <div class="col-sm">
             <div class="input-group">
               <input
                 class="form-control"
+                [ngClass]="{
+                 'is-invalid': formControls.salary_start.errors && formControls.salary_start.dirty
+                }"
                 type="number"
-                id="nickname"
+                id="salary"
                 min="0"
                 step="500"
                 placeholder="Von"
+                aria-describedby="salary-start-small"
                 formControlName="salary_start"
               />
               <div class="input-group-postpend">
                 <div class="input-group-text">€</div>
               </div>
             </div>
+            <small class="form-text text-muted" id="salary-start-small">
+              Das Gehalt muss mindestens 50€ betragen.
+            </small>
           </div>
           <div class="col-sm">
             <div class="input-group">
-              <input class="form-control" type="number" placeholder="Bis" min="0" step="500" formControlName="salary_end"/>
+              <input 
+                class="form-control" 
+                [ngClass]="{
+                  'is-invalid': formControls.salary_end.errors && formControls.salary_end.dirty
+                }"
+                type="number" 
+                placeholder="Bis" 
+                min="0" 
+                step="500" 
+                aria-describedby="salary-end-small"
+                formControlName="salary_end"
+              />
               <div class="input-group-postpend">
                 <div class="input-group-text">€</div>
               </div>
             </div>
+            <small class="form-text text-muted" id="salary-end-small">
+              Das Gehalt darf maximal 1.000.000€ betragen.
+            </small>
+            
           </div>
           <label class="col-sm-1 col-form-label">Alter:</label>
           <div class="col-sm">
             <input
               class="form-control"
+              [ngClass]="{
+                'is-invalid': formControls.age_start.errors && formControls.age_start.dirty
+              }"
               type="number"
               min="0"
               step="5"
               placeholder="Von"
+              aria-describedby="age-start-small"
               formControlName="age_start"
             />
+            <small class="form-text text-muted" id="age-start-small">
+              Das Alter muss mindestens 5 betragen.
+            </small>
           </div>
           <div class="col-sm">
-            <input class="form-control" type="number" placeholder="Bis" min="0" step="5" formControlName="age_end"/>
+            <input 
+              class="form-control"
+              [ngClass]="{
+                'is-invalid': formControls.age_end.errors && formControls.age_end.dirty
+              }"
+              type="number" 
+              placeholder="Bis" 
+              min="0" 
+              step="5" 
+              aria-describedby="age-end-small"
+              formControlName="age_end"
+            />
+            <small class="form-text text-muted" id="age-end-small">
+              Das Alter darf maximal 100 betragen.
+            </small>
           </div>
         </div>
         <div class="form-group row">
@@ -78,7 +125,12 @@
       </form>
       <div class="button-row">
         <div class="button">
-          <button type="button" class="btn btn-success" (click)="search()">
+          <button 
+            type="button" 
+            class="btn btn-success" 
+            (click)="search()"
+            [disabled]="!(filterForm.valid && filterForm.dirty)"
+          >
             Suchen
           </button>
         </div>

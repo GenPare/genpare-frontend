@@ -14,6 +14,12 @@ td {
   width: 16, 67%;
 }
 
+button:disabled {
+  color: #ffffff;
+  background-color: #6c757d;
+  border-color: #6c757d;
+}
+
 .no-selection-option {
   background-color: #e9ecef;
 }
@@ -25,4 +31,8 @@ td {
 
 .button {
   margin: 10px;
+}
+
+.red-text {
+  color: #dc3545;
 }

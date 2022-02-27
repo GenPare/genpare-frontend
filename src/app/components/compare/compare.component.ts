@@ -11,7 +11,7 @@ import {
   education_degrees_f,
   federal_states_f,
 } from '@shared/model/frontend_data';
-import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
+import { AbstractControl, FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
 import { MapService } from 'app/services/map.service';
 import { filter, map } from 'rxjs/operators';
 import { ToastService } from 'app/services/toast.service';
@@ -48,19 +48,44 @@ export class CompareComponent {
     'Geschlecht',
   ];
 
-  filterForm =  new FormGroup({
-    salary_start: new FormControl(''),
-    salary_end: new FormControl(''),
-    age_start: new FormControl(''),
-    age_end: new FormControl(''),
-    job: new FormControl(''),
-    state: new FormControl(''),
-    education: new FormControl(''),
+  filterForm = this.fb.group({
+    salary_start: [
+      '',
+      [Validators.min(50), Validators.max(1000000)]
+    ],
+    salary_end: [
+      '',
+      [Validators.min(50), Validators.max(1000000)]
+    ],
+    age_start: [
+      '',
+      [Validators.min(15), Validators.max(100)]
+    ],
+    age_end: [
+      '',
+      [Validators.min(15), Validators.max(100)]
+    ],
+    job: [
+      '',
+      []
+    ],
+    state: [
+      '',
+      []
+    ],
+    education: [
+      '',
+      []
+    ]
   }, {
 
   })
+
+  get formControls(): { [key: string]: AbstractControl } {
+    return this.filterForm.controls;
+  }
   
-  constructor(private jobInformationService: JobInformationService, private mapService: MapService, private toastService: ToastService) {
+  constructor(private jobInformationService: JobInformationService, private mapService: MapService, private toastService: ToastService, private fb: FormBuilder) {
     this.federal_states = federal_states_f;
     this.education_degrees = education_degrees_f;
     this.jobTitles$ = this.jobInformationService.getJobTitles();
