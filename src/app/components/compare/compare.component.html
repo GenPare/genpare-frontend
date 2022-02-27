@@ -133,21 +133,7 @@
             Suchen
           </button>
         </div>
-        <div class="button">
-          <button type="button" class="btn btn-danger" (click)="resetFilters()" 
-          [disabled]="!(
-            filterForm.value.age_start 
-            || filterForm.value.age_end 
-            || filterForm.value.salary_start 
-            || filterForm.value.salary_end 
-            || filterForm.value.job === noSelectionText
-            || filterForm.value.state === noSelectionText
-            || filterForm.value.education === noSelectionText
-            )">
-            Filter löschen
-          </button>
-        </div>
-      </div>
+      </form>
     </div>
   </div>
 </div>

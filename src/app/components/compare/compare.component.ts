@@ -134,10 +134,6 @@ export class CompareComponent {
     this.responseData$ = of([]);
     this.responseData = [];
     this.initialState = true;
-    this.filterForm.valueChanges.subscribe((changes) => {
-      console.log(changes);
-      console.log(this.filterForm.errors)
-    })
   }
 
   search(): void {
@@ -227,8 +223,4 @@ export class CompareComponent {
     this.filterForm.patchValue({ state: this.noSelectionText });
     this.filterForm.patchValue({ education: this.noSelectionText });
   }
-
-  checkFormGroup(): boolean {
-    return true;
-  }    
 }
