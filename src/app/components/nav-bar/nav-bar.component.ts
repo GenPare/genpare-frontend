@@ -1,7 +1,8 @@
 import { Component } from '@angular/core';
 import { AuthService } from '@auth0/auth0-angular';
 import { MemberService } from 'app/services/member.service';
-import { Observable } from 'rxjs';
+import { Observable, of } from 'rxjs';
+import { catchError } from 'rxjs/operators';
 
 @Component({
   selector: 'app-nav-bar',
@@ -17,7 +18,7 @@ export class NavBarComponent {
 
   logout() {
     this.memberService
-      .invalidateSessionId()
+      .invalidateSessionId().pipe(catchError((err) => of(undefined)))
       .subscribe(() => this.auth.logout());
   }
 }
