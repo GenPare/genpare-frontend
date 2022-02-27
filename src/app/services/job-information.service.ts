@@ -14,12 +14,12 @@ export interface JobInfo {
 }
 
 export interface CompRequestData {
-  filters: any[],
-  resultTransformers: any[],
+  filters: any[];
+  resultTransformers: any[];
 }
 
 export interface CompResponseData {
-  results: { results: CompareData[] }[]
+  results: { results: CompareData[] }[];
 }
 
 export interface CompareData {
@@ -47,20 +47,25 @@ export class JobInformationService {
   ) {}
 
   getCompareData(req: CompRequestData): Observable<CompareData[]> {
-    return this.http.post<CompResponseData>(env.backendURL + '/salary', req)
-    .pipe(map((res) => (res.results[0].results)))
-    .pipe(tap((res) => console.log(res)))
-    .pipe(map((arr) => (
-      arr.map((element) => ({
-        age: element.age,
-        salary: element.salary,
-        jobTitle: element.jobTitle,
-        gender: this.mapService.mapGenderBtoF(element.gender),
-        state: this.mapService.mapFederalStateBtoF(element.state),
-        levelOfEducation: this.mapService.mapEducationDegreeBtoF(element.levelOfEducation)
-      }))
-    )))
-    .pipe(tap((res) => console.log(res)));
+    return this.http
+      .post<CompResponseData>(env.backendURL + '/salary', req)
+      .pipe(map((res) => res.results[0].results))
+      .pipe(tap((res) => console.log(res)))
+      .pipe(
+        map((arr) =>
+          arr.map((element) => ({
+            age: element.age,
+            salary: element.salary,
+            jobTitle: element.jobTitle,
+            gender: this.mapService.mapGenderBtoF(element.gender),
+            state: this.mapService.mapFederalStateBtoF(element.state),
+            levelOfEducation: this.mapService.mapEducationDegreeBtoF(
+              element.levelOfEducation
+            ),
+          }))
+        )
+      )
+      .pipe(tap((res) => console.log(res)));
   }
 
   newJobInformation(data: JobInfo): Observable<Object | never> {
@@ -119,6 +124,6 @@ export class JobInformationService {
   }
 
   getJobTitles(): Observable<string[]> {
-    	return this.http.get<string[]>(env.backendURL + '/salary/info');
+    return this.http.get<string[]>(env.backendURL + '/salary/info');
   }
 }

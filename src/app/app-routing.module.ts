@@ -10,12 +10,24 @@ import { HasEnteredDataGuard } from './guards/has-entered-data';
 import { IsLoggedIn } from './guards/is-logged-in';
 
 const routes: Routes = [
-  { path: 'compare', component: CompareComponent, canActivate: [IsLoggedIn,HasEnteredDataGuard] },
-  { path: 'profile', component: ProfileManagementComponent ,canActivate: [IsLoggedIn]},
+  {
+    path: 'compare',
+    component: CompareComponent,
+    canActivate: [IsLoggedIn, HasEnteredDataGuard],
+  },
+  {
+    path: 'profile',
+    component: ProfileManagementComponent,
+    canActivate: [IsLoggedIn],
+  },
   { path: 'start', component: StartPageComponent },
-  { path: 'support', component: SupportPageComponent},
-  { path: 'success', component: LoginSuccessComponent,canActivate: [AuthGuard]},
-  { path: '', redirectTo: 'start', pathMatch: 'full' }
+  { path: 'support', component: SupportPageComponent },
+  {
+    path: 'success',
+    component: LoginSuccessComponent,
+    canActivate: [AuthGuard],
+  },
+  { path: '', redirectTo: 'start', pathMatch: 'full' },
 ];
 
 @NgModule({

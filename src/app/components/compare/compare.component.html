@@ -5,18 +5,22 @@
     <h5 class="card-title">Filter</h5>
     <div class="card-text">
       <p>
-        Bitte geben Sie mindestens einen Filter an. Das Gehalt wird in 500er-Schritten 
-        und das Alter in 5er-Schritten angegeben.
+        Bitte geben Sie mindestens einen Filter an. Das Gehalt wird in
+        500er-Schritten und das Alter in 5er-Schritten angegeben.
       </p>
       <form [formGroup]="filterForm" class="needs-validation">
         <div class="form-group row">
-          <label class="col-sm-1 col-form-label" for="salary">Monatsgehalt:</label>
+          <label class="col-sm-1 col-form-label" for="salary"
+            >Monatsgehalt:</label
+          >
           <div class="col-sm">
             <div class="input-group">
               <input
                 class="form-control"
                 [ngClass]="{
-                 'is-invalid': formControls.salary_start.errors && formControls.salary_start.dirty
+                  'is-invalid':
+                    formControls.salary_start.errors &&
+                    formControls.salary_start.dirty
                 }"
                 type="number"
                 id="salary"
@@ -36,14 +40,16 @@
           </div>
           <div class="col-sm">
             <div class="input-group">
-              <input 
-                class="form-control" 
+              <input
+                class="form-control"
                 [ngClass]="{
-                  'is-invalid': formControls.salary_end.errors && formControls.salary_end.dirty
+                  'is-invalid':
+                    formControls.salary_end.errors &&
+                    formControls.salary_end.dirty
                 }"
-                type="number" 
-                placeholder="Bis" 
-                step="500" 
+                type="number"
+                placeholder="Bis"
+                step="500"
                 [min]="filterForm.value.salary_start"
                 aria-describedby="salary-end-small"
                 formControlName="salary_end"
@@ -61,7 +67,8 @@
             <input
               class="form-control"
               [ngClass]="{
-                'is-invalid': formControls.age_start.errors && formControls.age_start.dirty
+                'is-invalid':
+                  formControls.age_start.errors && formControls.age_start.dirty
               }"
               type="number"
               min="0"
@@ -75,19 +82,24 @@
             </small>
           </div>
           <div class="col-sm">
-            <input 
+            <input
               class="form-control"
               [ngClass]="{
-                'is-invalid': formControls.age_end.errors && formControls.age_end.dirty
+                'is-invalid':
+                  formControls.age_end.errors && formControls.age_end.dirty
               }"
-              type="number" 
-              placeholder="Bis" 
-              step="5" 
+              type="number"
+              placeholder="Bis"
+              step="5"
               [min]="filterForm.value.age_start"
               aria-describedby="age-end-small"
               formControlName="age_end"
             />
-            <small *ngIf="!(formControls.age_end.errors)" class="form-text text-muted" id="age-end-small">
+            <small
+              *ngIf="!formControls.age_end.errors"
+              class="form-text text-muted"
+              id="age-end-small"
+            >
               Das Alter darf maximal 100 betragen.
             </small>
           </div>
@@ -96,16 +108,22 @@
           <label class="col-sm-1 col-form-label">Beruf:</label>
           <div class="col-sm-3">
             <select class="form-control" type="select" formControlName="job">
-              <option value="" class="no-selection-option">{{ noSelectionText }}</option>
+              <option value="" class="no-selection-option">
+                {{ noSelectionText }}
+              </option>
               <ng-container>
-                <option *ngFor="let title of jobTitles$ | async">{{ title }}</option>
+                <option *ngFor="let title of jobTitles$ | async">
+                  {{ title }}
+                </option>
               </ng-container>
             </select>
           </div>
           <label class="col-sm-1 col-form-label">Bundesland:</label>
           <div class="col-sm-3">
             <select class="form-control" type="select" formControlName="state">
-              <option value="" class="no-selection-option">{{ noSelectionText }}</option>
+              <option value="" class="no-selection-option">
+                {{ noSelectionText }}
+              </option>
               <ng-container *ngFor="let federal_state of federal_states">
                 <option>{{ federal_state }}</option>
               </ng-container>
@@ -113,8 +131,14 @@
           </div>
           <label class="col-sm-1 col-form-label">Bildungsgrad:</label>
           <div class="col-sm-3">
-            <select class="form-control" type="select" formControlName="education">
-              <option value="" class="no-selection-option">{{ noSelectionText }}</option>
+            <select
+              class="form-control"
+              type="select"
+              formControlName="education"
+            >
+              <option value="" class="no-selection-option">
+                {{ noSelectionText }}
+              </option>
               <ng-container *ngFor="let education_degree of education_degrees">
                 <option>{{ education_degree }}</option>
               </ng-container>
@@ -124,9 +148,9 @@
       </form>
       <div class="button-row">
         <div class="button">
-          <button 
-            type="button" 
-            class="btn btn-success" 
+          <button
+            type="button"
+            class="btn btn-success"
             (click)="search()"
             [disabled]="!(filterForm.valid && filterForm.dirty)"
           >
@@ -145,21 +169,24 @@
       <p *ngIf="initialState">
         Hier werden die Ergebnisse nach einer erfolgreichen Suche angezeigt.
       </p>
-      <p *ngIf="!initialState && responseData.length===0">
+      <p *ngIf="!initialState && responseData.length === 0">
         Für Ihre Suche sind keine Ergebnisse vorhanden.
       </p>
-      <table class="table table-striped" *ngIf="responseData.length>0 && !initialState">
+      <table
+        class="table table-striped"
+        *ngIf="responseData.length > 0 && !initialState"
+      >
         <tr>
           <th *ngFor="let header of table_headers">{{ header }}</th>
         </tr>
-          <tr *ngFor="let data of responseData">
-            <td>{{ data.jobTitle }}</td>
-            <td>{{ data.levelOfEducation }}</td>
-            <td>{{ data.age.min }} - {{ data.age.max }}</td>
-            <td>{{ data.state }}</td>
-            <td>{{ data.salary.min }}€ - {{ data.salary.max }}€</td>
-            <td>{{ data.gender }}</td>
-          </tr>
+        <tr *ngFor="let data of responseData">
+          <td>{{ data.jobTitle }}</td>
+          <td>{{ data.levelOfEducation }}</td>
+          <td>{{ data.age.min }} - {{ data.age.max }}</td>
+          <td>{{ data.state }}</td>
+          <td>{{ data.salary.min }}€ - {{ data.salary.max }}€</td>
+          <td>{{ data.gender }}</td>
+        </tr>
       </table>
     </div>
   </div>

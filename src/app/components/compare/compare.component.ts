@@ -3,32 +3,43 @@ import { Observable, of } from 'rxjs';
 import {
   JobInformationService,
   CompareData,
-  Range, 
-  CompRequestData, 
-  CompResponseData
+  Range,
+  CompRequestData,
+  CompResponseData,
 } from '../../services/job-information.service';
 import {
   education_degrees_f,
   federal_states_f,
 } from '@shared/model/frontend_data';
-import { AbstractControl, FormBuilder, FormControl, FormGroup, ValidationErrors, ValidatorFn, Validators } from '@angular/forms';
+import {
+  AbstractControl,
+  FormBuilder,
+  FormControl,
+  FormGroup,
+  ValidationErrors,
+  ValidatorFn,
+  Validators,
+} from '@angular/forms';
 import { MapService } from 'app/services/map.service';
 import { filter, map } from 'rxjs/operators';
 import { ToastService } from 'app/services/toast.service';
 
-function minSmallerMax(minControlName: string, maxControlName: string): ValidatorFn {
+function minSmallerMax(
+  minControlName: string,
+  maxControlName: string
+): ValidatorFn {
   return (control: AbstractControl): ValidationErrors | null => {
     const minControl = control.get(minControlName);
     const maxControl = control.get(maxControlName);
-    if(minControl?.value && maxControl?.value) {
+    if (minControl?.value && maxControl?.value) {
       return minControl?.value < maxControl?.value
-      ? {
-          minSmallerMax: {
-            minimumValue: minControl?.value,
-            maximumValue: maxControl?.value,
-          },
-        }
-      : null;
+        ? {
+            minSmallerMax: {
+              minimumValue: minControl?.value,
+              maximumValue: maxControl?.value,
+            },
+          }
+        : null;
     } else {
       return null;
     }
@@ -38,12 +49,12 @@ function minSmallerMax(minControlName: string, maxControlName: string): Validato
 function requireOneControl(): ValidatorFn {
   return (formGroup: AbstractControl): ValidationErrors | null => {
     let filledControls: number = 0;
-    for(const [key, value] of Object.entries(formGroup.value)) {
+    for (const [key, value] of Object.entries(formGroup.value)) {
       if (value !== '') {
         filledControls += 1;
       }
     }
-    console.log(filledControls)
+    console.log(filledControls);
     return filledControls === 0
       ? {
           requireOneControl: {
@@ -66,7 +77,7 @@ export class CompareComponent {
   readonly ageMinimum = 15;
   readonly ageMaximum = 100;
   private readonly minimumFilterAmount = 1;
-  readonly noSelectionText = "- Bitte Auswählen -";
+  readonly noSelectionText = '- Bitte Auswählen -';
 
   initialState: boolean;
 
@@ -86,48 +97,35 @@ export class CompareComponent {
     'Geschlecht',
   ];
 
-  filterForm = this.fb.group({
-    salary_start: [
-      '',
-      [Validators.min(50), Validators.max(1000000)]
-    ],
-    salary_end: [
-      '',
-      [Validators.min(50), Validators.max(1000000)]
-    ],
-    age_start: [
-      '',
-      [Validators.min(15), Validators.max(100)]
-    ],
-    age_end: [
-      '',
-      [Validators.min(15), Validators.max(100)]
-    ],
-    job: [
-      '',
-      []
-    ],
-    state: [
-      '',
-      []
-    ],
-    education: [
-      '',
-      []
-    ]
-  }, {
-    validator: [
-      minSmallerMax("salary_start", "salary_end"), 
-      minSmallerMax("age_start", "age_end"), 
-      requireOneControl()
-    ]
-  })
+  filterForm = this.fb.group(
+    {
+      salary_start: ['', [Validators.min(50), Validators.max(1000000)]],
+      salary_end: ['', [Validators.min(50), Validators.max(1000000)]],
+      age_start: ['', [Validators.min(15), Validators.max(100)]],
+      age_end: ['', [Validators.min(15), Validators.max(100)]],
+      job: ['', []],
+      state: ['', []],
+      education: ['', []],
+    },
+    {
+      validator: [
+        minSmallerMax('salary_start', 'salary_end'),
+        minSmallerMax('age_start', 'age_end'),
+        requireOneControl(),
+      ],
+    }
+  );
 
   get formControls(): { [key: string]: AbstractControl } {
     return this.filterForm.controls;
   }
-  
-  constructor(private jobInformationService: JobInformationService, private mapService: MapService, private toastService: ToastService, private fb: FormBuilder) {
+
+  constructor(
+    private jobInformationService: JobInformationService,
+    private mapService: MapService,
+    private toastService: ToastService,
+    private fb: FormBuilder
+  ) {
     this.federal_states = federal_states_f;
     this.education_degrees = education_degrees_f;
     this.jobTitles$ = this.jobInformationService.getJobTitles();
@@ -137,18 +135,21 @@ export class CompareComponent {
   }
 
   search(): void {
-    if(this.filterForm.valid) {
+    if (this.filterForm.valid) {
       let requestData: CompRequestData = {
         filters: this.getFilters(),
-        resultTransformers: [{
-          name: "list"
-        }]
-      }
-      this.responseData$ = this.jobInformationService.getCompareData(requestData);
+        resultTransformers: [
+          {
+            name: 'list',
+          },
+        ],
+      };
+      this.responseData$ =
+        this.jobInformationService.getCompareData(requestData);
       this.responseData$.subscribe((data) => {
         this.responseData = data;
         this.initialState = false;
-      })
+      });
     }
   }
 
@@ -158,85 +159,111 @@ export class CompareComponent {
     let age_end = this.filterForm.value.age_end;
     let salary_start = this.filterForm.value.salary_start;
     let salary_end = this.filterForm.value.salary_end;
-    let job = this.filterForm.value.job && this.filterForm.value.job !== this.noSelectionText;
-    let state = this.filterForm.value.state && this.filterForm.value.state !== this.noSelectionText;
-    let education = this.filterForm.value.education && this.filterForm.value.education !== this.noSelectionText;
+    let job =
+      this.filterForm.value.job &&
+      this.filterForm.value.job !== this.noSelectionText;
+    let state =
+      this.filterForm.value.state &&
+      this.filterForm.value.state !== this.noSelectionText;
+    let education =
+      this.filterForm.value.education &&
+      this.filterForm.value.education !== this.noSelectionText;
 
-    if(salary_start || salary_end) {
-      if(salary_end && !salary_start) {
+    if (salary_start || salary_end) {
+      if (salary_end && !salary_start) {
         let carry = this.filterForm.value.salary_end % 500;
-        this.filterForm.patchValue({ salary_end: this.filterForm.value.salary_end - carry });
+        this.filterForm.patchValue({
+          salary_end: this.filterForm.value.salary_end - carry,
+        });
         this.filterForm.patchValue({ salary_start: this.salaryMinimum });
-      } else if (salary_start && !salary_end){
+      } else if (salary_start && !salary_end) {
         let carry = this.filterForm.value.salary_start % 500;
-        this.filterForm.patchValue({ salary_start: this.filterForm.value.salary_start - carry });
+        this.filterForm.patchValue({
+          salary_start: this.filterForm.value.salary_start - carry,
+        });
         this.filterForm.patchValue({ salary_end: this.salaryMaximum });
-      } else if(salary_end && salary_start) {
+      } else if (salary_end && salary_start) {
         let carry_start = this.filterForm.value.salary_start % 500;
-        this.filterForm.patchValue({ salary_start: this.filterForm.value.salary_start - carry_start });
+        this.filterForm.patchValue({
+          salary_start: this.filterForm.value.salary_start - carry_start,
+        });
         let carry_end = this.filterForm.value.salary_end % 500;
-        this.filterForm.patchValue({ salary_end: this.filterForm.value.salary_end - carry_end });
+        this.filterForm.patchValue({
+          salary_end: this.filterForm.value.salary_end - carry_end,
+        });
       }
       filters.push({
-        name: "salary",
+        name: 'salary',
         min: this.filterForm.value.salary_start,
-        max: this.filterForm.value.salary_end
-      })
+        max: this.filterForm.value.salary_end,
+      });
     }
 
-    if(age_start || age_end) {
-      if(age_end && !age_start) {
+    if (age_start || age_end) {
+      if (age_end && !age_start) {
         let carry = this.filterForm.value.age_end % 5;
-        this.filterForm.patchValue({ age_end: this.filterForm.value.age_end - carry });
+        this.filterForm.patchValue({
+          age_end: this.filterForm.value.age_end - carry,
+        });
         this.filterForm.patchValue({ age_start: this.ageMinimum });
-      } else if(age_start && !age_end){
+      } else if (age_start && !age_end) {
         let carry = this.filterForm.value.age_start % 5;
-        this.filterForm.patchValue({ age_start: this.filterForm.value.age_start - carry });
+        this.filterForm.patchValue({
+          age_start: this.filterForm.value.age_start - carry,
+        });
         this.filterForm.patchValue({ age_end: this.ageMaximum });
-      } else if(age_start && age_end) {
+      } else if (age_start && age_end) {
         let carry_start = this.filterForm.value.age_start % 5;
-        this.filterForm.patchValue({ age_start: this.filterForm.value.age_start - carry_start });
+        this.filterForm.patchValue({
+          age_start: this.filterForm.value.age_start - carry_start,
+        });
         let carry_end = this.filterForm.value.age_end % 5;
-        this.filterForm.patchValue({ age_end: this.filterForm.value.age_end - carry_end });
+        this.filterForm.patchValue({
+          age_end: this.filterForm.value.age_end - carry_end,
+        });
       }
       filters.push({
-        name: "age",
+        name: 'age',
         min: this.filterForm.value.age_start,
-        max: this.filterForm.value.age_end
-      })
+        max: this.filterForm.value.age_end,
+      });
     }
 
-    if(job){
+    if (job) {
       filters.push({
-        name: "jobTitle",
-        desiredJobTitle: this.filterForm.value.job
-      })
+        name: 'jobTitle',
+        desiredJobTitle: this.filterForm.value.job,
+      });
     }
 
-    if(state){
+    if (state) {
       filters.push({
-        name: "state",
-        desiredState: this.mapService.mapFederalStateFtoB(this.filterForm.value.state)
-      })
+        name: 'state',
+        desiredState: this.mapService.mapFederalStateFtoB(
+          this.filterForm.value.state
+        ),
+      });
     }
 
-    if(education){
+    if (education) {
       filters.push({
-        name: "levelOfEducation",
-        desiredLevelOfEducation: this.mapService.mapEducationDegreeFtoB(this.filterForm.value.education)
-      })
+        name: 'levelOfEducation',
+        desiredLevelOfEducation: this.mapService.mapEducationDegreeFtoB(
+          this.filterForm.value.education
+        ),
+      });
     }
-    
-    if(filters.length < this.minimumFilterAmount) {
+
+    if (filters.length < this.minimumFilterAmount) {
       //Error: zu wenig Filter
-      throw new Error("zu wenig filter");
+      throw new Error('zu wenig filter');
     }
 
     return filters;
   }
 
   resetFilters(): void {
-    this.filterForm.reset( { job: '', education: '', state: ''});
+    this.filterForm.reset({ job: '', education: '', state: '' });
     this.filterForm.patchValue({ job: this.noSelectionText });
     this.filterForm.patchValue({ state: this.noSelectionText });
     this.filterForm.patchValue({ education: this.noSelectionText });

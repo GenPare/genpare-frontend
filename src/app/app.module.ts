@@ -40,7 +40,7 @@ export class App {
     SupportPageComponent,
     LoginSuccessComponent,
     NavBarComponent,
-    LoginButtonsComponent
+    LoginButtonsComponent,
   ],
   imports: [
     BrowserModule,
@@ -49,19 +49,19 @@ export class App {
     FormsModule,
     ReactiveFormsModule,
     AuthModule.forRoot({
-      ...env.auth
+      ...env.auth,
     }),
     MDBBootstrapModule.forRoot(),
     HttpClientModule,
     JwtModule.forRoot({
       config: {
         tokenGetter: tokenGetter,
-        allowedDomains: ['localhost:8080']
+        allowedDomains: ['localhost:8080'],
       },
     }),
     CommonModule,
   ],
-  providers: [DatePipe, HasEnteredDataGuard,IsLoggedIn],
-  bootstrap: [AppComponent]
+  providers: [DatePipe, HasEnteredDataGuard, IsLoggedIn],
+  bootstrap: [AppComponent],
 })
 export class AppModule {}
