@@ -2,5 +2,12 @@ services:
   frontend:
     container_name: genpare_frontend
     build: .
+    environment:
+      NG_APP_ENV: ${NG_APP_ENV}
+      NG_APP_DOMAIN: ${NG_APP_DOMAIN}
+      NG_APP_CLIENT_ID: ${NG_APP_CLIENT_ID}
+      NG_APP_AUDIENCE: ${NG_APP_AUDIENCE}
+      NG_APP_BACKEND_URL: ${NG_APP_BACKEND_URL}
+      NG_APP_REDIRECT_URI: ${NG_APP_REDIRECT_URI}
     ports:
       - 4200:4200
