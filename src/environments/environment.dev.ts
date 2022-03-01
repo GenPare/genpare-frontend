@@ -1,10 +1,11 @@
 export const environment = {
   production: false,
   auth: {
-    domain: 'dev-t9d7tc1e.eu.auth0.com',
-    clientId: 'OLtqeuEcVpFPKkLIRaKJ3ENrv3hUUlWY',
+    domain: process.env.NG_APP_DOMAIN,
+    clientId: process.env.NG_APP_CLIENT_ID,
     redirectUri: window.location.origin,
-    audience: 'genpare',
+    audience: process.env.NG_APP_AUDIENCE,
   },
-  backendURL: 'http://localhost:8080',
+  backendURL: 'localhost:8080',
+  protocol: 'http:'
 };
