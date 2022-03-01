@@ -5,7 +5,7 @@ import { catchError, map, switchMap, tap } from 'rxjs/operators';
 import { BehaviorSubject, Observable, of } from 'rxjs';
 import { DatePipe } from '@angular/common';
 import { MapService } from './map.service';
-import { environment as env } from 'environments/environment.dev';
+import { environment as env } from 'environments/environment';
 
 interface sessionIdResponse {
   sessionId: sessionIdType;

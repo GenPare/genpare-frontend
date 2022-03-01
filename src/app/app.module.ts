@@ -14,7 +14,7 @@ import { HasEnteredDataGuard } from './guards/has-entered-data';
 import { SupportPageComponent } from './components/support-page/support-page.component';
 import { HttpClientModule } from '@angular/common/http';
 import { AuthModule } from '@auth0/auth0-angular';
-import { environment as env } from 'environments/environment.dev';
+import { environment as env } from 'environments/environment';
 import { LoginSuccessComponent } from './components/login-success/login-success.component';
 import { NavBarComponent } from './components/nav-bar/nav-bar.component';
 

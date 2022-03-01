@@ -4,7 +4,7 @@ import { HttpClient } from '@angular/common/http';
 import { MapService } from './map.service';
 import { MemberService } from './member.service';
 import { map, switchMap, tap } from 'rxjs/operators';
-import { environment as env } from 'environments/environment.dev';
+import { environment as env } from 'environments/environment';
 
 export interface JobInfo {
   salary: number;
