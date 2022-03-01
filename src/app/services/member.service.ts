@@ -40,7 +40,6 @@ export class MemberService implements OnInit {
   ) {
     this.nickname$ = this.nicknameSubject$.asObservable();
     this.updateNickname(this.getSessionId());
-    console.log(env.protocol + env.backendURL)
   }
   ngOnInit(): void {}
 
