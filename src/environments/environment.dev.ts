@@ -6,5 +6,6 @@ export const environment = {
     redirectUri: window.location.origin,
     audience: process.env.NG_APP_AUDIENCE,
   },
-  backendURL: 'http:localhost:8080',
+  backendURL: 'localhost:8080',
+  protocol: 'http:'
 };
