@@ -1,12 +1,11 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable, OnInit } from '@angular/core';
 import { AuthService } from '@auth0/auth0-angular';
-import { backendURL } from 'app/app.module';
-import { catchError, delay, map, switchMap, tap } from 'rxjs/operators';
-import { Observable, of, Subject } from 'rxjs';
+import { catchError, map, switchMap, tap } from 'rxjs/operators';
+import { BehaviorSubject, Observable, of } from 'rxjs';
 import { DatePipe } from '@angular/common';
 import { MapService } from './map.service';
-import { Router } from '@angular/router';
+import { environment as env } from 'environments/environment';
 
 interface sessionIdResponse {
   sessionId: sessionIdType;
@@ -20,18 +19,28 @@ interface memberDataResponse {
   gender: string;
 }
 
+interface memberInfo {
+  birthdate: Date;
+  gender: string;
+}
+
 @Injectable({
   providedIn: 'root',
 })
 export class MemberService implements OnInit {
   pipe = new DatePipe('en-US');
+  defaultNickname = 'genparer';
+  private nicknameSubject$ = new BehaviorSubject<string>(this.defaultNickname);
+  public nickname$: Observable<string>;
 
   constructor(
     private http: HttpClient,
     private auth: AuthService,
-    private mapService: MapService,
-    private router: Router
-  ) {}
+    private mapService: MapService
+  ) {
+    this.nickname$ = this.nicknameSubject$.asObservable();
+    this.updateNickname(this.getSessionId());
+  }
   ngOnInit(): void {}
 
   getEmail(): Observable<string> {
@@ -40,59 +49,104 @@ export class MemberService implements OnInit {
     );
   }
 
-  setSessionId():void {
-    this.getEmail()
+  setSessionId(): Observable<Object> {
+    return this.getEmail()
       .pipe(
         switchMap((mail) =>
           this.http
-            .get<sessionIdResponse>(backendURL + '/members/session', {
+            .get<sessionIdResponse>(env.protocol + env.backendURL + '/members/session', {
               params: { email: mail },
             })
             .pipe(map((jsonResponse) => jsonResponse.sessionId))
         )
       )
-      .subscribe((id) => {
-        sessionStorage.setItem('sessionId', id);
-      });
+      .pipe(
+        tap((id) => {
+          sessionStorage.setItem('sessionId', id);
+          this.updateNickname(id);
+        })
+      );
   }
 
   getSessionId(): string | null {
-    return sessionStorage.getItem('sessionId');
+    const id = sessionStorage.getItem('sessionId');
+    return id;
   }
 
-  getNickname(): Observable<string> {
-    let sessionId = this.getSessionId();
-    return sessionId
-      ? this.http
-          .get<memberDataResponse>(backendURL + '/members', {
-            params: { sessionId },
+  private updateNickname(sessionId: string | null) {
+    if (sessionId) {
+      this.http
+        .get<memberDataResponse>(env.protocol + env.backendURL + '/members', {
+          params: { sessionId },
+        })
+        .pipe(map((memberData) => memberData.name))
+        .pipe(
+          catchError((err) => {
+            console.error(err);
+            return of(this.defaultNickname);
           })
-          .pipe(map((jsonResponse) => jsonResponse.name))
-          .pipe(catchError(() => of('No Nickname')))
-      : of('No Nickname');
+        )
+        .subscribe((nickname) => this.nicknameSubject$.next(nickname));
+    } else {
+      this.nicknameSubject$.next(this.defaultNickname);
+    }
   }
 
-  registerMember(name: string, birthdate: Date, gender: string) {
+  getMemberInfo(): Observable<memberInfo> {
+    let sessionId = this.getSessionId();
+    if (sessionId) {
+      return this.http
+        .get<memberDataResponse>(env.protocol + env.backendURL + '/members', {
+          params: { sessionId },
+        })
+        .pipe(
+          map((memberData) => ({
+            birthdate: memberData.birthdate,
+            gender: this.mapService.mapGenderBtoF(memberData.gender),
+          }))
+        );
+    } else {
+      return of();
+    }
+  }
+
+  registerMember(
+    name: string,
+    birthdate: Date,
+    gender: string
+  ): Observable<Object> {
     const formatDate = this.pipe.transform(birthdate, 'yyyy-MM-dd');
     gender = this.mapService.mapGenderFtoB(gender);
-    return this.getEmail().pipe(
-      switchMap((mail) => {
-        return this.http.post(backendURL + '/members', {
-          id: null,
-          email: mail,
-          name: name,
-          birthdate: formatDate,
-          gender: gender,
-        });
+    return this.getEmail()
+      .pipe(
+        switchMap((mail) => {
+          return this.http.post(env.protocol + env.backendURL + '/members', {
+            id: null,
+            email: mail,
+            name: name,
+            birthdate: formatDate,
+            gender: gender,
+          });
+        })
+      )
+      .pipe(switchMap(() => this.setSessionId()));
+  }
+
+  editNickname(newName: string): Observable<Object> {
+    let sessionId = this.getSessionId();
+    return this.http
+      .patch(env.protocol + env.backendURL + '/members', {
+        name: newName,
+        sessionId,
       })
-    );
+      .pipe(tap(() => this.updateNickname(sessionId)));
   }
 
   invalidateSessionId(): Observable<Object> {
     return this.getEmail()
       .pipe(
         switchMap((mail) =>
-          this.http.delete(backendURL + '/members/session', {
+          this.http.delete(env.protocol + env.backendURL + '/members/session', {
             params: {
               email: mail,
             },

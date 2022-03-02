@@ -1,12 +1,12 @@
-import { Component } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { AuthService } from '@auth0/auth0-angular';
 
 @Component({
-  selector: 'app-start-page',
-  templateUrl: './start-page.component.html',
-  styleUrls: ['./start-page.component.scss'],
+  selector: 'app-login-buttons',
+  templateUrl: './login-buttons.component.html',
+  styleUrls: ['./login-buttons.component.scss'],
 })
-export class StartPageComponent {
+export class LoginButtonsComponent {
   constructor(public auth: AuthService) {}
 
   loginWithRedirect() {

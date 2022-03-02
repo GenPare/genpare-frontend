@@ -1,15 +1,38 @@
-@import '../../shared/variables.scss';
+@import "../../shared/variables.scss";
 
 button {
-    color: $secondary-color;
-    background-color: $primary-color;
-    border-color: $primary-color;
+  color: $secondary-color;
+  background-color: $primary-color;
+  border-color: $primary-color;
 }
 
 th {
-    border-top: 0;
+  border-top: 0;
 }
 
 td {
-    width: 16,67%;
+  width: 16, 67%;
+}
+
+button:disabled {
+  color: #ffffff;
+  background-color: #6c757d;
+  border-color: #6c757d;
+}
+
+.no-selection-option {
+  background-color: #e9ecef;
+}
+
+.button-row {
+  display: flex;
+  flex-direction: row;
+}
+
+.button {
+  margin: 10px;
+}
+
+.red-text {
+  color: #dc3545;
 }
