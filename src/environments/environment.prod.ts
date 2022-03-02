@@ -7,5 +7,5 @@ export const environment = {
     audience: process.env.NG_APP_AUDIENCE,
   },
   backendURL: process.env.NG_APP_BACKEND_URL,
-  protocol: 'http://'
+  protocol: 'https://'
 };
