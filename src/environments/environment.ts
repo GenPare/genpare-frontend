@@ -11,7 +11,7 @@ export const environment = {
     audience: process.env.NG_APP_AUDIENCE,
   },
   backendURL: process.env.NG_APP_BACKEND_URL,
-  protocol: 'http:'
+  protocol: 'http://'
 };
 /*
  * For easier debugging in development mode, you can import the following file
