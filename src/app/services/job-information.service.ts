@@ -48,7 +48,7 @@ export class JobInformationService {
 
   getCompareData(req: CompRequestData): Observable<CompareData[]> {
     return this.http
-      .post<CompResponseData>(env.backendURL + '/salary', req)
+      .post<CompResponseData>(env.protocol + env.backendURL + '/salary', req)
       .pipe(map((res) => res.results[0].results))
       .pipe(tap((res) => console.log(res)))
       .pipe(
@@ -71,7 +71,7 @@ export class JobInformationService {
   newJobInformation(data: JobInfo): Observable<Object | never> {
     const sessionId = this.memberService.getSessionId();
     if (sessionId) {
-      return this.http.put(env.backendURL + '/salary/own', {
+      return this.http.put(env.protocol + env.backendURL + '/salary/own', {
         sessionId: sessionId,
         salary: data.salary,
         jobTitle: data.jobTitle,
@@ -89,7 +89,7 @@ export class JobInformationService {
     const sessionId = this.memberService.getSessionId();
     if (sessionId) {
       return this.http
-        .get<JobInfo>(env.backendURL + '/salary/own', {
+        .get<JobInfo>(env.protocol + env.backendURL + '/salary/own', {
           params: { sessionId: sessionId },
         })
         .pipe(
@@ -109,7 +109,7 @@ export class JobInformationService {
   modifyJobInformation(data: JobInfo): Observable<Object | never> {
     const sessionId = this.memberService.getSessionId();
     if (sessionId) {
-      return this.http.patch(env.backendURL + '/salary/own', {
+      return this.http.patch(env.protocol + env.backendURL + '/salary/own', {
         sessionId: sessionId,
         salary: data.salary,
         jobTitle: data.jobTitle,
@@ -124,6 +124,6 @@ export class JobInformationService {
   }
 
   getJobTitles(): Observable<string[]> {
-    return this.http.get<string[]>(env.backendURL + '/salary/info');
+    return this.http.get<string[]>(env.protocol + env.backendURL + '/salary/info');
   }
 }

@@ -54,7 +54,7 @@ export class MemberService implements OnInit {
       .pipe(
         switchMap((mail) =>
           this.http
-            .get<sessionIdResponse>(env.backendURL + '/members/session', {
+            .get<sessionIdResponse>(env.protocol + env.backendURL + '/members/session', {
               params: { email: mail },
             })
             .pipe(map((jsonResponse) => jsonResponse.sessionId))
@@ -76,7 +76,7 @@ export class MemberService implements OnInit {
   private updateNickname(sessionId: string | null) {
     if (sessionId) {
       this.http
-        .get<memberDataResponse>(env.backendURL + '/members', {
+        .get<memberDataResponse>(env.protocol + env.backendURL + '/members', {
           params: { sessionId },
         })
         .pipe(map((memberData) => memberData.name))
@@ -96,7 +96,7 @@ export class MemberService implements OnInit {
     let sessionId = this.getSessionId();
     if (sessionId) {
       return this.http
-        .get<memberDataResponse>(env.backendURL + '/members', {
+        .get<memberDataResponse>(env.protocol + env.backendURL + '/members', {
           params: { sessionId },
         })
         .pipe(
@@ -120,7 +120,7 @@ export class MemberService implements OnInit {
     return this.getEmail()
       .pipe(
         switchMap((mail) => {
-          return this.http.post(env.backendURL + '/members', {
+          return this.http.post(env.protocol + env.backendURL + '/members', {
             id: null,
             email: mail,
             name: name,
@@ -135,7 +135,7 @@ export class MemberService implements OnInit {
   editNickname(newName: string): Observable<Object> {
     let sessionId = this.getSessionId();
     return this.http
-      .patch(env.backendURL + '/members', {
+      .patch(env.protocol + env.backendURL + '/members', {
         name: newName,
         sessionId,
       })
@@ -146,7 +146,7 @@ export class MemberService implements OnInit {
     return this.getEmail()
       .pipe(
         switchMap((mail) =>
-          this.http.delete(env.backendURL + '/members/session', {
+          this.http.delete(env.protocol + env.backendURL + '/members/session', {
             params: {
               email: mail,
             },
