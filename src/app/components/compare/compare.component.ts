@@ -32,7 +32,7 @@ function minSmallerMax(
     const minControl = control.get(minControlName);
     const maxControl = control.get(maxControlName);
     if (minControl?.value && maxControl?.value) {
-      return minControl?.value < maxControl?.value
+      return minControl?.value > maxControl?.value
         ? {
             minSmallerMax: {
               minimumValue: minControl?.value,
@@ -54,7 +54,6 @@ function requireOneControl(): ValidatorFn {
         filledControls += 1;
       }
     }
-    console.log(filledControls);
     return filledControls === 0
       ? {
           requireOneControl: {
@@ -72,7 +71,7 @@ function requireOneControl(): ValidatorFn {
   styleUrls: ['./compare.component.scss'],
 })
 export class CompareComponent {
-  readonly salaryMinimum = 50;
+  readonly salaryMinimum = 0;
   readonly salaryMaximum = 1000000;
   readonly ageMinimum = 15;
   readonly ageMaximum = 100;
@@ -99,10 +98,10 @@ export class CompareComponent {
 
   filterForm = this.fb.group(
     {
-      salary_start: ['', [Validators.min(50), Validators.max(1000000)]],
-      salary_end: ['', [Validators.min(50), Validators.max(1000000)]],
-      age_start: ['', [Validators.min(15), Validators.max(100)]],
-      age_end: ['', [Validators.min(15), Validators.max(100)]],
+      salary_start: ['', [Validators.min(this.salaryMinimum), Validators.max(this.salaryMaximum)]],
+      salary_end: ['', [Validators.min(this.salaryMinimum), Validators.max(this.salaryMaximum)]],
+      age_start: ['', [Validators.min(this.ageMinimum), Validators.max(this.ageMaximum)]],
+      age_end: ['', [Validators.min(this.ageMinimum), Validators.max(this.ageMaximum)]],
       job: ['', []],
       state: ['', []],
       education: ['', []],
