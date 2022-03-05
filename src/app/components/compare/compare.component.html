@@ -35,7 +35,7 @@
               </div>
             </div>
             <small class="form-text text-muted" id="salary-start-small">
-              Das Gehalt muss mindestens {{salaryMinimum}}€ betragen.
+              Das Gehalt muss mindestens {{ salaryMinimum }}€ betragen.
             </small>
           </div>
           <div class="col-sm">
@@ -59,7 +59,7 @@
               </div>
             </div>
             <small class="form-text text-muted" id="salary-end-small">
-              Das Gehalt darf maximal 1.000.000€ betragen.
+              Das Gehalt darf maximal {{ salaryMaximum | number : '6.2-2' }}€ betragen.
             </small>
           </div>
           <label class="col-sm-1 col-form-label">Alter:</label>
@@ -78,7 +78,7 @@
               formControlName="age_start"
             />
             <small class="form-text text-muted" id="age-start-small">
-              Das Alter muss mindestens 15 betragen.
+              Das Alter muss mindestens {{ ageMinimum }} betragen.
             </small>
           </div>
           <div class="col-sm">
@@ -100,7 +100,7 @@
               class="form-text text-muted"
               id="age-end-small"
             >
-              Das Alter darf maximal 100 betragen.
+              Das Alter darf maximal {{ ageMaximum }} betragen.
             </small>
           </div>
         </div>
