@@ -49,21 +49,34 @@ export class MemberService implements OnInit {
     );
   }
 
-  setSessionId(): Observable<Object> {
+  setSessionId(): Observable<Object | undefined> {
     return this.getEmail()
       .pipe(
         switchMap((mail) =>
           this.http
-            .get<sessionIdResponse>(env.protocol + env.backendURL + '/members/session', {
-              params: { email: mail },
-            })
-            .pipe(map((jsonResponse) => jsonResponse.sessionId))
+            .get<sessionIdResponse>(
+              env.protocol + env.backendURL + '/members/session',
+              { params: { email: mail } }
+            )
+            .pipe(
+              catchError((err) => {
+                console.log(err);
+                return of(undefined);
+              })
+            )
+            .pipe(
+              map((jsonResponse) =>
+                jsonResponse ? jsonResponse.sessionId : undefined
+              )
+            )
         )
       )
       .pipe(
         tap((id) => {
-          sessionStorage.setItem('sessionId', id);
-          this.updateNickname(id);
+          if (id) {
+            sessionStorage.setItem('sessionId', id);
+            this.updateNickname(id);
+          }
         })
       );
   }
@@ -129,7 +142,12 @@ export class MemberService implements OnInit {
           });
         })
       )
-      .pipe(switchMap(() => this.setSessionId()));
+      .pipe(switchMap(() => this.setSessionId()))
+      .pipe(
+        map((sessionID) =>
+          sessionID ? sessionID : { error: 'Could not set SessionID' }
+        )
+      );
   }
 
   editNickname(newName: string): Observable<Object> {
