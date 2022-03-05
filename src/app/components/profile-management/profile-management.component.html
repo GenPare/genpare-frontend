@@ -228,7 +228,7 @@
               class="form-text text-muted"
               id="salary-small"
               *ngIf="!(formControls.salary.dirty && formControls.salary.errors)"
-              >Bitte geben Sie Ihr Monatsgehalt in Euro an.</small
+              >Bitte geben Sie Ihr Brutto-Monatsgehalt in Euro an.</small
             >
 
             <ng-container
@@ -236,12 +236,12 @@
             >
               <small *ngIf="formControls.salary.errors.min" class="red-text"
                 >Ihr Gehalt muss mindestens
-                {{ formControls.salary.errors.min.requiredMin }} € betragen
+                {{ formControls.salary.errors.min.min }} € betragen
                 .</small
               >
               <small *ngIf="formControls.salary.errors.max" class="red-text"
                 >Ihr Gehalt darf maxmimal
-                {{ formControls.salary.errors.max.requiredMax }} €
+                {{ formControls.salary.errors.max.max }} €
                 betragen.</small
               >
               <small
@@ -280,7 +280,7 @@
             <button
               type="submit"
               class="btn btn-success"
-              [disabled]="!(profileForm.valid && profileForm.dirty)"
+              [disabled]="!(profileForm.valid && formValuesChanged)"
             >
               {{ saveButtonText }}
             </button>
