@@ -58,25 +58,18 @@ export class MemberService implements OnInit {
               env.protocol + env.backendURL + '/members/session',
               { params: { email: mail } }
             )
-            .pipe(
-              catchError((err) => {
-                console.log(err);
-                return of(undefined);
-              })
-            )
-            .pipe(
-              map((jsonResponse) =>
-                jsonResponse ? jsonResponse.sessionId : undefined
-              )
-            )
+            .pipe(map((jsonResponse) => jsonResponse.sessionId))
         )
       )
       .pipe(
         tap((id) => {
-          if (id) {
             sessionStorage.setItem('sessionId', id);
             this.updateNickname(id);
-          }
+        })
+      )
+      .pipe(
+        catchError(() => {
+          return of(undefined);
         })
       );
   }
