@@ -1,6 +1,6 @@
 # GenPare: Frontend
 
-Welcome to the Frontend-Repository of [GenPare](genpare.de)! If you want to set up the Angular-Application locally, the following steps will help you.
+Welcome to the Frontend-Repository of [GenPare](https://genpare.de)! If you want to set up the Angular-Application locally, the following steps will help you.
 
 ## Option 1: Build the docker-image
 
