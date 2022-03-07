@@ -50,7 +50,7 @@ function requireOneControl(): ValidatorFn {
   return (formGroup: AbstractControl): ValidationErrors | null => {
     let filledControls: number = 0;
     for (const [key, value] of Object.entries(formGroup.value)) {
-      if (value !== '') {
+      if (value !== '' && value !== null) {
         filledControls += 1;
       }
     }

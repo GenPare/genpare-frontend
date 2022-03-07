@@ -15,6 +15,7 @@ import {
 import { JobInformationService } from 'app/services/job-information.service';
 import { MemberService } from 'app/services/member.service';
 import { ToastService } from 'app/services/toast.service';
+import * as _ from 'lodash';
 import { combineLatest, Observable, of, Subscription } from 'rxjs';
 import { switchMap } from 'rxjs/operators';
 
@@ -74,16 +75,24 @@ export class ProfileManagementComponent implements OnInit, OnDestroy {
     federal_state: ['', Validators.required],
     salary: [
       '',
-      [Validators.required, Validators.min(50), Validators.max(1000000)],
+      [Validators.required, Validators.min(0), Validators.max(1000000)],
     ],
     gender: ['', Validators.required],
     age: ['', [Validators.required, minAge(15), maxAge(99)]],
     nickname: [
       '',
-      [Validators.required, Validators.minLength(4), Validators.maxLength(25)],
+      [Validators.required, Validators.minLength(4), Validators.maxLength(20)],
     ],
   });
 
+  private uneditedValues?: {
+    federal_state: string;
+    salary: number;
+    education_degree: string;
+    job_title: string;
+  };
+
+  formValuesChanged = false;
   isRegistered: boolean;
   saveButtonText: SaveButtonText;
 
@@ -119,6 +128,17 @@ export class ProfileManagementComponent implements OnInit, OnDestroy {
       this.profileForm.get('gender')?.disable();
       this.fillForm();
     }
+    this.subscriptions.add(
+      combineLatest([
+        this.profileForm.valueChanges,
+        this.memberService.nickname$,
+      ]).subscribe(([formvalues, nickname]) => {
+        const copmareValues = { ...this.uneditedValues, nickname };
+        this.formValuesChanged = _.isEqual(copmareValues, formvalues)
+          ? false
+          : true;
+      })
+    );
   }
 
   ngOnDestroy(): void {
@@ -130,6 +150,12 @@ export class ProfileManagementComponent implements OnInit, OnDestroy {
     const salary$ = this.jobInformationService.getJobInformation();
     this.subscriptions.add(
       combineLatest([member$, salary$]).subscribe(([memberInfo, jobInfo]) => {
+        this.uneditedValues = {
+          federal_state: jobInfo.state,
+          salary: jobInfo.salary,
+          education_degree: jobInfo.levelOfEducation,
+          job_title: jobInfo.jobTitle,
+        };
         this.profileForm.patchValue({
           federal_state: jobInfo.state,
           salary: jobInfo.salary,
