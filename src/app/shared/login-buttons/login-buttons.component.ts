@@ -14,6 +14,9 @@ export class LoginButtonsComponent {
   }
 
   registerWithRedirect() {
-    this.auth.loginWithRedirect({ screen_hint: 'signup', target: '/success' });
+    this.auth.loginWithRedirect({
+      screen_hint: 'signup',
+      appState: { target: '/success' },
+    });
   }
 }
