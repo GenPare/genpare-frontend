@@ -1,21 +1,29 @@
 <h3>Profilverwaltung</h3>
-<form [formGroup]="profileForm" class="needs-validation" (ngSubmit)="save()">
-  <div class="card">
-    <div class="card-body">
-      <div class="card-text">
-        <p class="bottom-gap">
-          Bitte ermöglichen Sie allen anderen Nutzer*innen möglichst genaue
-          Resultate, indem Sie Ihre Daten wahrheitsgemäß angeben und diese
-          regelmäßig aktualisieren. Ihre Daten werden streng vertraulich
-          behandelt und anderen Nutzer*innen anonymisiert angezeigt. Bei Fragen
-          oder Bedenken wenden Sie sich bitte an
-          <a href="mailto:support@genpare.de">support@genpare.de</a>.
-        </p>
-        <div class="form-group row">
-          <div class="col-1">Email:</div>
-          <div class="col-5">{{ email$ | async }}</div>
-          <label class="col-sm-1 col-form-label" for="age">Alter:</label>
-          <div class="col-sm-5">
+<div class="card">
+  <div class="card-body">
+    <div class="card-text">
+      <p class="bottom-gap">
+        Bitte ermöglichen Sie allen anderen Nutzer*innen möglichst genaue
+        Resultate, indem Sie Ihre Daten wahrheitsgemäß angeben und diese
+        regelmäßig aktualisieren. Ihre Daten werden streng vertraulich behandelt
+        und anderen Nutzer*innen anonymisiert angezeigt. Bei Fragen oder
+        Bedenken wenden Sie sich bitte an
+        <a href="mailto:support@genpare.de">support@genpare.de</a>.
+      </p>
+      <form [formGroup]="profileForm" (ngSubmit)="save()">
+        <div class="form-row">
+          <div class="form-group col-md-6">
+            <label for="email">Email:</label>
+            <input
+              type="text"
+              [value]="email$ | async"
+              id="email"
+              class="form-control"
+              disabled
+            />
+          </div>
+          <div class="form-group col-md-6">
+            <label class="" for="age">Alter:</label>
             <input
               class="form-control"
               [ngClass]="{
@@ -59,10 +67,10 @@
             </ng-container>
           </div>
         </div>
-        <div class="form-group row">
-          <label class="col-1 col-form-label" for="nickname">Nickname:</label>
-          <div class="col-5">
-            <input
+        <div class="form-row">
+          <div class="form-group col-md-6">
+            <label class="" for="nickname">Nickname:</label>
+            <input  
               class="form-control"
               [ngClass]="{
                 'is-invalid':
@@ -107,10 +115,9 @@
               >
             </ng-container>
           </div>
-          <label class="col-sm-1 col-form-label" for="gender"
-            >Geschlecht:</label
-          >
-          <div class="col-sm-5">
+          <div class="form-group col-md-6">
+            <label class="" for="gender">Geschlecht:</label>
+
             <select
               class="form-control"
               id="gender"
@@ -131,9 +138,10 @@
             >
           </div>
         </div>
-        <div class="form-group row">
-          <label class="col-sm-1 col-form-label" for="job">Beruf:</label>
-          <div class="col-sm-5">
+        <div class="form-row">
+          <div class="form-group col-md-6">
+            <label class="" for="job">Beruf:</label>
+
             <input
               class="form-control"
               [ngClass]="{
@@ -176,10 +184,9 @@
               >
             </div>
           </div>
-          <label class="col-sm-1 col-form-label" for="education-degree"
-            >Bildungsgrad:</label
-          >
-          <div class="col-sm-5">
+          <div class="form-group col-md-6">
+            <label class="" for="education-degree">Bildungsgrad:</label>
+          
             <select
               class="form-control"
               id="education-degree"
@@ -201,92 +208,85 @@
             >
           </div>
         </div>
-        <div class="form-group row">
-          <label class="col-sm-1 col-form-label" for="salary">Gehalt:</label>
-          <div class="col-sm-5">
-            <div class="input-group">
-              <input
-                [ngClass]="{
-                  'is-invalid':
-                    formControls.salary.errors && formControls.salary.dirty
-                }"
-                class="form-control"
-                type="number"
-                min="0"
-                max="1000000"
-                id="salary"
-                aria-describedby="salary-small"
-                placeholder="z.B. 2000"
-                formControlName="salary"
-              />
-              <div class="input-group-postpend">
-                <div class="input-group-text">€</div>
+        <div class="form-row">
+          <div class="form-group col-md-6">
+            <label class="" for="salary">Gehalt:</label>
+              <div class="input-group">
+                <input
+                  [ngClass]="{
+                            'is-invalid':
+                              formControls.salary.errors && formControls.salary.dirty
+                          }"
+                  class="form-control"
+                  type="number"
+                  min="0"
+                  max="1000000"
+                  id="salary"
+                  aria-describedby="salary-small"
+                  placeholder="z.B. 2000"
+                  formControlName="salary"
+                />
+                <div class="input-group-postpend">
+                  <div class="input-group-text">€</div>
+                </div>
               </div>
-            </div>
-
-            <small
-              class="form-text text-muted"
-              id="salary-small"
-              *ngIf="!(formControls.salary.dirty && formControls.salary.errors)"
-              >Bitte geben Sie Ihr Brutto-Monatsgehalt in Euro an.</small
-            >
-
-            <ng-container
-              *ngIf="formControls.salary.dirty && formControls.salary.errors"
-            >
-              <small *ngIf="formControls.salary.errors.min" class="red-text"
-                >Ihr Gehalt muss mindestens
-                {{ formControls.salary.errors.min.min }} € betragen
-                .</small
-              >
-              <small *ngIf="formControls.salary.errors.max" class="red-text"
-                >Ihr Gehalt darf maxmimal
-                {{ formControls.salary.errors.max.max }} €
-                betragen.</small
-              >
+          
               <small
-                *ngIf="formControls.salary.errors.required"
-                class="red-text"
-                >Bitte geben Sie Ihr Monatsgehalt in Euro an.</small
+                class="form-text text-muted"
+                id="salary-small"
+                *ngIf="!(formControls.salary.dirty && formControls.salary.errors)"
+                >Bitte geben Sie Ihr Brutto-Monatsgehalt in Euro an.</small
               >
-            </ng-container>
-          </div>
-          <label class="col-sm-1 col-form-label" for="federal-state"
-            >Bundesland:</label
-          >
-          <div class="col-sm-5">
-            <select
-              class="form-control"
-              id="federal-state"
-              style="width: 100%"
-              aria-describedby="federal-state-small"
-              formControlName="federal_state"
-            >
-              <option class="disabled-option" disabled>
-                Bitte wählen Sie Ihr Bundesland
-              </option>
-              <ng-container *ngFor="let federal_state of federal_states">
-                <option [ngValue]="federal_state">{{ federal_state }}</option>
+          
+              <ng-container
+                *ngIf="formControls.salary.dirty && formControls.salary.errors"
+              >
+                <small *ngIf="formControls.salary.errors.min" class="red-text"
+                  >Ihr Gehalt muss mindestens {{ formControls.salary.errors.min.min }} €
+                  betragen .</small
+                >
+                <small *ngIf="formControls.salary.errors.max" class="red-text"
+                  >Ihr Gehalt darf maxmimal {{ formControls.salary.errors.max.max }} €
+                  betragen.</small
+                >
+                <small *ngIf="formControls.salary.errors.required" class="red-text"
+                  >Bitte geben Sie Ihr Monatsgehalt in Euro an.</small
+                >
               </ng-container>
-            </select>
-            <small class="form-text text-muted" id="federal-state-small"
-              >Bitte geben Sie Ihr Bundesland an.</small
-            >
-          </div>
+            </div>
+            <div class="form-group col-md-6">
+              <label class="" for="federal-state">Bundesland:</label>
+          
+                <select
+                  class="form-control"
+                  id="federal-state"
+                  style="width: 100%"
+                  aria-describedby="federal-state-small"
+                  formControlName="federal_state"
+                >
+                  <option class="disabled-option" disabled>
+                    Bitte wählen Sie Ihr Bundesland
+                  </option>
+                  <ng-container *ngFor="let federal_state of federal_states">
+                    <option [ngValue]="federal_state">{{ federal_state }}</option>
+                  </ng-container>
+                </select>
+                <small class="form-text text-muted" id="federal-state-small"
+                  >Bitte geben Sie Ihr Bundesland an.</small
+                >
+            </div>
         </div>
-        <div class="row">
-          <div class="col-sm-1"></div>
-          <div class="col-sm-5">
-            <button
-              type="submit"
-              class="btn btn-success"
-              [disabled]="!(profileForm.valid && formValuesChanged)"
-            >
-              {{ saveButtonText }}
-            </button>
-          </div>
+
+        <div class="form-row">
+          <button
+            type="submit"
+            class="btn btn-success"
+            [disabled]="!(profileForm.valid && formValuesChanged)"
+          >
+            {{ saveButtonText }}
+          </button>
         </div>
-      </div>
+      </form>
     </div>
   </div>
-</form>
+</div>
