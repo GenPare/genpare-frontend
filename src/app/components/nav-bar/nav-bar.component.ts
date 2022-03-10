@@ -11,9 +11,14 @@ import { catchError } from 'rxjs/operators';
 })
 export class NavBarComponent {
   nickname$: Observable<string>;
+  isCollapsed = true;  
 
   constructor(public auth: AuthService, private memberService: MemberService) {
     this.nickname$ = this.memberService.nickname$;
+  }
+
+  toggleCollapsed(): void {
+    this.isCollapsed = !this.isCollapsed;
   }
 
   logout() {

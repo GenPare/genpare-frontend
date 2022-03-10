@@ -2,14 +2,10 @@
 
 .navbar {
   background-color: $secondary-color;
-}
 
-.navbar-brand {
-  color: $primary-color;
-}
-
-.nav-item {
-  color: $primary-color;
+  a {
+    color: $primary-color;
+  }
 }
 
 button {
