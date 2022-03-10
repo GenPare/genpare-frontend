@@ -34,9 +34,22 @@
                 <div class="input-group-text">€</div>
               </div>
             </div>
-            <small class="form-text text-muted" id="salary-start-small">
-              Das Gehalt muss mindestens {{ salaryMinimum }}€ betragen.
-            </small>
+            <ng-container *ngIf="formControls.salary_start.errors">
+              <small
+                class="form-text red-text"
+                id="salary-start-small"
+                *ngIf="formControls.salary_start.errors.min"
+              >
+                Das Gehalt muss mindestens {{ salaryMinimum }}€ betragen.
+              </small>
+              <small
+                class="form-text red-text"
+                id="salary-start-small"
+                *ngIf="formControls.salary_start.errors.minSmallerMax"
+              >
+                Minimum ist größer als Maximum.
+              </small>
+            </ng-container>
           </div>
           <div class="col-sm">
             <div class="input-group">
@@ -58,9 +71,30 @@
                 <div class="input-group-text">€</div>
               </div>
             </div>
-            <small class="form-text text-muted" id="salary-end-small">
-              Das Gehalt darf maximal {{ salaryMaximum | number : '6.2-2' }}€ betragen.
-            </small>
+            <ng-container *ngIf="formControls.salary_end.errors">
+              <small
+                class="form-text red-text"
+                id="salary-start-small"
+                *ngIf="formControls.salary_end.errors.min"
+              >
+                Das Gehalt muss mindestens {{ salaryMinimum }}€ betragen.
+              </small>
+              <small
+                class="form-text red-text"
+                id="salary-end-small"
+                *ngIf="formControls.salary_end.errors.max"
+              >
+                Das Gehalt darf maximal {{ salaryMaximum | number: "6.2-2" }}€
+                betragen.
+              </small>
+              <small
+                class="form-text red-text"
+                id="salary-start-small"
+                *ngIf="formControls.salary_end.errors.minSmallerMax"
+              >
+                Maximum ist kleiner als Minimum.
+              </small>
+            </ng-container>
           </div>
           <label class="col-sm-1 col-form-label">Alter:</label>
           <div class="col-sm">
@@ -77,9 +111,30 @@
               aria-describedby="age-start-small"
               formControlName="age_start"
             />
-            <small class="form-text text-muted" id="age-start-small">
-              Das Alter muss mindestens {{ ageMinimum }} betragen.
-            </small>
+            <ng-container *ngIf="formControls.age_start.errors">
+              <small
+                *ngIf="formControls.age_start.errors.max"
+                class="form-text red-text"
+                id="age-end-small"
+              >
+                Das Alter darf maximal {{ ageMaximum }} betragen.
+              </small>
+              <small
+                *ngIf="formControls.age_start.errors.min"
+                class="form-text red-text"
+                id="age-end-small"
+              >
+                Das Alter muss mindestens {{ ageMinimum }} betragen.
+              </small>
+              <small
+                class="form-text red-text"
+                id="salary-start-small"
+                *ngIf="formControls.age_start.errors.minSmallerMax"
+              >
+                Minimum ist größer als Maximum.
+              </small>
+
+            </ng-container>
           </div>
           <div class="col-sm">
             <input
@@ -95,13 +150,30 @@
               aria-describedby="age-end-small"
               formControlName="age_end"
             />
-            <small
-              *ngIf="!formControls.age_end.errors"
-              class="form-text text-muted"
-              id="age-end-small"
-            >
-              Das Alter darf maximal {{ ageMaximum }} betragen.
-            </small>
+            <ng-container *ngIf="formControls.age_end.errors">
+              <small
+                *ngIf="formControls.age_end.errors.max"
+                class="form-text red-text"
+                id="age-end-small"
+              >
+                Das Alter darf maximal {{ ageMaximum }} betragen.
+              </small>
+              <small
+                *ngIf="formControls.age_end.errors.min"
+                class="form-text red-text"
+                id="age-end-small"
+              >
+                Das Alter muss mindestens {{ ageMinimum }} betragen.
+              </small>
+              <small
+                class="form-text red-text"
+                id="salary-start-small"
+                *ngIf="formControls.age_end.errors.minSmallerMax"
+              >
+                Maximum ist kleiner als Minimum.
+              </small>
+
+            </ng-container>
           </div>
         </div>
         <div class="form-group row">

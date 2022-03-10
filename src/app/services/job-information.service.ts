@@ -50,7 +50,6 @@ export class JobInformationService {
     return this.http
       .post<CompResponseData>(env.protocol + env.backendURL + '/salary', req)
       .pipe(map((res) => res.results[0].results))
-      .pipe(tap((res) => console.log(res)))
       .pipe(
         map((arr) =>
           arr.map((element) => ({
@@ -65,7 +64,6 @@ export class JobInformationService {
           }))
         )
       )
-      .pipe(tap((res) => console.log(res)));
   }
 
   newJobInformation(data: JobInfo): Observable<Object | never> {

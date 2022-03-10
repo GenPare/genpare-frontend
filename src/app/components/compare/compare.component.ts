@@ -32,17 +32,19 @@ function minSmallerMax(
     const minControl = control.get(minControlName);
     const maxControl = control.get(maxControlName);
     if (minControl?.value && maxControl?.value) {
-      return minControl?.value > maxControl?.value
-        ? {
-            minSmallerMax: {
-              minimumValue: minControl?.value,
-              maximumValue: maxControl?.value,
-            },
-          }
-        : null;
-    } else {
-      return null;
+      if (minControl.value > maxControl.value) {
+        const error = {
+          minSmallerMax: {
+            minimumValue: minControl?.value,
+            maximumValue: maxControl?.value,
+          },
+        };
+        control.get(minControlName)?.setErrors(error);
+        control.get(maxControlName)?.setErrors(error);
+        return error;
+      }
     }
+    return null;
   };
 }
 
@@ -74,7 +76,7 @@ export class CompareComponent {
   readonly salaryMinimum = 0;
   readonly salaryMaximum = 1000000;
   readonly ageMinimum = 15;
-  readonly ageMaximum = 100;
+  readonly ageMaximum = 99;
   private readonly minimumFilterAmount = 1;
   readonly noSelectionText = '- Bitte Auswählen -';
 
@@ -98,10 +100,28 @@ export class CompareComponent {
 
   filterForm = this.fb.group(
     {
-      salary_start: ['', [Validators.min(this.salaryMinimum), Validators.max(this.salaryMaximum)]],
-      salary_end: ['', [Validators.min(this.salaryMinimum), Validators.max(this.salaryMaximum)]],
-      age_start: ['', [Validators.min(this.ageMinimum), Validators.max(this.ageMaximum)]],
-      age_end: ['', [Validators.min(this.ageMinimum), Validators.max(this.ageMaximum)]],
+      salary_start: [
+        '',
+        [
+          Validators.min(this.salaryMinimum),
+          Validators.max(this.salaryMaximum),
+        ],
+      ],
+      salary_end: [
+        '',
+        [
+          Validators.min(this.salaryMinimum),
+          Validators.max(this.salaryMaximum),
+        ],
+      ],
+      age_start: [
+        '',
+        [Validators.min(this.ageMinimum), Validators.max(this.ageMaximum)],
+      ],
+      age_end: [
+        '',
+        [Validators.min(this.ageMinimum), Validators.max(this.ageMaximum)],
+      ],
       job: ['', []],
       state: ['', []],
       education: ['', []],
@@ -257,7 +277,7 @@ export class CompareComponent {
       //Error: zu wenig Filter
       throw new Error('zu wenig filter');
     }
-
+    console.log(filters)
     return filters;
   }
 
