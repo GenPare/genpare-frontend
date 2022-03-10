@@ -3,7 +3,7 @@ export const environment = {
   auth: {
     domain: process.env.NG_APP_DOMAIN,
     clientId: process.env.NG_APP_CLIENT_ID,
-    redirectUri: window.location.origin,
+    redirectUri: 'http://localhost:4200/success',
     audience: process.env.NG_APP_AUDIENCE,
   },
   backendURL: 'localhost:8080',
