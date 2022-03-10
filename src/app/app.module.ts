@@ -20,7 +20,6 @@ import { NavBarComponent } from './components/nav-bar/nav-bar.component';
 
 import { JwtModule } from '@auth0/angular-jwt';
 import { IsLoggedIn } from './guards/is-logged-in';
-import { LoginButtonsComponent } from './shared/login-buttons/login-buttons.component';
 
 export function tokenGetter() {
   return sessionStorage.getItem('access_token');
@@ -40,7 +39,6 @@ export class App {
     SupportPageComponent,
     LoginSuccessComponent,
     NavBarComponent,
-    LoginButtonsComponent,
   ],
   imports: [
     BrowserModule,
