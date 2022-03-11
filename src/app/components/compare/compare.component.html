@@ -219,7 +219,7 @@
         </div>
       </form>
       <div class="button-row">
-        <div class="button">
+
           <button
             type="button"
             class="btn btn-success"
@@ -228,7 +228,14 @@
           >
             Suchen
           </button>
-        </div>
+          <button
+            type="button"
+            class="btn btn-danger"
+            (click)="resetFilters()"
+            [disabled]="!filterForm.dirty"
+          >
+            Zurücksetzen
+          </button>
       </div>
     </div>
   </div>

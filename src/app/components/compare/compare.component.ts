@@ -302,8 +302,5 @@ export class CompareComponent implements OnDestroy {
 
   resetFilters(): void {
     this.filterForm.reset({ job: '', education: '', state: '' });
-    this.filterForm.patchValue({ job: this.noSelectionText });
-    this.filterForm.patchValue({ state: this.noSelectionText });
-    this.filterForm.patchValue({ education: this.noSelectionText });
   }
 }
