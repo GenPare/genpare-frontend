@@ -1,34 +1,39 @@
 @import "../../shared/variables.scss";
 
 .centered {
-  width: 50%;
-  position: absolute;
-  top: 50%;
-  left: 50%;
-  margin-right: -50%;
-  transform: translate(-50%, -50%);
-  display: flex;
-  flex-direction: column;
+  display:flex;
+  justify-content: center;
   align-items: center;
+  flex-direction: column;
+  margin-top: 5rem;
+
+  img {
+      width: 50%;
+      height: auto;
+      max-height: 60%;
+  }
 
   .button-container {
     padding: 1rem;
     width: 100%;
     display: flex;
     justify-content: center;
+
+  }
+  .button-container > * {
+    margin: 0 1rem;
   }
 
   .log-button {
     color: $primary-color;
     background-color: $secondary-color;
     border-color: $secondary-color;
-    margin: 0 3rem;
   }
   .sign-button {
     color: $secondary-color;
     background-color: $primary-color;
     border-color: $secondary-color;
-    margin: 0 3rem;
+
   }
 
   .title {
@@ -37,10 +42,4 @@
   .description {
     color: $secondary-color;
   }
-}
-
-svg {
-  width: 30rem;
-  height: auto;
-  border: 0px;
 }
