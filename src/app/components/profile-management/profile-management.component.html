@@ -1,8 +1,14 @@
-<h3>Profilverwaltung</h3>
+<h3>Profilverwaltung <i class="fa-solid fa-circle-info" [ngbTooltip]="tooltipText" fxHide fxShow.xs="true" fxShow.sm="true" #tt="ngbTooltip"></i></h3>
+<ng-template #tooltipText>Bitte ermöglichen Sie allen anderen Nutzer*innen möglichst genaue
+  Resultate, indem Sie Ihre Daten wahrheitsgemäß angeben und diese
+  regelmäßig aktualisieren. Ihre Daten werden streng vertraulich behandelt
+  und anderen Nutzer*innen anonymisiert angezeigt. Bei Fragen oder
+  Bedenken wenden Sie sich bitte an
+  <a href="mailto:support@genpare.de">support@genpare.de</a>.</ng-template>
 <div class="card">
   <div class="card-body">
-    <div class="card-text">
-      <p class="bottom-gap">
+    <div class="card-text" >
+      <p class="bottom-gap" fxShow.xs="false" fxShow.sm="false" fxShow="true">
         Bitte ermöglichen Sie allen anderen Nutzer*innen möglichst genaue
         Resultate, indem Sie Ihre Daten wahrheitsgemäß angeben und diese
         regelmäßig aktualisieren. Ihre Daten werden streng vertraulich behandelt
@@ -10,6 +16,7 @@
         Bedenken wenden Sie sich bitte an
         <a href="mailto:support@genpare.de">support@genpare.de</a>.
       </p>
+      </div>
       <form [formGroup]="profileForm" (ngSubmit)="save()">
         <div class="form-row">
           <div class="form-group col-md-6">
@@ -124,7 +131,7 @@
               style="width: 100%"
               aria-describedby="gender-small"
               formControlName="gender"
-              mdbTooltip="Um Sinnvoll die Gehälter vergleichen zu können, wurde auf weitere Geschlechter zur Auswahl verzichtet."
+              ngbTooltip="Um Sinnvoll die Gehälter vergleichen zu können, wurde auf weitere Geschlechter zur Auswahl verzichtet."
             >
               <option class="disabled-option" disabled>
                 Bitte wählen Sie Ihr Geschlecht
@@ -289,4 +296,3 @@
       </form>
     </div>
   </div>
-</div>

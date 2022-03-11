@@ -1,4 +1,4 @@
-import { Component, OnDestroy, OnInit } from '@angular/core';
+import { Component, OnDestroy, OnInit, ViewChild } from '@angular/core';
 import {
   AbstractControl,
   FormBuilder,
@@ -7,6 +7,7 @@ import {
   Validators,
 } from '@angular/forms';
 import { Router } from '@angular/router';
+import { NgbTooltip } from '@ng-bootstrap/ng-bootstrap';
 import {
   education_degrees_f,
   federal_states_f,
@@ -59,6 +60,9 @@ function maxAge(years: number): ValidatorFn {
   styleUrls: ['./profile-management.component.scss'],
 })
 export class ProfileManagementComponent implements OnInit, OnDestroy {
+  private tooltipVisible = false;
+  @ViewChild('tt', {static: false}) mytooltip?: NgbTooltip;
+  
   email$: Observable<string>;
   subscriptions = new Subscription();
 
@@ -166,6 +170,14 @@ export class ProfileManagementComponent implements OnInit, OnDestroy {
         });
       })
     );
+  }
+
+  toggleTooltip() {
+    if (this.tooltipVisible) {
+      this.mytooltip?.close()
+    } else {
+      this.mytooltip?.open()
+    }
   }
 
   save(): void {
