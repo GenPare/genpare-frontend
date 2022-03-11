@@ -1,11 +1,9 @@
-import { Component, OnInit } from '@angular/core';
-import { Observable, of } from 'rxjs';
+import { Component, OnDestroy } from '@angular/core';
+import { Observable, of, Subscription } from 'rxjs';
 import {
   JobInformationService,
   CompareData,
-  Range,
   CompRequestData,
-  CompResponseData,
 } from '../../services/job-information.service';
 import {
   education_degrees_f,
@@ -14,14 +12,11 @@ import {
 import {
   AbstractControl,
   FormBuilder,
-  FormControl,
-  FormGroup,
   ValidationErrors,
   ValidatorFn,
   Validators,
 } from '@angular/forms';
 import { MapService } from 'app/services/map.service';
-import { filter, map } from 'rxjs/operators';
 import { ToastService } from 'app/services/toast.service';
 
 function minSmallerMax(
@@ -35,12 +30,12 @@ function minSmallerMax(
       if (minControl.value > maxControl.value) {
         const error = {
           minSmallerMax: {
-            minimumValue: minControl?.value,
-            maximumValue: maxControl?.value,
+            minControl: minControlName,
+            minimumValue: minControl.value,
+            maxControl: maxControlName,
+            maximumValue: maxControl.value,
           },
         };
-        control.get(minControlName)?.setErrors(error);
-        control.get(maxControlName)?.setErrors(error);
         return error;
       }
     }
@@ -72,7 +67,7 @@ function requireOneControl(): ValidatorFn {
   templateUrl: './compare.component.html',
   styleUrls: ['./compare.component.scss'],
 })
-export class CompareComponent {
+export class CompareComponent implements OnDestroy {
   readonly salaryMinimum = 0;
   readonly salaryMaximum = 1000000;
   readonly ageMinimum = 15;
@@ -81,6 +76,8 @@ export class CompareComponent {
   readonly noSelectionText = '- Bitte Auswählen -';
 
   initialState: boolean;
+
+  formChangeSubscribtion: Subscription;
 
   jobTitles$: Observable<string[]>;
   responseData$: Observable<CompareData[]>;
@@ -132,6 +129,7 @@ export class CompareComponent {
         minSmallerMax('age_start', 'age_end'),
         requireOneControl(),
       ],
+      
     }
   );
 
@@ -151,6 +149,27 @@ export class CompareComponent {
     this.responseData$ = of([]);
     this.responseData = [];
     this.initialState = true;
+    this.formChangeSubscribtion = this.filterForm.valueChanges.subscribe(() => {
+
+      if (this.filterForm.errors?.minSmallerMax) {
+        if (this.filterForm.errors.minSmallerMax.minControl == "age_start") {
+          this.filterForm.controls.age_start.setErrors({minSmallerMax: "true"})
+          this.filterForm.controls.age_end.setErrors({minSmallerMax: "true"})
+        } else {
+          this.filterForm.controls.salary_start.setErrors({minSmallerMax: "true"})
+          this.filterForm.controls.salary_end.setErrors({minSmallerMax: "true"})
+        }
+      } else {
+        this.filterForm.controls.age_start.setErrors(null)
+        this.filterForm.controls.age_end.setErrors(null)
+        this.filterForm.controls.salary_start.setErrors(null)
+        this.filterForm.controls.salary_end.setErrors(null)
+        this.filterForm.updateValueAndValidity({emitEvent: false})
+      }
+    });
+  }
+  ngOnDestroy(): void {
+    this.formChangeSubscribtion.unsubscribe();
   }
 
   search(): void {
@@ -174,6 +193,7 @@ export class CompareComponent {
 
   getFilters(): any[] {
     let filters: any[] = [];
+
     let age_start = this.filterForm.value.age_start;
     let age_end = this.filterForm.value.age_end;
     let salary_start = this.filterForm.value.salary_start;
@@ -277,7 +297,6 @@ export class CompareComponent {
       //Error: zu wenig Filter
       throw new Error('zu wenig filter');
     }
-    console.log(filters)
     return filters;
   }
 
