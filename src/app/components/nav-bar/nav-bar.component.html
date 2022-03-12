@@ -1,5 +1,5 @@
 <nav class="navbar navbar-expand-sm" *ngIf="auth.isAuthenticated$ | async">
-  <a class="navbar-brand" routerLink="/compare">GenPare</a>
+  <a class="navbar-brand" routerLink="/compare" (click)="collapse()">GenPare</a>
 
   <button
     class="navbar-toggler collapsed"
@@ -21,12 +21,12 @@
   >
     <ul class="nav navbar-nav mr-auto">
       <li class="nav-item">
-        <a class="nav-link waves-light" mdbWavesEffect routerLink="/compare"
+        <a class="nav-link waves-light" mdbWavesEffect routerLink="/compare" (click)="collapse()"
           >Vergleich</a
         >
       </li>
       <li class="nav-item">
-        <a class="nav-link waves-light" mdbWavesEffect routerLink="/support"
+        <a class="nav-link waves-light" mdbWavesEffect routerLink="/support" (click)="collapse()"
           >Kontakt</a
         >
       </li>
@@ -34,7 +34,7 @@
 
     <ul class="navbar-nav ml-auto nav-flex-icons">
       <li class="nav-item">
-        <a class="nav-link" routerLink="/profile">
+        <a class="nav-link" routerLink="/profile" (click)="collapse()">
           <i class="fa-solid fa-user"></i> {{ nickname$ | async }}
         </a>
       </li>

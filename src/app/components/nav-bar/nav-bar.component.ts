@@ -20,6 +20,9 @@ export class NavBarComponent {
   toggleCollapsed(): void {
     this.isCollapsed = !this.isCollapsed;
   }
+  collapse(): void {
+    this.isCollapsed = true;
+  }
 
   logout() {
     this.memberService

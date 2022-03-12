@@ -26,6 +26,8 @@ export class LoginSuccessComponent implements OnInit {
         })
       )
       .pipe(switchMap(() => this.memberService.setSessionId()))
-      .subscribe(() => this.router.navigateByUrl('/profile'));
+      .subscribe(() => {
+        this.router.navigateByUrl('/compare');
+      });
   }
 }
