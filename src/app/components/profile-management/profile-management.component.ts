@@ -210,14 +210,16 @@ export class ProfileManagementComponent implements OnInit, OnDestroy {
           })
       );
     } else {
-      let editNickname$: Observable<Object> = of({});
+      let editNicknameAndGender$: Observable<Object> = of({});
       let modifyJob$: Observable<Object> = of({});
 
-      if (this.profileForm.get('nickname')?.dirty) {
-        editNickname$ = this.memberService.editNickname(
-          this.profileForm.value.nickname
+      if (this.profileForm.get('nickname')?.dirty || this.profileForm.get('gender')?.dirty) {
+        editNicknameAndGender$ = this.memberService.editNicknameAndGender(
+          this.profileForm.value.nickname,
+          this.profileForm.value.gender
         );
-        this.profileForm.get('nickname')?.markAsPristine();
+        this.profileForm.get('nickname')?.dirty
+        this.profileForm.get('gender')?.dirty
       }
 
       if (this.profileForm.dirty) {
@@ -229,7 +231,7 @@ export class ProfileManagementComponent implements OnInit, OnDestroy {
         });
       }
       this.subscriptions.add(
-        combineLatest([editNickname$, modifyJob$]).subscribe(() => {
+        combineLatest([editNicknameAndGender$, modifyJob$]).subscribe(() => {
           this.toastService.show('Daten aktualisiert!', {
             classname: 'bg-success text-light',
           });
