@@ -18,6 +18,27 @@ import {
 } from '@angular/forms';
 import { MapService } from 'app/services/map.service';
 import { ToastService } from 'app/services/toast.service';
+import * as _ from 'lodash';
+
+interface LooseObject {
+  [key: string]: any
+}
+
+function flattenObject(obj:any): Object {
+  let flattened:LooseObject = {}
+
+  Object.keys(obj).forEach((key) => {
+    let value = obj[key]
+
+    if (typeof value === 'object' && value !== null && !Array.isArray(value)) {
+      Object.assign(flattened, flattenObject(value))
+    } else {
+      flattened[key] = value;
+    }
+  })
+
+  return flattened
+}
 
 function minSmallerMax(
   minControlName: string,
@@ -30,9 +51,7 @@ function minSmallerMax(
       if (minControl.value > maxControl.value) {
         const error = {
           minSmallerMax: {
-            minControl: minControlName,
             minimumValue: minControl.value,
-            maxControl: maxControlName,
             maximumValue: maxControl.value,
           },
         };
@@ -46,11 +65,15 @@ function minSmallerMax(
 function requireOneControl(): ValidatorFn {
   return (formGroup: AbstractControl): ValidationErrors | null => {
     let filledControls: number = 0;
-    for (const [key, value] of Object.entries(formGroup.value)) {
+    const flattened = flattenObject(formGroup.value);
+    for (const [key, value] of Object.entries(flattened)) {
+      if (typeof value === 'object') {
+      }
       if (value !== '' && value !== null) {
         filledControls += 1;
       }
     }
+
     return filledControls === 0
       ? {
           requireOneControl: {
@@ -97,43 +120,58 @@ export class CompareComponent implements OnDestroy {
 
   filterForm = this.fb.group(
     {
-      salary_start: [
-        '',
-        [
-          Validators.min(this.salaryMinimum),
-          Validators.max(this.salaryMaximum),
-        ],
-      ],
-      salary_end: [
-        '',
-        [
-          Validators.min(this.salaryMinimum),
-          Validators.max(this.salaryMaximum),
-        ],
-      ],
-      age_start: [
-        '',
-        [Validators.min(this.ageMinimum), Validators.max(this.ageMaximum)],
-      ],
-      age_end: [
-        '',
-        [Validators.min(this.ageMinimum), Validators.max(this.ageMaximum)],
-      ],
+      salary: this.fb.group(
+        {
+          salary_start: [
+            '',
+            [
+              Validators.min(this.salaryMinimum),
+              Validators.max(this.salaryMaximum),
+            ],
+          ],
+          salary_end: [
+            '',
+            [
+              Validators.min(this.salaryMinimum),
+              Validators.max(this.salaryMaximum),
+            ],
+          ],
+        },
+        { validators: minSmallerMax('salary_start', 'salary_end') }
+      ),
+      age: this.fb.group(
+        {
+          age_start: [
+            '',
+            [Validators.min(this.ageMinimum), Validators.max(this.ageMaximum)],
+          ],
+          age_end: [
+            '',
+            [Validators.min(this.ageMinimum), Validators.max(this.ageMaximum)],
+          ],
+        },
+        { validators: minSmallerMax('age_start', 'age_end') }
+      ),
+
       job: ['', []],
       state: ['', []],
       education: ['', []],
     },
     {
-      validator: [
-        minSmallerMax('salary_start', 'salary_end'),
-        minSmallerMax('age_start', 'age_end'),
-        requireOneControl(),
-      ],
+      validators: requireOneControl(),
     }
   );
 
   get formControls(): { [key: string]: AbstractControl } {
     return this.filterForm.controls;
+  }
+
+  get ageControls(): AbstractControl | null {
+    return this.filterForm.get('age');
+  }
+
+  get salaryControls(): AbstractControl | null {
+    return this.filterForm.get('salary');
   }
 
   constructor(
@@ -148,36 +186,63 @@ export class CompareComponent implements OnDestroy {
     this.responseData$ = of([]);
     this.responseData = [];
     this.initialState = true;
-    this.formChangeSubscribtion = this.filterForm.valueChanges.subscribe(() => {
-      if (this.filterForm.errors?.minSmallerMax) {
-        if (this.filterForm.errors.minSmallerMax.minControl == 'age_start') {
-          this.filterForm.controls.age_start.setErrors({
-            minSmallerMax: 'true',
-          });
-          this.filterForm.controls.age_end.setErrors({ minSmallerMax: 'true' });
-        } else {
-          this.filterForm.controls.salary_start.setErrors({
-            minSmallerMax: 'true',
-          });
-          this.filterForm.controls.salary_end.setErrors({
-            minSmallerMax: 'true',
-          });
-        }
-      } else {
-        if (this.filterForm.controls.age_start.hasError('minSmallerMax') || this.filterForm.controls.age_end.hasError('minSmallerMax')){
-          this.filterForm.controls.age_start.setErrors(null);
-          this.filterForm.controls.age_end.setErrors(null);
-        } else if (this.filterForm.controls.salary_start.hasError('minSmallerMax') || this.filterForm.controls.salary_end.hasError('minSmallerMax')){
-          this.filterForm.controls.salary_start.setErrors(null);
-          this.filterForm.controls.salary_end.setErrors(null);          
-        }
-        this.filterForm.updateValueAndValidity({ emitEvent: false });
+    this.formChangeSubscribtion = this.filterForm.valueChanges.subscribe(
+      (values) => {
+        this.setControlErrorMinMax();
       }
-    });
+    );
   }
 
   ngOnDestroy(): void {
     this.formChangeSubscribtion.unsubscribe();
+  }
+
+  setControlErrorMinMax() {
+    if (this.ageControls?.errors?.minSmallerMax) {
+      this.ageControls.get('age_start')?.setErrors({
+        ...this.ageControls?.get('age_start')?.errors,
+        minSmallerMax: true,
+      });
+      this.ageControls.get('age_end')?.setErrors({
+        ...this.ageControls?.get('age_end')?.errors,
+        minSmallerMax: true,
+      });
+    } else if (this.salaryControls?.errors?.minSmallerMax) {
+      this.salaryControls.get('salary_start')?.setErrors({
+        ...this.salaryControls?.get('salary_start')?.errors,
+        minSmallerMax: true,
+      });
+      this.salaryControls.get('salary_end')?.setErrors({
+        ...this.salaryControls?.get('salary_end')?.errors,
+        minSmallerMax: true,
+      });
+    } else {
+      if (
+        this.ageControls?.get('age_start')?.hasError('minSmallerMax') ||
+        this.ageControls?.get('age_end')?.hasError('minSmallerMax')
+      ) {
+        delete this.ageControls?.get('age_start')?.errors?.minSmallerMax;
+        delete this.ageControls?.get('age_end')?.errors?.minSmallerMax;
+        this.ageControls
+          ?.get('age_start')
+          ?.updateValueAndValidity({ emitEvent: false});
+        this.ageControls
+          ?.get('age_end')
+          ?.updateValueAndValidity({ emitEvent: false});
+      } else if (
+        this.salaryControls?.get('salary_start')?.hasError('minSmallerMax') ||
+        this.salaryControls?.get('salary_end')?.hasError('minSmallerMax')
+      ) {
+        delete this.salaryControls?.get('salary_start')?.errors?.minSmallerMax;
+        delete this.salaryControls?.get('salary_end')?.errors?.minSmallerMax;
+        this.salaryControls
+          ?.get('salary_start')
+          ?.updateValueAndValidity({ emitEvent: false});
+        this.salaryControls
+          ?.get('salary_end')
+          ?.updateValueAndValidity({ emitEvent: false});
+      }
+    }
   }
 
   search(): void {
@@ -205,64 +270,66 @@ export class CompareComponent implements OnDestroy {
 
     let values = { ...this.filterForm.value };
     const salaryStep = 500;
-    if (values.salary_start || values.salary_end) {
-      if (values.salary_end && !values.salary_start) {
-        let carry = values.salary_end % salaryStep;
-        values.salary_end += carry !== 0 ? salaryStep - carry : 0;
-        values.salary_start = this.salaryMinimum;
-        this.filterForm.patchValue({ salary_end: values.salary_end });
-      } else if (values.salary_start && !values.salary_end) {
-        let carry = values.salary_start % salaryStep;
-        values.salary_start -= carry;
-        values.salary_end = this.salaryMaximum;
-        this.filterForm.patchValue({ salary_start: values.salary_start });
-      } else if (values.salary_end && values.salary_start) {
-        let carry_start = values.salary_start % salaryStep;
-        let carry_end = values.salary_end % salaryStep;
-        values.salary_start -= carry_start;
-        values.salary_end += carry_end !== 0 ? salaryStep - carry_end : 0;
-        this.filterForm.patchValue({
-          salary_end: values.salary_end,
-          salary_start: values.salary_start,
+    if (values.salary.salary_start || values.salary.salary_end) {
+      if (values.salary.salary_end && !values.salary.salary_start) {
+        let carry = values.salary.salary_end % salaryStep;
+        values.salary.salary_end += carry !== 0 ? salaryStep - carry : 0;
+        values.salary.salary_start = this.salaryMinimum;
+        this.salaryControls?.patchValue({ salary_end: values.salary.salary_end });
+      } else if (values.salary.salary_start && !values.salary.salary_end) {
+        let carry = values.salary.salary_start % salaryStep;
+        values.salary.salary_start -= carry;
+        values.salary.salary_end = this.salaryMaximum;
+        this.salaryControls?.patchValue({
+          salary_start: values.salary.salary_start,
+        });
+      } else if (values.salary.salary_end && values.salary.salary_start) {
+        let carry_start = values.salary.salary_start % salaryStep;
+        let carry_end = values.salary.salary_end % salaryStep;
+        values.salary.salary_start -= carry_start;
+        values.salary.salary_end +=
+          carry_end !== 0 ? salaryStep - carry_end : 0;
+        this.salaryControls?.patchValue({
+          salary_end: values.salary.salary_end,
+          salary_start: values.salary.salary_start,
         });
       }
       filters.push({
         name: 'salary',
-        min: values.salary_start,
-        max: values.salary_end,
+        min: values.salary.salary_start,
+        max: values.salary.salary_end,
       });
     }
     const ageStep = 5;
-    if (values.age_start || values.age_end) {
-      if (values.age_end && !values.age_start) {
-        let carry = values.age_end % ageStep;
-        
-        values.age_end += carry !== 0 ? ageStep - carry : 0;
-        values.age_start = this.ageMinimum;
-        this.filterForm.patchValue({
-          age_end: values.age_end,
+    if (values.age.age_start || values.age.age_end) {
+      if (values.age.age_end && !values.age.age_start) {
+        let carry = values.age.age_end % ageStep;
+        values.age.age_end += carry !== 0 ? ageStep - carry : 0;
+        values.age.age_start = this.ageMinimum;
+        this.ageControls?.patchValue({
+          age_end: values.age.age_end,
         });
-      } else if (values.age_start && !values.age_end) {
-        let carry = values.age_start % ageStep;
-        values.age_start -= carry;
-        values.age_end = this.ageMaximum;
-        this.filterForm.patchValue({
-          age_start: values.age_start,
+      } else if (values.age.age_start && !values.age.age_end) {
+        let carry = values.age.age_start % ageStep;
+        values.age.age_start -= carry;
+        values.age.age_end = this.ageMaximum;
+        this.ageControls?.patchValue({
+          age_start: values.age.age_start,
         });
-      } else if (values.age_start && values.age_end) {
-        let carry_start = values.age_start % ageStep;
-        let carry_end = values.age_end % ageStep;
-        values.age_start -= carry_start;
-        values.age_end += carry_end !== 0 ? ageStep - carry_end : 0;
-        this.filterForm.patchValue({
-          age_start: values.age_start,
-          age_end: values.age_end,
+      } else if (values.age.age_start && values.age.age_end) {
+        let carry_start = values.age.age_start % ageStep;
+        let carry_end = values.age.age_end % ageStep;
+        values.age.age_start -= carry_start;
+        values.age.age_end += carry_end !== 0 ? ageStep - carry_end : 0;
+        this.ageControls?.patchValue({
+          age_start: values.age.age_start,
+          age_end: values.age.age_end,
         });
       }
       filters.push({
         name: 'age',
-        min: values.age_start,
-        max: values.age_end,
+        min: values.age.age_start,
+        max: values.age.age_end,
       });
     }
 
@@ -288,11 +355,11 @@ export class CompareComponent implements OnDestroy {
         ),
       });
     }
-
     if (filters.length < this.minimumFilterAmount) {
       //Error: zu wenig Filter
       throw new Error('zu wenig filter');
     }
+    
     return filters;
   }
 

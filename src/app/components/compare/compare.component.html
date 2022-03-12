@@ -10,171 +10,175 @@
       </p>
       <form [formGroup]="filterForm" class="needs-validation">
         <div class="form-group row">
-          <label class="col-sm-1 col-form-label" for="salary"
-            >Monatsgehalt:</label
-          >
-          <div class="col-sm">
-            <div class="input-group">
+          <ng-container formGroupName="salary" *ngIf="salaryControls">
+            <label class="col-sm-1 col-form-label" for="salary"
+              >Monatsgehalt:</label
+            >
+            <div class="col-sm">
+              <div class="input-group">
+                <input
+                  class="form-control"
+                  [ngClass]="{
+                    'is-invalid': salaryControls.get('salary_start')?.errors
+                  }"
+                  type="number"
+                  id="salary"
+                  min="0"
+                  step="500"
+                  placeholder="Von"
+                  aria-describedby="salary-start-small"
+                  formControlName="salary_start"
+                />
+                <div class="input-group-postpend">
+                  <div class="input-group-text">€</div>
+                </div>
+              </div>
+              <ng-container
+                *ngIf="salaryControls.get('salary_start')?.errors as errors"
+              >
+                <small
+                  class="form-text red-text"
+                  id="salary-start-small"
+                  *ngIf="errors.min"
+                >
+                  Das Gehalt muss positiv sein.
+                </small>
+                <small
+                  class="form-text red-text"
+                  id="salary-start-small"
+                  *ngIf="errors.minSmallerMax"
+                >
+                  Minimum ist größer als Maximum.
+                </small>
+              </ng-container>
+            </div>
+            <div class="col-sm">
+              <div class="input-group">
+                <input
+                  class="form-control"
+                  [ngClass]="{
+                    'is-invalid': salaryControls.get('salary_end')?.errors
+                  }"
+                  type="number"
+                  placeholder="Bis"
+                  step="500"
+                  [min]="filterForm.value.salary_start"
+                  aria-describedby="salary-end-small"
+                  formControlName="salary_end"
+                />
+                <div class="input-group-postpend">
+                  <div class="input-group-text">€</div>
+                </div>
+              </div>
+              <ng-container
+                *ngIf="salaryControls.get('salary_end')?.errors as errors"
+              >
+                <small
+                  class="form-text red-text"
+                  id="salary-start-small"
+                  *ngIf="errors.min"
+                >
+                  Das Gehalt muss positiv sein.
+                </small>
+                <small
+                  class="form-text red-text"
+                  id="salary-end-small"
+                  *ngIf="errors.max"
+                >
+                  Das Gehalt darf maximal {{ salaryMaximum | number: "6.2-2" }}€
+                  betragen.
+                </small>
+                <small
+                  class="form-text red-text"
+                  id="salary-start-small"
+                  *ngIf="errors.minSmallerMax"
+                >
+                  Maximum ist kleiner als Minimum.
+                </small>
+              </ng-container>
+            </div>
+          </ng-container>
+          <ng-container formGroupName="age" *ngIf="ageControls">
+            <label class="col-sm-1 col-form-label">Alter:</label>
+            <div class="col-sm">
               <input
                 class="form-control"
                 [ngClass]="{
-                  'is-invalid':
-                    formControls.salary_start.errors &&
-                    formControls.salary_start.dirty
+                  'is-invalid': ageControls.get('age_start')?.errors
                 }"
                 type="number"
-                id="salary"
                 min="0"
-                step="500"
+                step="5"
                 placeholder="Von"
-                aria-describedby="salary-start-small"
-                formControlName="salary_start"
+                aria-describedby="age-start-small"
+                formControlName="age_start"
               />
-              <div class="input-group-postpend">
-                <div class="input-group-text">€</div>
-              </div>
+              <ng-container
+                *ngIf="ageControls.get('age_start')?.errors as errors"
+              >
+                <small
+                  *ngIf="errors.max"
+                  class="form-text red-text"
+                  id="age-end-small"
+                >
+                  Das Alter darf maximal {{ ageMaximum }} betragen.
+                </small>
+                <small
+                  *ngIf="errors.min"
+                  class="form-text red-text"
+                  id="age-end-small"
+                >
+                  Das Alter muss mindestens {{ ageMinimum }} betragen.
+                </small>
+                <small
+                  class="form-text red-text"
+                  id="salary-start-small"
+                  *ngIf="errors.minSmallerMax"
+                >
+                  Minimum ist größer als Maximum.
+                </small>
+              </ng-container>
             </div>
-            <ng-container *ngIf="formControls.salary_start.errors">
-              <small
-                class="form-text red-text"
-                id="salary-start-small"
-                *ngIf="formControls.salary_start.errors.min"
-              >
-                Das Gehalt muss mindestens {{ salaryMinimum }}€ betragen.
-              </small>
-              <small
-                class="form-text red-text"
-                id="salary-start-small"
-                *ngIf="formControls.salary_start.errors.minSmallerMax"
-              >
-                Minimum ist größer als Maximum.
-              </small>
-            </ng-container>
-          </div>
-          <div class="col-sm">
-            <div class="input-group">
+            <div class="col-sm">
               <input
                 class="form-control"
                 [ngClass]="{
-                  'is-invalid':
-                    formControls.salary_end.errors &&
-                    formControls.salary_end.dirty
+                  'is-invalid': ageControls.get('age_end')?.errors
                 }"
                 type="number"
                 placeholder="Bis"
-                step="500"
-                [min]="filterForm.value.salary_start"
-                aria-describedby="salary-end-small"
-                formControlName="salary_end"
+                step="5"
+                [min]="filterForm.value.age_start"
+                aria-describedby="age-end-small"
+                formControlName="age_end"
               />
-              <div class="input-group-postpend">
-                <div class="input-group-text">€</div>
-              </div>
+              <ng-container
+                *ngIf="ageControls.get('age_end')?.errors as errors"
+              >
+                <small
+                  *ngIf="errors.max"
+                  class="form-text red-text"
+                  id="age-end-small"
+                >
+                  Das Alter darf maximal {{ ageMaximum }} betragen.
+                </small>
+                <small
+                  *ngIf="errors.min"
+                  class="form-text red-text"
+                  id="age-end-small"
+                >
+                  Das Alter muss mindestens {{ ageMinimum }} betragen.
+                </small>
+                <small
+                  class="form-text red-text"
+                  id="salary-start-small"
+                  *ngIf="errors.minSmallerMax"
+                >
+                  Maximum ist kleiner als Minimum.
+                </small>
+              </ng-container>
             </div>
-            <ng-container *ngIf="formControls.salary_end.errors">
-              <small
-                class="form-text red-text"
-                id="salary-start-small"
-                *ngIf="formControls.salary_end.errors.min"
-              >
-                Das Gehalt muss mindestens {{ salaryMinimum }}€ betragen.
-              </small>
-              <small
-                class="form-text red-text"
-                id="salary-end-small"
-                *ngIf="formControls.salary_end.errors.max"
-              >
-                Das Gehalt darf maximal {{ salaryMaximum | number: "6.2-2" }}€
-                betragen.
-              </small>
-              <small
-                class="form-text red-text"
-                id="salary-start-small"
-                *ngIf="formControls.salary_end.errors.minSmallerMax"
-              >
-                Maximum ist kleiner als Minimum.
-              </small>
-            </ng-container>
-          </div>
-          <label class="col-sm-1 col-form-label">Alter:</label>
-          <div class="col-sm">
-            <input
-              class="form-control"
-              [ngClass]="{
-                'is-invalid':
-                  formControls.age_start.errors && formControls.age_start.dirty
-              }"
-              type="number"
-              min="0"
-              step="5"
-              placeholder="Von"
-              aria-describedby="age-start-small"
-              formControlName="age_start"
-            />
-            <ng-container *ngIf="formControls.age_start.errors">
-              <small
-                *ngIf="formControls.age_start.errors.max"
-                class="form-text red-text"
-                id="age-end-small"
-              >
-                Das Alter darf maximal {{ ageMaximum }} betragen.
-              </small>
-              <small
-                *ngIf="formControls.age_start.errors.min"
-                class="form-text red-text"
-                id="age-end-small"
-              >
-                Das Alter muss mindestens {{ ageMinimum }} betragen.
-              </small>
-              <small
-                class="form-text red-text"
-                id="salary-start-small"
-                *ngIf="formControls.age_start.errors.minSmallerMax"
-              >
-                Minimum ist größer als Maximum.
-              </small>
-
-            </ng-container>
-          </div>
-          <div class="col-sm">
-            <input
-              class="form-control"
-              [ngClass]="{
-                'is-invalid':
-                  formControls.age_end.errors && formControls.age_end.dirty
-              }"
-              type="number"
-              placeholder="Bis"
-              step="5"
-              [min]="filterForm.value.age_start"
-              aria-describedby="age-end-small"
-              formControlName="age_end"
-            />
-            <ng-container *ngIf="formControls.age_end.errors">
-              <small
-                *ngIf="formControls.age_end.errors.max"
-                class="form-text red-text"
-                id="age-end-small"
-              >
-                Das Alter darf maximal {{ ageMaximum }} betragen.
-              </small>
-              <small
-                *ngIf="formControls.age_end.errors.min"
-                class="form-text red-text"
-                id="age-end-small"
-              >
-                Das Alter muss mindestens {{ ageMinimum }} betragen.
-              </small>
-              <small
-                class="form-text red-text"
-                id="salary-start-small"
-                *ngIf="formControls.age_end.errors.minSmallerMax"
-              >
-                Maximum ist kleiner als Minimum.
-              </small>
-
-            </ng-container>
-          </div>
+          </ng-container>
         </div>
         <div class="form-group row">
           <label class="col-sm-1 col-form-label">Beruf:</label>
@@ -219,23 +223,22 @@
         </div>
       </form>
       <div class="button-row">
-
-          <button
-            type="button"
-            class="btn btn-success"
-            (click)="search()"
-            [disabled]="!(filterForm.valid && filterForm.dirty)"
-          >
-            Suchen
-          </button>
-          <button
-            type="button"
-            class="btn btn-danger"
-            (click)="resetFilters()"
-            [disabled]="!filterForm.dirty"
-          >
-            Zurücksetzen
-          </button>
+        <button
+          type="button"
+          class="btn btn-success search-button"
+          (click)="search()"
+          [disabled]="!(filterForm.valid && filterForm.dirty)"
+        >
+          Suchen
+        </button>
+        <button
+          type="button"
+          class="btn btn-danger reset-button"
+          (click)="resetFilters()"
+          [disabled]="filterForm.errors?.requireOneControl"
+        >
+          Zurücksetzen
+        </button>
       </div>
     </div>
   </div>

@@ -1,11 +1,5 @@
 @import "../../shared/variables.scss";
 
-button {
-  color: $secondary-color;
-  background-color: $primary-color;
-  border-color: $primary-color;
-}
-
 th {
   border-top: 0;
 }
@@ -29,11 +23,20 @@ button:disabled {
   flex-direction: row;
   justify-content: flex-start;
 
-  button {
+  .search-button {
+    color: $secondary-color;
+    background-color: $primary-color;
+    border-color: $primary-color;
+
     margin: 0 10px;
   }
-}
 
+  .reset-button {
+    color: $primary-color;
+    background-color: $secondary-color;
+    border-color: $secondary-color;
+  }
+}
 
 .red-text {
   color: #dc3545;
