@@ -20,6 +20,7 @@ import { NavBarComponent } from './components/nav-bar/nav-bar.component';
 
 import { JwtModule } from '@auth0/angular-jwt';
 import { IsLoggedIn } from './guards/is-logged-in';
+import { FlexLayoutModule } from '@angular/flex-layout';
 
 export function tokenGetter() {
   return sessionStorage.getItem('access_token');
@@ -58,6 +59,7 @@ export class App {
       },
     }),
     CommonModule,
+    FlexLayoutModule 
   ],
   providers: [DatePipe, HasEnteredDataGuard, IsLoggedIn],
   bootstrap: [AppComponent],

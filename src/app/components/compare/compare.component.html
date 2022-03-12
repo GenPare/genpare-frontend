@@ -9,105 +9,110 @@
         500er-Schritten und das Alter in 5er-Schritten angegeben.
       </p>
       <form [formGroup]="filterForm" class="needs-validation">
-        <div class="form-group row">
-          <label class="col-sm-1 col-form-label" for="salary"
-            >Monatsgehalt:</label
-          >
-          <div class="col-sm">
-            <div class="input-group">
+        <div class="row">
+          <div class="form-group col-md-6">
+            <label class="col-form-label" for="salary">Monatsgehalt:</label>
+            <div id="salary">
+              <div class="input-group">
+                <input
+                  class="form-control"
+                  [ngClass]="{
+                    'is-invalid':
+                      formControls.salary_start.errors &&
+                      formControls.salary_start.dirty
+                  }"
+                  type="number"
+                  min="0"
+                  step="500"
+                  placeholder="Von"
+                  aria-describedby="salary-start-small"
+                  formControlName="salary_start"
+                />
+                <div class="input-group-postpend">
+                  <div class="input-group-text">€</div>
+                </div>
+              </div>
+              <small class="form-text text-muted" id="salary-start-small">
+                Das Gehalt muss mindestens {{ salaryMinimum }}€ betragen.
+              </small>
+
+              <div class="input-group">
+                <input
+                  class="form-control"
+                  [ngClass]="{
+                    'is-invalid':
+                      formControls.salary_end.errors &&
+                      formControls.salary_end.dirty
+                  }"
+                  type="number"
+                  placeholder="Bis"
+                  step="500"
+                  [min]="filterForm.value.salary_start"
+                  aria-describedby="salary-end-small"
+                  formControlName="salary_end"
+                />
+                <div class="input-group-postpend">
+                  <div class="input-group-text">€</div>
+                </div>
+              </div>
+              <small class="form-text text-muted" id="salary-end-small">
+                Das Gehalt darf maximal {{ salaryMaximum | number: "6.2-2" }}€
+                betragen.
+              </small>
+            </div>
+          </div>
+          <div class="form-group col-md-6">
+            <label class="col-form-label" for="age">Alter:</label>
+            <div id="age">
               <input
                 class="form-control"
                 [ngClass]="{
                   'is-invalid':
-                    formControls.salary_start.errors &&
-                    formControls.salary_start.dirty
+                    formControls.age_start.errors &&
+                    formControls.age_start.dirty
                 }"
                 type="number"
-                id="salary"
                 min="0"
-                step="500"
+                step="5"
                 placeholder="Von"
-                aria-describedby="salary-start-small"
-                formControlName="salary_start"
+                aria-describedby="age-start-small"
+                formControlName="age_start"
               />
-              <div class="input-group-postpend">
-                <div class="input-group-text">€</div>
-              </div>
-            </div>
-            <small class="form-text text-muted" id="salary-start-small">
-              Das Gehalt muss mindestens {{ salaryMinimum }}€ betragen.
-            </small>
-          </div>
-          <div class="col-sm">
-            <div class="input-group">
+              <small class="form-text text-muted" id="age-start-small">
+                Das Alter muss mindestens {{ ageMinimum }} betragen.
+              </small>
               <input
                 class="form-control"
                 [ngClass]="{
                   'is-invalid':
-                    formControls.salary_end.errors &&
-                    formControls.salary_end.dirty
+                    formControls.age_end.errors && formControls.age_end.dirty
                 }"
                 type="number"
                 placeholder="Bis"
-                step="500"
-                [min]="filterForm.value.salary_start"
-                aria-describedby="salary-end-small"
-                formControlName="salary_end"
+                step="5"
+                [min]="filterForm.value.age_start"
+                aria-describedby="age-end-small"
+                formControlName="age_end"
               />
-              <div class="input-group-postpend">
-                <div class="input-group-text">€</div>
-              </div>
+              <small
+                *ngIf="!formControls.age_end.errors"
+                class="form-text text-muted"
+                id="age-end-small"
+              >
+                Das Alter darf maximal {{ ageMaximum }} betragen.
+              </small>
             </div>
-            <small class="form-text text-muted" id="salary-end-small">
-              Das Gehalt darf maximal {{ salaryMaximum | number : '6.2-2' }}€ betragen.
-            </small>
-          </div>
-          <label class="col-sm-1 col-form-label">Alter:</label>
-          <div class="col-sm">
-            <input
-              class="form-control"
-              [ngClass]="{
-                'is-invalid':
-                  formControls.age_start.errors && formControls.age_start.dirty
-              }"
-              type="number"
-              min="0"
-              step="5"
-              placeholder="Von"
-              aria-describedby="age-start-small"
-              formControlName="age_start"
-            />
-            <small class="form-text text-muted" id="age-start-small">
-              Das Alter muss mindestens {{ ageMinimum }} betragen.
-            </small>
-          </div>
-          <div class="col-sm">
-            <input
-              class="form-control"
-              [ngClass]="{
-                'is-invalid':
-                  formControls.age_end.errors && formControls.age_end.dirty
-              }"
-              type="number"
-              placeholder="Bis"
-              step="5"
-              [min]="filterForm.value.age_start"
-              aria-describedby="age-end-small"
-              formControlName="age_end"
-            />
-            <small
-              *ngIf="!formControls.age_end.errors"
-              class="form-text text-muted"
-              id="age-end-small"
-            >
-              Das Alter darf maximal {{ ageMaximum }} betragen.
-            </small>
           </div>
         </div>
-        <div class="form-group row">
-          <label class="col-sm-1 col-form-label">Beruf:</label>
-          <div class="col-sm-3">
-            <select class="form-control" type="select" formControlName="job">
+        <div class="row">
+          <div class="form-group col-md-4">
+            <label for="job">Beruf:</label>
+            <select
+              class="form-control"
+              type="select"
+              formControlName="job"
+              id="job"
+            >
               <option value="" class="no-selection-option">
                 {{ noSelectionText }}
               </option>
@@ -118,9 +123,16 @@
               </ng-container>
             </select>
           </div>
-          <label class="col-sm-1 col-form-label">Bundesland:</label>
-          <div class="col-sm-3">
-            <select class="form-control" type="select" formControlName="state">
+
+          <div class="form-group col-md-4">
+            <label for="state">Bundesland:</label>
+
+            <select
+              class="form-control"
+              type="select"
+              formControlName="state"
+              id="state"
+            >
               <option value="" class="no-selection-option">
                 {{ noSelectionText }}
               </option>
@@ -129,9 +141,12 @@
               </ng-container>
             </select>
           </div>
-          <label class="col-sm-1 col-form-label">Bildungsgrad:</label>
-          <div class="col-sm-3">
+
+          <div class="form-group col-md-4">
+            <label for="education">Bildungsgrad:</label>
+
             <select
+              id="education"
               class="form-control"
               type="select"
               formControlName="education"
@@ -165,7 +180,7 @@
 <div class="card">
   <div class="card-body">
     <h5 class="card-title">Ergebnisse</h5>
-    <div class="card-text">
+    <div class="card-text table-responsive">
       <p *ngIf="initialState">
         Hier werden die Ergebnisse nach einer erfolgreichen Suche angezeigt.
       </p>

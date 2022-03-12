@@ -1,27 +1,5 @@
 @import "./shared/variables.scss";
 
-.navbar {
-  background-color: $secondary-color;
-}
-
-.navbar-brand {
-  color: $primary-color;
-}
-
-.nav-item {
-  color: $primary-color;
-}
-
-.toast-container {
-  margin-top: 4rem;
-}
-
-button {
-  color: $secondary-color;
-  background-color: $primary-color;
-  border-color: $primary-color;
-}
-
 .toast-container {
   margin-top: 4rem;
 }
