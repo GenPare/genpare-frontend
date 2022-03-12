@@ -71,7 +71,7 @@ export class CompareComponent implements OnDestroy {
   readonly salaryMinimum = 0;
   readonly salaryMaximum = 1000000;
   readonly ageMinimum = 15;
-  readonly ageMaximum = 99;
+  readonly ageMaximum = 100;
   private readonly minimumFilterAmount = 1;
   readonly noSelectionText = '- Bitte Auswählen -';
 
@@ -129,7 +129,6 @@ export class CompareComponent implements OnDestroy {
         minSmallerMax('age_start', 'age_end'),
         requireOneControl(),
       ],
-      
     }
   );
 
@@ -150,24 +149,33 @@ export class CompareComponent implements OnDestroy {
     this.responseData = [];
     this.initialState = true;
     this.formChangeSubscribtion = this.filterForm.valueChanges.subscribe(() => {
-
       if (this.filterForm.errors?.minSmallerMax) {
-        if (this.filterForm.errors.minSmallerMax.minControl == "age_start") {
-          this.filterForm.controls.age_start.setErrors({minSmallerMax: "true"})
-          this.filterForm.controls.age_end.setErrors({minSmallerMax: "true"})
+        if (this.filterForm.errors.minSmallerMax.minControl == 'age_start') {
+          this.filterForm.controls.age_start.setErrors({
+            minSmallerMax: 'true',
+          });
+          this.filterForm.controls.age_end.setErrors({ minSmallerMax: 'true' });
         } else {
-          this.filterForm.controls.salary_start.setErrors({minSmallerMax: "true"})
-          this.filterForm.controls.salary_end.setErrors({minSmallerMax: "true"})
+          this.filterForm.controls.salary_start.setErrors({
+            minSmallerMax: 'true',
+          });
+          this.filterForm.controls.salary_end.setErrors({
+            minSmallerMax: 'true',
+          });
         }
       } else {
-        this.filterForm.controls.age_start.setErrors(null)
-        this.filterForm.controls.age_end.setErrors(null)
-        this.filterForm.controls.salary_start.setErrors(null)
-        this.filterForm.controls.salary_end.setErrors(null)
-        this.filterForm.updateValueAndValidity({emitEvent: false})
+        if (this.filterForm.controls.age_start.hasError('minSmallerMax') || this.filterForm.controls.age_end.hasError('minSmallerMax')){
+          this.filterForm.controls.age_start.setErrors(null);
+          this.filterForm.controls.age_end.setErrors(null);
+        } else if (this.filterForm.controls.salary_start.hasError('minSmallerMax') || this.filterForm.controls.salary_end.hasError('minSmallerMax')){
+          this.filterForm.controls.salary_start.setErrors(null);
+          this.filterForm.controls.salary_end.setErrors(null);          
+        }
+        this.filterForm.updateValueAndValidity({ emitEvent: false });
       }
     });
   }
+
   ngOnDestroy(): void {
     this.formChangeSubscribtion.unsubscribe();
   }
@@ -192,103 +200,91 @@ export class CompareComponent implements OnDestroy {
   }
 
   getFilters(): any[] {
+    // TODO in funktionen auslagern
     let filters: any[] = [];
 
-    let age_start = this.filterForm.value.age_start;
-    let age_end = this.filterForm.value.age_end;
-    let salary_start = this.filterForm.value.salary_start;
-    let salary_end = this.filterForm.value.salary_end;
-    let job =
-      this.filterForm.value.job &&
-      this.filterForm.value.job !== this.noSelectionText;
-    let state =
-      this.filterForm.value.state &&
-      this.filterForm.value.state !== this.noSelectionText;
-    let education =
-      this.filterForm.value.education &&
-      this.filterForm.value.education !== this.noSelectionText;
-
-    if (salary_start || salary_end) {
-      if (salary_end && !salary_start) {
-        let carry = this.filterForm.value.salary_end % 500;
+    let values = { ...this.filterForm.value };
+    const salaryStep = 500;
+    if (values.salary_start || values.salary_end) {
+      if (values.salary_end && !values.salary_start) {
+        let carry = values.salary_end % salaryStep;
+        values.salary_end += carry !== 0 ? salaryStep - carry : 0;
+        values.salary_start = this.salaryMinimum;
+        this.filterForm.patchValue({ salary_end: values.salary_end });
+      } else if (values.salary_start && !values.salary_end) {
+        let carry = values.salary_start % salaryStep;
+        values.salary_start -= carry;
+        values.salary_end = this.salaryMaximum;
+        this.filterForm.patchValue({ salary_start: values.salary_start });
+      } else if (values.salary_end && values.salary_start) {
+        let carry_start = values.salary_start % salaryStep;
+        let carry_end = values.salary_end % salaryStep;
+        values.salary_start -= carry_start;
+        values.salary_end += carry_end !== 0 ? salaryStep - carry_end : 0;
         this.filterForm.patchValue({
-          salary_end: this.filterForm.value.salary_end - carry,
-        });
-        this.filterForm.patchValue({ salary_start: this.salaryMinimum });
-      } else if (salary_start && !salary_end) {
-        let carry = this.filterForm.value.salary_start % 500;
-        this.filterForm.patchValue({
-          salary_start: this.filterForm.value.salary_start - carry,
-        });
-        this.filterForm.patchValue({ salary_end: this.salaryMaximum });
-      } else if (salary_end && salary_start) {
-        let carry_start = this.filterForm.value.salary_start % 500;
-        this.filterForm.patchValue({
-          salary_start: this.filterForm.value.salary_start - carry_start,
-        });
-        let carry_end = this.filterForm.value.salary_end % 500;
-        this.filterForm.patchValue({
-          salary_end: this.filterForm.value.salary_end - carry_end,
+          salary_end: values.salary_end,
+          salary_start: values.salary_start,
         });
       }
       filters.push({
         name: 'salary',
-        min: this.filterForm.value.salary_start,
-        max: this.filterForm.value.salary_end,
+        min: values.salary_start,
+        max: values.salary_end,
       });
     }
-
-    if (age_start || age_end) {
-      if (age_end && !age_start) {
-        let carry = this.filterForm.value.age_end % 5;
+    const ageStep = 5;
+    if (values.age_start || values.age_end) {
+      if (values.age_end && !values.age_start) {
+        let carry = values.age_end % ageStep;
+        
+        values.age_end += carry !== 0 ? ageStep - carry : 0;
+        values.age_start = this.ageMinimum;
         this.filterForm.patchValue({
-          age_end: this.filterForm.value.age_end - carry,
+          age_end: values.age_end,
         });
-        this.filterForm.patchValue({ age_start: this.ageMinimum });
-      } else if (age_start && !age_end) {
-        let carry = this.filterForm.value.age_start % 5;
+      } else if (values.age_start && !values.age_end) {
+        let carry = values.age_start % ageStep;
+        values.age_start -= carry;
+        values.age_end = this.ageMaximum;
         this.filterForm.patchValue({
-          age_start: this.filterForm.value.age_start - carry,
+          age_start: values.age_start,
         });
-        this.filterForm.patchValue({ age_end: this.ageMaximum });
-      } else if (age_start && age_end) {
-        let carry_start = this.filterForm.value.age_start % 5;
+      } else if (values.age_start && values.age_end) {
+        let carry_start = values.age_start % ageStep;
+        let carry_end = values.age_end % ageStep;
+        values.age_start -= carry_start;
+        values.age_end += carry_end !== 0 ? ageStep - carry_end : 0;
         this.filterForm.patchValue({
-          age_start: this.filterForm.value.age_start - carry_start,
-        });
-        let carry_end = this.filterForm.value.age_end % 5;
-        this.filterForm.patchValue({
-          age_end: this.filterForm.value.age_end - carry_end,
+          age_start: values.age_start,
+          age_end: values.age_end,
         });
       }
       filters.push({
         name: 'age',
-        min: this.filterForm.value.age_start,
-        max: this.filterForm.value.age_end,
+        min: values.age_start,
+        max: values.age_end,
       });
     }
 
-    if (job) {
+    if (values.job) {
       filters.push({
         name: 'jobTitle',
-        desiredJobTitle: this.filterForm.value.job,
+        desiredJobTitle: values.job,
       });
     }
 
-    if (state) {
+    if (values.state) {
       filters.push({
         name: 'state',
-        desiredState: this.mapService.mapFederalStateFtoB(
-          this.filterForm.value.state
-        ),
+        desiredState: this.mapService.mapFederalStateFtoB(values.state),
       });
     }
 
-    if (education) {
+    if (values.education) {
       filters.push({
         name: 'levelOfEducation',
         desiredLevelOfEducation: this.mapService.mapEducationDegreeFtoB(
-          this.filterForm.value.education
+          values.education
         ),
       });
     }
