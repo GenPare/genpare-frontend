@@ -129,7 +129,6 @@ export class ProfileManagementComponent implements OnInit, OnDestroy {
         })
       );
       this.profileForm.get('age')?.disable();
-      this.profileForm.get('gender')?.disable();
       this.fillForm();
     }
     this.subscriptions.add(
@@ -218,8 +217,8 @@ export class ProfileManagementComponent implements OnInit, OnDestroy {
           this.profileForm.value.nickname,
           this.profileForm.value.gender
         );
-        this.profileForm.get('nickname')?.dirty
-        this.profileForm.get('gender')?.dirty
+        this.profileForm.get('nickname')?.dirty;
+        this.profileForm.get('gender')?.dirty;
       }
 
       if (this.profileForm.dirty) {
