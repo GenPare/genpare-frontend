@@ -1,4 +1,4 @@
-import { Component, OnDestroy, OnInit } from '@angular/core';
+import { Component, OnDestroy, OnInit, ViewChild } from '@angular/core';
 import {
   AbstractControl,
   FormBuilder,
@@ -7,6 +7,7 @@ import {
   Validators,
 } from '@angular/forms';
 import { Router } from '@angular/router';
+import { NgbTooltip } from '@ng-bootstrap/ng-bootstrap';
 import {
   education_degrees_f,
   federal_states_f,
@@ -59,6 +60,9 @@ function maxAge(years: number): ValidatorFn {
   styleUrls: ['./profile-management.component.scss'],
 })
 export class ProfileManagementComponent implements OnInit, OnDestroy {
+  private tooltipVisible = false;
+  @ViewChild('tt', {static: false}) mytooltip?: NgbTooltip;
+  
   email$: Observable<string>;
   subscriptions = new Subscription();
 
@@ -125,7 +129,6 @@ export class ProfileManagementComponent implements OnInit, OnDestroy {
         })
       );
       this.profileForm.get('age')?.disable();
-      this.profileForm.get('gender')?.disable();
       this.fillForm();
     }
     this.subscriptions.add(
@@ -168,6 +171,14 @@ export class ProfileManagementComponent implements OnInit, OnDestroy {
     );
   }
 
+  toggleTooltip() {
+    if (this.tooltipVisible) {
+      this.mytooltip?.close()
+    } else {
+      this.mytooltip?.open()
+    }
+  }
+
   save(): void {
     //TODO in Methoden auslagern
     if (!this.isRegistered) {
@@ -198,14 +209,16 @@ export class ProfileManagementComponent implements OnInit, OnDestroy {
           })
       );
     } else {
-      let editNickname$: Observable<Object> = of({});
+      let editNicknameAndGender$: Observable<Object> = of({});
       let modifyJob$: Observable<Object> = of({});
 
-      if (this.profileForm.get('nickname')?.dirty) {
-        editNickname$ = this.memberService.editNickname(
-          this.profileForm.value.nickname
+      if (this.profileForm.get('nickname')?.dirty || this.profileForm.get('gender')?.dirty) {
+        editNicknameAndGender$ = this.memberService.editNicknameAndGender(
+          this.profileForm.value.nickname,
+          this.profileForm.value.gender
         );
-        this.profileForm.get('nickname')?.markAsPristine();
+        this.profileForm.get('nickname')?.dirty;
+        this.profileForm.get('gender')?.dirty;
       }
 
       if (this.profileForm.dirty) {
@@ -217,7 +230,7 @@ export class ProfileManagementComponent implements OnInit, OnDestroy {
         });
       }
       this.subscriptions.add(
-        combineLatest([editNickname$, modifyJob$]).subscribe(() => {
+        combineLatest([editNicknameAndGender$, modifyJob$]).subscribe(() => {
           this.toastService.show('Daten aktualisiert!', {
             classname: 'bg-success text-light',
           });

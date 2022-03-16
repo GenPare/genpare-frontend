@@ -143,11 +143,12 @@ export class MemberService implements OnInit {
       );
   }
 
-  editNickname(newName: string): Observable<Object> {
+  editNicknameAndGender(newName: string, newGender: string): Observable<Object> {
     let sessionId = this.getSessionId();
     return this.http
       .patch(env.protocol + env.backendURL + '/members', {
         name: newName,
+        gender: this.mapService.mapGenderFtoB(newGender),
         sessionId,
       })
       .pipe(tap(() => this.updateNickname(sessionId)));

@@ -63,7 +63,7 @@ export class JobInformationService {
             ),
           }))
         )
-      )
+      );
   }
 
   newJobInformation(data: JobInfo): Observable<Object | never> {

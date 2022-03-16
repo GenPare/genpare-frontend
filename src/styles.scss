@@ -1,6 +1,12 @@
 @import "~bootstrap/scss/bootstrap";
 @import "app/shared/variables.scss";
 
+@mixin md {
+  @media (min-width: 768px) {
+      @content;
+  }
+}
+
 body {
   font-family: Arial, Helvetica, sans-serif;
   background-color: $primary-color;
@@ -20,7 +26,13 @@ h3 {
 }
 
 .card {
-  margin-left: $padding-big;
-  margin-right: $padding-big;
-  margin-bottom: $padding-big;
+  margin-left: $padding-small;
+  margin-right: $padding-small;
+  margin-bottom: $padding-small;
+
+  @include md {
+    margin-left: $padding-big;
+    margin-right: $padding-big;
+    margin-bottom: $padding-big;
+  }
 }
