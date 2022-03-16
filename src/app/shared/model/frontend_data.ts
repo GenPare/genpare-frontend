@@ -36,4 +36,8 @@ export const education_degrees_f: string[] = [
   'Mittlerer Dienst',
   'Gehobener Dienst',
   'Höherer Dienst',
+  'Berufsausbildung',
+  'Approbation',
+  '1. Staatsexamen',
+  '2. Staatsexamen',
 ];
