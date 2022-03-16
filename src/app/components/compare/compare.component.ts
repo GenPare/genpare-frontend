@@ -1,5 +1,5 @@
-import { Component, OnDestroy } from '@angular/core';
-import { Observable, of, Subscription } from 'rxjs';
+import { Component } from '@angular/core';
+import { Observable, of } from 'rxjs';
 import {
   JobInformationService,
   CompareData,
@@ -21,23 +21,23 @@ import { ToastService } from 'app/services/toast.service';
 import * as _ from 'lodash';
 
 interface LooseObject {
-  [key: string]: any
+  [key: string]: any;
 }
 
-function flattenObject(obj:any): Object {
-  let flattened:LooseObject = {}
+function flattenObject(obj: any): Object {
+  let flattened: LooseObject = {};
 
   Object.keys(obj).forEach((key) => {
-    let value = obj[key]
+    let value = obj[key];
 
     if (typeof value === 'object' && value !== null && !Array.isArray(value)) {
-      Object.assign(flattened, flattenObject(value))
+      Object.assign(flattened, flattenObject(value));
     } else {
       flattened[key] = value;
     }
-  })
+  });
 
-  return flattened
+  return flattened;
 }
 
 function minSmallerMax(
@@ -90,7 +90,7 @@ function requireOneControl(): ValidatorFn {
   templateUrl: './compare.component.html',
   styleUrls: ['./compare.component.scss'],
 })
-export class CompareComponent implements OnDestroy {
+export class CompareComponent {
   readonly salaryMinimum = 0;
   readonly salaryMaximum = 1000000;
   readonly ageMinimum = 15;
@@ -99,8 +99,6 @@ export class CompareComponent implements OnDestroy {
   readonly noSelectionText = '- Bitte Auswählen -';
 
   initialState: boolean;
-
-  formChangeSubscribtion: Subscription;
 
   jobTitles$: Observable<string[]>;
   responseData$: Observable<CompareData[]>;
@@ -186,64 +184,9 @@ export class CompareComponent implements OnDestroy {
     this.responseData$ = of([]);
     this.responseData = [];
     this.initialState = true;
-    this.formChangeSubscribtion = this.filterForm.valueChanges.subscribe(
-      (values) => {
-        this.setControlErrorMinMax();
-      }
-    );
+
   }
 
-  ngOnDestroy(): void {
-    this.formChangeSubscribtion.unsubscribe();
-  }
-
-  setControlErrorMinMax() {
-    if (this.ageControls?.errors?.minSmallerMax) {
-      this.ageControls.get('age_start')?.setErrors({
-        ...this.ageControls?.get('age_start')?.errors,
-        minSmallerMax: true,
-      });
-      this.ageControls.get('age_end')?.setErrors({
-        ...this.ageControls?.get('age_end')?.errors,
-        minSmallerMax: true,
-      });
-    } else if (this.salaryControls?.errors?.minSmallerMax) {
-      this.salaryControls.get('salary_start')?.setErrors({
-        ...this.salaryControls?.get('salary_start')?.errors,
-        minSmallerMax: true,
-      });
-      this.salaryControls.get('salary_end')?.setErrors({
-        ...this.salaryControls?.get('salary_end')?.errors,
-        minSmallerMax: true,
-      });
-    } else {
-      if (
-        this.ageControls?.get('age_start')?.hasError('minSmallerMax') ||
-        this.ageControls?.get('age_end')?.hasError('minSmallerMax')
-      ) {
-        delete this.ageControls?.get('age_start')?.errors?.minSmallerMax;
-        delete this.ageControls?.get('age_end')?.errors?.minSmallerMax;
-        this.ageControls
-          ?.get('age_start')
-          ?.updateValueAndValidity({ emitEvent: false});
-        this.ageControls
-          ?.get('age_end')
-          ?.updateValueAndValidity({ emitEvent: false});
-      } else if (
-        this.salaryControls?.get('salary_start')?.hasError('minSmallerMax') ||
-        this.salaryControls?.get('salary_end')?.hasError('minSmallerMax')
-      ) {
-        delete this.salaryControls?.get('salary_start')?.errors?.minSmallerMax;
-        delete this.salaryControls?.get('salary_end')?.errors?.minSmallerMax;
-        this.salaryControls
-          ?.get('salary_start')
-          ?.updateValueAndValidity({ emitEvent: false});
-        this.salaryControls
-          ?.get('salary_end')
-          ?.updateValueAndValidity({ emitEvent: false});
-      }
-    }
-  }
 
   search(): void {
     if (this.filterForm.valid) {
@@ -275,7 +218,9 @@ export class CompareComponent implements OnDestroy {
         let carry = values.salary.salary_end % salaryStep;
         values.salary.salary_end += carry !== 0 ? salaryStep - carry : 0;
         values.salary.salary_start = this.salaryMinimum;
-        this.salaryControls?.patchValue({ salary_end: values.salary.salary_end });
+        this.salaryControls?.patchValue({
+          salary_end: values.salary.salary_end,
+        });
       } else if (values.salary.salary_start && !values.salary.salary_end) {
         let carry = values.salary.salary_start % salaryStep;
         values.salary.salary_start -= carry;
@@ -359,7 +304,6 @@ export class CompareComponent implements OnDestroy {
       //Error: zu wenig Filter
       throw new Error('zu wenig filter');
     }
-    
     return filters;
   }
 

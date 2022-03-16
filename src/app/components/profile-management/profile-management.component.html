@@ -253,7 +253,7 @@
                   betragen .</small
                 >
                 <small *ngIf="formControls.salary.errors.max" class="red-text"
-                  >Ihr Gehalt darf maxmimal {{ formControls.salary.errors.max.max }} €
+                  >Ihr Gehalt darf maxmimal {{ formControls.salary.errors.max.max | number: "6.2-2"}} €
                   betragen.</small
                 >
                 <small *ngIf="formControls.salary.errors.required" class="red-text"

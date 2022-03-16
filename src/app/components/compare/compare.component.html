@@ -18,7 +18,9 @@
                   <input
                     class="form-control"
                     [ngClass]="{
-                      'is-invalid': salaryControls.get('salary_start')?.errors
+                      'is-invalid':
+                        salaryControls.get('salary_start')?.errors ||
+                        salaryControls.errors?.minSmallerMax
                     }"
                     type="number"
                     min="0"
@@ -36,12 +38,14 @@
                   <input
                     class="form-control"
                     [ngClass]="{
-                      'is-invalid': salaryControls.get('salary_end')?.errors
+                      'is-invalid':
+                        salaryControls.get('salary_end')?.errors ||
+                        salaryControls.errors?.minSmallerMax
                     }"
                     type="number"
                     placeholder="Bis"
+                    min="0"
                     step="500"
-                    [min]="filterForm.value.salary.salary_start"
                     aria-describedby="salary-end-small"
                     formControlName="salary_end"
                   />
@@ -61,14 +65,7 @@
                     id="salary-start-small"
                     *ngIf="errors.min"
                   >
-                    Das Gehalt muss positiv sein.
-                  </small>
-                  <small
-                    class="form-text red-text"
-                    id="salary-start-small"
-                    *ngIf="errors.minSmallerMax"
-                  >
-                    Minimum ist größer als Maximum.
+                    Das Gehalt darf nicht negativ sein.
                   </small>
                   <small
                     class="form-text red-text"
@@ -77,6 +74,15 @@
                   >
                     Das Gehalt darf maximal
                     {{ salaryMaximum | number: "6.2-2" }}€ betragen.
+                  </small>
+                </ng-container>
+                <ng-container *ngIf="salaryControls.errors as errors">
+                  <small
+                    class="form-text red-text"
+                    id="salary-start-small"
+                    *ngIf="errors.minSmallerMax"
+                  >
+                    Minimum ist größer als Maximum.
                   </small>
                 </ng-container>
               </div>
@@ -89,10 +95,11 @@
                 <input
                   class="form-control"
                   [ngClass]="{
-                    'is-invalid': ageControls.get('age_start')?.errors
+                    'is-invalid':
+                      ageControls.get('age_start')?.errors ||
+                      ageControls.errors?.minSmallerMax
                   }"
                   type="number"
-                  min="0"
                   step="5"
                   placeholder="Von"
                   aria-describedby="age-start-small"
@@ -102,17 +109,21 @@
                 <input
                   class="form-control"
                   [ngClass]="{
-                    'is-invalid': ageControls.get('age_end')?.errors
+                    'is-invalid':
+                      ageControls.get('age_end')?.errors ||
+                      ageControls.errors?.minSmallerMax
                   }"
                   type="number"
                   placeholder="Bis"
                   step="5"
-                  [min]="filterForm.value.age.age_start"
                   aria-describedby="age-end-small"
                   formControlName="age_end"
                 />
                 <ng-container
-                  *ngIf="ageControls.get('age_start')?.errors || ageControls.get('age_end')?.errors as errors"
+                  *ngIf="
+                    ageControls.get('age_start')?.errors ||
+                    ageControls.get('age_end')?.errors as errors
+                  "
                 >
                   <small
                     *ngIf="errors.max"
@@ -128,6 +139,8 @@
                   >
                     Das Alter muss mindestens {{ ageMinimum }} betragen.
                   </small>
+                </ng-container>
+                <ng-container *ngIf="ageControls.errors as errors">
                   <small
                     class="form-text red-text"
                     id="age_start-small"
