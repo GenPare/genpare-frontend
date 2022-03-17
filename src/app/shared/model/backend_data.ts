@@ -36,4 +36,8 @@ export const education_degrees_b: string[] = [
   'MITTLERER_DIENST',
   'GEHOBENER_DIENST',
   'HOEHERER_DIENST',
+  'BERUFSAUSBILDUNG',
+  'APPROBATION',
+  'STAATSEXAMEN_1',
+  'STAATSEXAMEN_2',
 ];
