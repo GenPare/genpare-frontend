@@ -28,7 +28,6 @@ NG_APP_REDIRECT_URI=
 NG_APP_BACKEND_URL=
 ```
 
-
 ### Starting
 
 To run the frontend in a container use `docker-compose up`.
@@ -46,8 +45,8 @@ As an alternative to docker you can use the following instruction to install the
 
 When Angular is installed, clone the repository, open up a command line and head into the root directory (main-folder). To install all required dependencies, run the command `npm install`.
 
-### Starting
+You also have to set environment variables similar to the docker implementation. See Option 1 (Build a docker-image): "Installing" for more information.
 
-First, you need to set a few environmental variables for Authentification. 
+### Starting
 
 To start the frontend, stay in the root-directory of the repository and run `npm start`. The Angular CLI will compile and build the Application. Open up a new tab in your browser and naviagte to `localhost:4200`.
