@@ -1,6 +1,6 @@
 # GenPare: Frontend
 
-Welcome to the Frontend-Repository of [GenPare](https://genpare.de)! If you want to set up the Angular-Application locally, the following steps will help you.
+Welcome to the Frontend-Repository of GenPare! If you want to set up the Angular-Application in development configuration locally, the following steps will help you.
 
 ## Option 1: Build a docker-image
 
@@ -11,7 +11,7 @@ Welcome to the Frontend-Repository of [GenPare](https://genpare.de)! If you want
 
 ### Installing
 
-The Frontend can be started as a docker-container. If you already have a frontend image present, you need to remove it, or changes won't be applied. To check if you have an image present use `docker ps`.
+The frontend development configuration can be started as a docker-container. If you already have a frontend image present, you need to remove it, or changes won't be applied. To check if you have an image present use `docker ps`.
 
 ### Starting
 
