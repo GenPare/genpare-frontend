@@ -48,6 +48,6 @@ When Angular is installed, clone the repository, open up a command line and head
 
 ### Starting
 
-First, you need to set a few environmental variables for Authentification. 
+First, you need to set a few environmental variables for Authentification.
 
 To start the frontend, stay in the root-directory of the repository and run `npm start`. The Angular CLI will compile and build the Application. Open up a new tab in your browser and naviagte to `localhost:4200`.
