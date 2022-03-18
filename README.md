@@ -32,6 +32,8 @@ NG_APP_BACKEND_URL=
 
 To run the frontend in a container use `docker-compose up`.
 
+IMPORTANT: It might happen, that you will get an 401 Unauthorized error after logging in, which results in the problem, that you cannot save your profile data. To try to solve this problem, you can synchronize the timezone of your operating system and restart the backend and frontend.
+
 ## Option 2: Install Angular
 
 ### Prerequisites
@@ -50,3 +52,5 @@ You also have to set environment variables similar to the docker implementation.
 ### Starting
 
 To start the frontend, stay in the root-directory of the repository and run `npm start`. The Angular CLI will compile and build the Application. Open up a new tab in your browser and naviagte to `localhost:4200`.
+
+IMPORTANT: It might happen, that you will get an 401 Unauthorized error after logging in, which results in the problem, that you cannot save your profile data. To try to solve this problem, you can synchronize the timezone of your operating system and restart the backend and frontend.
