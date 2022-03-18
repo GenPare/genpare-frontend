@@ -21,21 +21,21 @@ button:disabled {
 .button-row {
   display: flex;
   flex-direction: row;
-  justify-content: flex-start;
+  justify-content: flex-start;  
+}
 
-  .search-button {
-    color: $secondary-color;
-    background-color: $primary-color;
-    border-color: $primary-color;
+.search-button {
+  color: $secondary-color;
+  background-color: $primary-color;
+  border-color: $primary-color;
 
-    margin: 0 10px;
-  }
+  margin: 0 10px;
+}
 
-  .reset-button {
-    color: $primary-color;
-    background-color: $secondary-color;
-    border-color: $secondary-color;
-  }
+.reset-button {
+  color: $primary-color;
+  background-color: $secondary-color;
+  border-color: $secondary-color;
 }
 
 .red-text {
