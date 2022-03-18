@@ -2,7 +2,7 @@
 
 Welcome to the Frontend-Repository of [GenPare](https://genpare.de)! If you want to set up the Angular-Application locally, the following steps will help you.
 
-## Option 1: Build the docker-image
+## Option 1: Build a docker-image
 
 ### Prerequisites
 
@@ -32,4 +32,10 @@ When Angular is installed, clone the repository, open up a command line and head
 
 ### Starting
 
-To start the frontend, stay in the root-directory of the repository and run `ng serve --open`. The Angular CLI will compile and build the Application and open it in a new tab in your browser.
+First, you need to set a few environmental variables. Run the following commands in the root directory, one after another (for windows):
+
+set NG_APP_DOMAIN=dev-t9d7tc1e.eu.auth0.com  
+set NG_APP_CLIENT_ID=OLtqeuEcVpFPKkLIRaKJ3ENrv3hUUlWY  
+set NG_APP_AUDIENCE=genpare  
+
+To start the frontend, stay in the root-directory of the repository and run `npm start`. The Angular CLI will compile and build the Application. Open up a new tab in your browser and naviagte to `localhost:4200`.
