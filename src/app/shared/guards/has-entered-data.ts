@@ -13,7 +13,7 @@ export class HasEnteredDataGuard implements CanActivate {
     private router: Router
   ) {}
 
-  canActivate(): boolean | UrlTree{
+  canActivate(): boolean | UrlTree {
     if (this.memberService.getSessionId()) {
       return true;
     } else {

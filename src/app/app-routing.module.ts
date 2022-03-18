@@ -6,8 +6,8 @@ import { StartPageComponent } from './components/start-page/start-page.component
 import { SupportPageComponent } from './components/support-page/support-page.component';
 import { ProfileManagementComponent } from './components/profile-management/profile-management.component';
 import { LoginSuccessComponent } from '@comp/login-success/login-success.component';
-import { HasEnteredDataGuard } from './guards/has-entered-data';
-import { IsLoggedIn } from './guards/is-logged-in';
+import { HasEnteredDataGuard } from './shared/guards/has-entered-data';
+import { IsLoggedIn } from './shared/guards/is-logged-in';
 
 const routes: Routes = [
   {

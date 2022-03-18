@@ -11,7 +11,7 @@ import { catchError } from 'rxjs/operators';
 })
 export class NavBarComponent {
   nickname$: Observable<string>;
-  isCollapsed = true;  
+  isCollapsed = true;
 
   constructor(public auth: AuthService, private memberService: MemberService) {
     this.nickname$ = this.memberService.nickname$;
@@ -26,7 +26,8 @@ export class NavBarComponent {
 
   logout() {
     this.memberService
-      .invalidateSessionId().pipe(catchError((err) => of(undefined)))
+      .invalidateSessionId()
+      .pipe(catchError((err) => of(undefined)))
       .subscribe(() => this.auth.logout());
   }
 }
