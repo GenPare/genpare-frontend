@@ -19,71 +19,8 @@ import {
 import { MapService } from 'app/services/map.service';
 import { ToastService } from 'app/services/toast.service';
 import * as _ from 'lodash';
-
-interface LooseObject {
-  [key: string]: any;
-}
-
-function flattenObject(obj: any): Object {
-  let flattened: LooseObject = {};
-
-  Object.keys(obj).forEach((key) => {
-    let value = obj[key];
-
-    if (typeof value === 'object' && value !== null && !Array.isArray(value)) {
-      Object.assign(flattened, flattenObject(value));
-    } else {
-      flattened[key] = value;
-    }
-  });
-
-  return flattened;
-}
-
-function minSmallerMax(
-  minControlName: string,
-  maxControlName: string
-): ValidatorFn {
-  return (control: AbstractControl): ValidationErrors | null => {
-    const minControl = control.get(minControlName);
-    const maxControl = control.get(maxControlName);
-    if (minControl?.value && maxControl?.value) {
-      if (minControl.value > maxControl.value) {
-        const error = {
-          minSmallerMax: {
-            minimumValue: minControl.value,
-            maximumValue: maxControl.value,
-          },
-        };
-        return error;
-      }
-    }
-    return null;
-  };
-}
-
-function requireOneControl(): ValidatorFn {
-  return (formGroup: AbstractControl): ValidationErrors | null => {
-    let filledControls: number = 0;
-    const flattened = flattenObject(formGroup.value);
-    for (const [key, value] of Object.entries(flattened)) {
-      if (typeof value === 'object') {
-      }
-      if (value !== '' && value !== null) {
-        filledControls += 1;
-      }
-    }
-
-    return filledControls === 0
-      ? {
-          requireOneControl: {
-            requiredControls: filledControls,
-            actualControls: 1,
-          },
-        }
-      : null;
-  };
-}
+import { requireOneControl } from '@shared/validator-functions/require-one-control';
+import { minSmallerMax } from '@shared/validator-functions/min-smaller-max';
 
 @Component({
   selector: 'app-compare',
