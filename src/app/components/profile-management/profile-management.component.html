@@ -1,4 +1,4 @@
-<h3>Profilverwaltung <i class="fa-solid fa-circle-info" [ngbTooltip]="tooltipText" fxHide fxShow.xs="true" fxShow.sm="true" #tt="ngbTooltip"></i></h3>
+<h3>Profilverwaltung <i class="fa-solid fa-circle-info" [ngbTooltip]="tooltipText" fxHide fxShow.xs="true" fxShow.sm="true" #tt="ngbTooltip" (click)="toggleTooltip()"></i></h3>
 <ng-template #tooltipText>Bitte ermöglichen Sie allen anderen Nutzer*innen möglichst genaue
   Resultate, indem Sie Ihre Daten wahrheitsgemäß angeben und diese
   regelmäßig aktualisieren. Ihre Daten werden streng vertraulich behandelt
@@ -94,7 +94,7 @@
               *ngIf="
                 !(formControls.nickname.dirty && formControls.nickname.errors)
               "
-              >Bitte geben Sie Ihren Nickname an.</small
+              >Bitte geben Sie <b>nicht</b> Ihren echten Namen an.</small
             >
             <ng-container
               *ngIf="
@@ -228,6 +228,7 @@
                   type="number"
                   min="0"
                   max="1000000"
+                  step="500"
                   id="salary"
                   aria-describedby="salary-small"
                   placeholder="z.B. 2000"
@@ -253,7 +254,7 @@
                   betragen .</small
                 >
                 <small *ngIf="formControls.salary.errors.max" class="red-text"
-                  >Ihr Gehalt darf maxmimal {{ formControls.salary.errors.max.max }} €
+                  >Ihr Gehalt darf maxmimal {{ formControls.salary.errors.max.max | number: "6.2-2"}} €
                   betragen.</small
                 >
                 <small *ngIf="formControls.salary.errors.required" class="red-text"
@@ -287,7 +288,7 @@
         <div class="form-row">
           <button
             type="submit"
-            class="btn btn-success"
+            class="btn btn-success save-button"
             [disabled]="!(profileForm.valid && formValuesChanged)"
           >
             {{ saveButtonText }}

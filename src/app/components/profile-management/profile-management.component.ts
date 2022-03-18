@@ -90,10 +90,11 @@ export class ProfileManagementComponent implements OnInit, OnDestroy {
   });
 
   private uneditedValues?: {
-    federal_state: string;
-    salary: number;
-    education_degree: string;
-    job_title: string;
+    federal_state: string,
+    salary: number,
+    education_degree: string,
+    job_title: string,
+    gender: string,
   };
 
   formValuesChanged = false;
@@ -158,6 +159,7 @@ export class ProfileManagementComponent implements OnInit, OnDestroy {
           salary: jobInfo.salary,
           education_degree: jobInfo.levelOfEducation,
           job_title: jobInfo.jobTitle,
+          gender: memberInfo.gender,
         };
         this.profileForm.patchValue({
           federal_state: jobInfo.state,
