@@ -32,10 +32,6 @@ When Angular is installed, clone the repository, open up a command line and head
 
 ### Starting
 
-First, you need to set a few environmental variables. Run the following commands in the root directory, one after another (for windows):
-
-set NG_APP_DOMAIN=dev-t9d7tc1e.eu.auth0.com  
-set NG_APP_CLIENT_ID=OLtqeuEcVpFPKkLIRaKJ3ENrv3hUUlWY  
-set NG_APP_AUDIENCE=genpare  
+First, you need to set a few environmental variables for Authentification. 
 
 To start the frontend, stay in the root-directory of the repository and run `npm start`. The Angular CLI will compile and build the Application. Open up a new tab in your browser and naviagte to `localhost:4200`.
