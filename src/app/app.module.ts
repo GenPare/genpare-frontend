@@ -9,8 +9,8 @@ import { MDBBootstrapModule } from 'angular-bootstrap-md';
 import { StartPageComponent } from '@comp/start-page/start-page.component';
 import { CompareComponent } from '@comp/compare/compare.component';
 import { ProfileManagementComponent } from '@comp/profile-management/profile-management.component';
-import { ToastsContainerComponent } from './shared/toasts-container/toasts-container.component';
-import { HasEnteredDataGuard } from './guards/has-entered-data';
+import { ToastsContainerComponent } from './components/toasts-container/toasts-container.component';
+import { HasEnteredDataGuard } from './shared/guards/has-entered-data';
 import { SupportPageComponent } from './components/support-page/support-page.component';
 import { HttpClientModule } from '@angular/common/http';
 import { AuthModule } from '@auth0/auth0-angular';
@@ -19,7 +19,7 @@ import { LoginSuccessComponent } from './components/login-success/login-success.
 import { NavBarComponent } from './components/nav-bar/nav-bar.component';
 
 import { JwtModule } from '@auth0/angular-jwt';
-import { IsLoggedIn } from './guards/is-logged-in';
+import { IsLoggedIn } from './shared/guards/is-logged-in';
 import { FlexLayoutModule } from '@angular/flex-layout';
 
 export function tokenGetter() {

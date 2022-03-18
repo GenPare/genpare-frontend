@@ -162,7 +162,7 @@
               formControlName="job"
               id="job"
             >
-              <option value="" class="no-selection-option">
+              <option [value]="null" class="no-selection-option">
                 {{ noSelectionText }}
               </option>
               <ng-container>
@@ -182,7 +182,7 @@
               formControlName="state"
               id="state"
             >
-              <option value="" class="no-selection-option">
+              <option [value]="null" class="no-selection-option">
                 {{ noSelectionText }}
               </option>
               <ng-container *ngFor="let federal_state of federal_states">
@@ -200,7 +200,7 @@
               type="select"
               formControlName="education"
             >
-              <option value="" class="no-selection-option">
+              <option [value]="null" class="no-selection-option">
                 {{ noSelectionText }}
               </option>
               <ng-container *ngFor="let education_degree of education_degrees">
@@ -239,17 +239,17 @@
       <p *ngIf="initialState">
         Hier werden die Ergebnisse nach einer erfolgreichen Suche angezeigt.
       </p>
-      <p *ngIf="!initialState && responseData.length === 0">
+      <p *ngIf="!initialState && tableData.length === 0">
         Für Ihre Suche sind keine Ergebnisse vorhanden.
       </p>
       <table
         class="table table-striped"
-        *ngIf="responseData.length > 0 && !initialState"
+        *ngIf="tableData.length > 0 && !initialState"
       >
         <tr>
           <th *ngFor="let header of table_headers">{{ header }}</th>
         </tr>
-        <tr *ngFor="let data of responseData">
+        <tr *ngFor="let data of tableData">
           <td>{{ data.jobTitle }}</td>
           <td>{{ data.levelOfEducation }}</td>
           <td>{{ data.age.min }} - {{ data.age.max }}</td>

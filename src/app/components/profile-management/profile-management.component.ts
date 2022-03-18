@@ -33,9 +33,12 @@ export class ProfileManagementComponent implements OnInit, OnDestroy {
   email$: Observable<string>;
   subscriptions = new Subscription();
 
-  education_degrees = education_degrees_f;
-  federal_states = federal_states_f;
-  genders = genders_f;
+  readonly education_degrees = education_degrees_f;
+  readonly federal_states = federal_states_f;
+  readonly genders = genders_f;
+  isRegistered: boolean = false;
+  saveButtonText: SaveButtonEnum;
+  formValuesChanged = false;
 
   profileForm = this.fb.group({
     job_title: [
@@ -63,10 +66,6 @@ export class ProfileManagementComponent implements OnInit, OnDestroy {
     job_title: string;
     gender: string;
   };
-
-  formValuesChanged = false;
-  isRegistered: boolean;
-  saveButtonText: SaveButtonEnum;
 
   constructor(
     private memberService: MemberService,
@@ -96,6 +95,7 @@ export class ProfileManagementComponent implements OnInit, OnDestroy {
           this.profileForm.patchValue({ nickname });
         })
       );
+      this.profileForm.get("age")?.disable()
       this.fillForm();
     }
     this.continuouslyCheckIfValuesChanged();
