@@ -1,4 +1,4 @@
-<h3>Profilverwaltung <i class="fa-solid fa-circle-info" [ngbTooltip]="tooltipText" fxHide fxShow.xs="true" fxShow.sm="true" #tt="ngbTooltip"></i></h3>
+<h3>Profilverwaltung <i class="fa-solid fa-circle-info" [ngbTooltip]="tooltipText" fxHide fxShow.xs="true" fxShow.sm="true" #tt="ngbTooltip" (click)="toggleTooltip()"></i></h3>
 <ng-template #tooltipText>Bitte ermöglichen Sie allen anderen Nutzer*innen möglichst genaue
   Resultate, indem Sie Ihre Daten wahrheitsgemäß angeben und diese
   regelmäßig aktualisieren. Ihre Daten werden streng vertraulich behandelt
