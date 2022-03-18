@@ -63,8 +63,8 @@ export class MemberService implements OnInit {
       )
       .pipe(
         tap((id) => {
-            sessionStorage.setItem('sessionId', id);
-            this.updateNickname(id);
+          sessionStorage.setItem('sessionId', id);
+          this.updateNickname(id);
         })
       )
       .pipe(
@@ -143,7 +143,10 @@ export class MemberService implements OnInit {
       );
   }
 
-  editNicknameAndGender(newName: string, newGender: string): Observable<Object> {
+  editNicknameAndGender(
+    newName: string,
+    newGender: string
+  ): Observable<Object> {
     let sessionId = this.getSessionId();
     return this.http
       .patch(env.protocol + env.backendURL + '/members', {

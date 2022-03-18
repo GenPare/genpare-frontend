@@ -59,7 +59,7 @@ export class App {
       },
     }),
     CommonModule,
-    FlexLayoutModule 
+    FlexLayoutModule,
   ],
   providers: [DatePipe, HasEnteredDataGuard, IsLoggedIn],
   bootstrap: [AppComponent],

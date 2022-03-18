@@ -3,7 +3,7 @@
 // The list of file replacements can be found in `angular.json`.
 
 export const environment = {
-  production: process.env.NG_APP_ENV == "PROD" ? true : false,
+  production: process.env.NG_APP_ENV == 'PROD' ? true : false,
   auth: {
     domain: process.env.NG_APP_DOMAIN,
     clientId: process.env.NG_APP_CLIENT_ID,
@@ -11,7 +11,7 @@ export const environment = {
     audience: process.env.NG_APP_AUDIENCE,
   },
   backendURL: process.env.NG_APP_BACKEND_URL,
-  protocol: 'http://'
+  protocol: 'http://',
 };
 /*
  * For easier debugging in development mode, you can import the following file

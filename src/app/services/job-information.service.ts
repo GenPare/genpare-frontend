@@ -122,6 +122,8 @@ export class JobInformationService {
   }
 
   getJobTitles(): Observable<string[]> {
-    return this.http.get<string[]>(env.protocol + env.backendURL + '/salary/info');
+    return this.http.get<string[]>(
+      env.protocol + env.backendURL + '/salary/info'
+    );
   }
 }

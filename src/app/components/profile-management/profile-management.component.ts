@@ -95,7 +95,7 @@ export class ProfileManagementComponent implements OnInit, OnDestroy {
           this.profileForm.patchValue({ nickname });
         })
       );
-      this.profileForm.get("age")?.disable()
+      this.profileForm.get('age')?.disable();
       this.fillForm();
     }
     this.continuouslyCheckIfValuesChanged();
